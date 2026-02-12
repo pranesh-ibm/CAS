@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace MedAxis.Controllers
+namespace CAS.Controllers
 {
     public class CrediMgrController : Controller
     {
@@ -18,7 +18,7 @@ namespace MedAxis.Controllers
             public async Task<IActionResult> Login(string username, string password)
             {
 
-                Models.MedAxisContext db = new Models.MedAxisContext();
+                Models.CasContext db = new Models.CasContext();
 
                 var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
 

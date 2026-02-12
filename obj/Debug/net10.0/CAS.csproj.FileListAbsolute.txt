@@ -223,3 +223,4 @@ C:\C#\CAS\CAS\obj\Debug\net10.0\refint\CAS.dll
 C:\C#\CAS\CAS\obj\Debug\net10.0\CAS.pdb
 C:\C#\CAS\CAS\obj\Debug\net10.0\CAS.genruntimeconfig.cache
 C:\C#\CAS\CAS\obj\Debug\net10.0\ref\CAS.dll
+C:\C#\CAS\CAS\obj\Debug\net10.0\CAS.sourcelink.json
