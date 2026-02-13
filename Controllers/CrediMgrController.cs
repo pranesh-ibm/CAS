@@ -42,7 +42,8 @@ namespace CAS.Controllers
                         principal);
 
                     return RedirectToAction("Index", usr.Role);
-                }
+                
+            }
 
                 ModelState.AddModelError("", "Invalid credentials");
 

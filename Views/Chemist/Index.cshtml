@@ -1,0 +1,98 @@
+﻿@model CAS.Models.Chemist
+
+@{
+    ViewData["Title"] = "Chemist Dashboard";
+}
+
+<style>
+    .gradient-header {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .profile-card {
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .action-card {
+        border-radius: 15px;
+        transition: 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+        .action-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+    .btn-modern {
+        border-radius: 25px;
+        padding: 8px 20px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- Gradient Header -->
+    <div class="gradient-header text-center mb-5">
+        <h2 class="fw-bold">Welcome, @Model.ChemistName 👋</h2>
+        <p class="mb-0">Chemist Control Panel</p>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="card profile-card p-4 mb-5">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Phone:</strong> @Model.Phone</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Address:</strong> @Model.Address</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card action-card p-4">
+                <h5>📦 Inventory</h5>
+                <p class="text-muted">Check available medicines</p>
+                <a href="/Chemist/ViewInventory"
+                   class="btn btn-primary btn-modern">
+                    View
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card action-card p-4">
+                <h5>📝 Order Drugs</h5>
+                <p class="text-muted">Place new drug request</p>
+                <a href="/Chemist/OrderDrug"
+                   class="btn btn-success btn-modern">
+                    Order
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card action-card p-4">
+                <h5>📋 My Orders</h5>
+                <p class="text-muted">Track order status</p>
+                <a href="/Chemist/MyOrders"
+                   class="btn btn-dark btn-modern">
+                    View
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>

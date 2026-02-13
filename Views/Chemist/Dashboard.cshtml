@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Chemist Dashboard";
+}
+
+<h2 class="mb-4">Chemist Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Drugs</h5>
+                <h3>@ViewBag.TotalDrugs</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Pending Orders</h5>
+                <h3>@ViewBag.PendingOrders</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+
+<div class="mt-3">
+    <a class="btn btn-success me-2" href="/Chemist/ViewInventory">View Inventory</a>
+    <a class="btn btn-info" href="/Chemist/OrderDrug">Order Drug</a>
+    <a class="btn btn-secondary" href="/Chemist/MyOrders">My Orders</a>
+
+</div>

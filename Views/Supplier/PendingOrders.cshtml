@@ -1,0 +1,36 @@
+﻿@model List<CAS.Models.DrugRequest>
+
+<h2 class="mb-4">Pending Orders</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Drug Details</th>
+            <th>Request Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DrugRequestId</td>
+                <td>@item.DrugsInfoText</td>
+                <td>@item.RequestDate</td>
+                <td>
+                    <a class="btn btn-success btn-sm"
+                       href="/Supplier/Approve/@item.DrugRequestId">
+                        Approve
+                    </a>
+
+                    <a class="btn btn-danger btn-sm"
+                       href="/Supplier/Reject/@item.DrugRequestId">
+                        Reject
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
