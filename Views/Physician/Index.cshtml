@@ -1,7 +1,49 @@
+@model CAS.Models.ViewModel.PhysicianHomeViewModel
+
 @{
     ViewData["Title"] = "Physician Home";
 }
 
 <div class="container mt-4">
-    <h1>Welcome, @ViewBag.Username</h1>
+    <h1>Welcome, Dr. @Model.PhysicianName</h1>
+    <p class="text-muted">Here are the patients associated with your schedule.</p>
+
+    @if (Model.Patients.Any())
+    {
+        <div class="table-responsive mt-3">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var patient in Model.Patients)
+                    {
+                        <tr>
+                            <td>@patient.PatientName</td>
+                            <td>@(patient.Dob?.ToString("yyyy-MM-dd") ?? "-")</td>
+                            <td>@(string.IsNullOrWhiteSpace(patient.Gender) ? "-" : patient.Gender)</td>
+                            <td>@(string.IsNullOrWhiteSpace(patient.Phone) ? "-" : patient.Phone)</td>
+                            <td>@(string.IsNullOrWhiteSpace(patient.Email) ? "-" : patient.Email)</td>
+                            <td>@(string.IsNullOrWhiteSpace(patient.Address) ? "-" : patient.Address)</td>
+                            <td>@(string.IsNullOrWhiteSpace(patient.Summary) ? "-" : patient.Summary)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3 mb-0" role="alert">
+            No patients are currently assigned to your schedule.
+        </div>
+    }
 </div>
