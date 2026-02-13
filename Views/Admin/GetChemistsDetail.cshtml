@@ -1,0 +1,65 @@
+﻿@model IEnumerable<CAS.Models.Chemist>
+
+@{
+    ViewData["Title"] = "GetChemistsDetail";
+}
+
+<h1>GetChemistsDetail</h1>
+
+<p>
+    <a asp-action="CreateChemist">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ChemistName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Summary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChemistStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChemistName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Summary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChemistStatus)
+            </td>
+            <td>
+                <a asp-action="EditChemist" asp-route-id="@item.ChemistId">Edit</a> |
+                    <a asp-action="GetChemistDetails" asp-route-id="@item.ChemistId">Details</a> |
+                    <a asp-action="DeleteChemist" asp-route-id="@item.ChemistId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

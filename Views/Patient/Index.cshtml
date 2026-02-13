@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Patient Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Patient Dashboard</h2>
+
+    <div class="row g-4">
+
+        <!-- Profile Section -->
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Profile</h5>
+                    <a asp-controller="Patient" asp-action="ViewProfile"
+                       class="btn btn-primary w-100 mb-2">View Profile</a>
+
+                    <a asp-controller="Patient" asp-action="EditProfile"
+                       class="btn btn-warning w-100">
+                        Edit Profile
+                    </a>
+                    <small class="text-muted d-block mt-2">
+                        (Name & Mobile cannot be changed)
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Drug Inventory</h5>
+                    <a asp-controller="Inventory" asp-action="Index"
+                       class="btn btn-success w-100">
+                        View Inventory
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Physician Details -->
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Physician Details</h5>
+                    <a asp-controller="Physician" asp-action="Directory"
+                       class="btn btn-info w-100 mb-2">
+                        View Physician Details
+                    </a>
+
+                    <a asp-controller="Physician" asp-action="Advice"
+                       class="btn btn-secondary w-100">
+                        View Advice
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Appointments</h5>
+                    <a asp-controller="Appointment" asp-action="Create"
+                       class="btn btn-primary w-100 mb-2">
+                        Make Appointment
+                    </a>
+
+                    <a asp-controller="Appointment" asp-action="MyAppointments"
+                       class="btn btn-dark w-100">
+                        Check Appointments
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescription -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Prescriptions</h5>
+                    <a asp-controller="Prescription" asp-action="MyPrescriptions"
+                       class="btn btn-danger w-100">
+                        View Prescriptions
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@model CAS.Models.Patient
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-4">
+    <h2>Edit Profile</h2>
+
+    <div class="card shadow p-4">
+        <form asp-action="EditProfile" method="post">
+
+            <input type="hidden" asp-for="PatientId" />
+
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input asp-for="PatientName" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mobile</label>
+                <input asp-for="Phone" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Date of Birth</label>
+                <input asp-for="Dob" type="date" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Gender</label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="">Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Address</label>
+                <textarea asp-for="Address" class="form-control"></textarea>
+            </div>
+
+            <!-- Summary -->
+            <div class="mb-3">
+                <label class="form-label">Summary</label>
+                <textarea asp-for="Summary" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Update Profile
+            </button>
+
+            <a asp-action="ViewProfile" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+    </div>
+</div>
