@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MedAxis.Models.ViewModel
+namespace CAS.Models.ViewModel
 {
     public class LoginViewModel
     {
