@@ -18,29 +18,50 @@ namespace CAS.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await BuildHomeModelAsync();
-            if (model == null)
+            var username = User.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return RedirectToAction("Login", "CrediMgr");
+            }
+
+            var physicianUser = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.UserName == username && u.Role == "Physician");
+
+            if (physicianUser?.RoleReferenceId == null)
             {
                 return Forbid();
             }
 
-            return View(model);
-        }
+            var patients = await _context.Schedules
+                .AsNoTracking()
+                .Where(s => s.PhysicianId == physicianUser.RoleReferenceId)
+                .Select(s => s.Appointment.Patient)
+                .Distinct()
+                .OrderBy(p => p.PatientName)
+                .ToListAsync();
 
-        public async Task<IActionResult> ViewPatients()
-        {
-            var model = await BuildHomeModelAsync();
-            if (model == null)
+            var model = new PhysicianHomeViewModel
             {
-                return Forbid();
-            }
+                UserName = username,
+                Patients = patients
+            };
 
             return View(model);
         }
 
         public async Task<IActionResult> PatientDetails(int id)
         {
-            var physicianUser = await GetCurrentPhysicianUserAsync();
+            var username = User.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return RedirectToAction("Login", "CrediMgr");
+            }
+
+            var physicianUser = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.UserName == username && u.Role == "Physician");
+
             if (physicianUser?.RoleReferenceId == null)
             {
                 return Forbid();
@@ -58,42 +79,6 @@ namespace CAS.Controllers
             }
 
             return View(patient);
-        }
-
-        private async Task<PhysicianHomeViewModel?> BuildHomeModelAsync()
-        {
-            var physicianUser = await GetCurrentPhysicianUserAsync();
-            if (physicianUser?.RoleReferenceId == null)
-            {
-                return null;
-            }
-
-            var patients = await _context.Schedules
-                .AsNoTracking()
-                .Where(s => s.PhysicianId == physicianUser.RoleReferenceId)
-                .Select(s => s.Appointment.Patient)
-                .Distinct()
-                .OrderBy(p => p.PatientName)
-                .ToListAsync();
-
-            return new PhysicianHomeViewModel
-            {
-                UserName = physicianUser.UserName,
-                Patients = patients
-            };
-        }
-
-        private async Task<User?> GetCurrentPhysicianUserAsync()
-        {
-            var username = User.Identity?.Name;
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return null;
-            }
-
-            return await _context.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.UserName == username && u.Role == "Physician");
         }
     }
 }
