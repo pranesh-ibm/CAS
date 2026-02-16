@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Physician Advice";
+    var adviceList = ViewBag.AdviceList as IEnumerable<dynamic>;
+}
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Physician Advice</h2>
+
+    <p>Total Records: @ViewBag.Count</p>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (adviceList != null && adviceList.Any())
+    {
+        <div class="row">
+            @foreach (var item in adviceList)
+            {
+                
+                    // Explicit casting to avoid runtime binder errors
+                    DateOnly date = (DateOnly)item.ScheduleDate;
+                TimeOnly time = (TimeOnly)item.ScheduleTime;
+
+                DateTime fullDateTime = date.ToDateTime(time);
+                
+
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 h-100">
+
+                        <div class="card-body">
+
+                            <h5 class="text-primary mb-3">
+                                Consultation Details
+                            </h5>
+
+                            <p>
+                                <strong>Date:</strong>
+                                @date.ToString("dd-MMM-yyyy")
+                            </p>
+
+                            <p>
+                                <strong>Time:</strong>
+                                @fullDateTime.ToString("hh:mm tt")
+                            </p>
+
+                            <hr />
+
+                            <p>
+                                <strong>Advice:</strong><br />
+                                @item.Advice
+                            </p>
+
+                            <p>
+                                <strong>Note:</strong><br />
+                                @item.Note
+                            </p>
+
+                        </div>
+                        <a asp-action="ViewPrescription"
+                           asp-route-scheduleId="@item.ScheduleId"
+                           class="btn btn-sm btn-primary mt-3">
+                            View Prescription
+                        </a>
+                    </div>
+                </div>
+                
+
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            No physician advice found.
+        </div>
+    }
+
+</div>

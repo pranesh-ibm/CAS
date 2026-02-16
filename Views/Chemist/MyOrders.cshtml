@@ -1,0 +1,38 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">My Purchase Orders</h2>
+
+    @foreach (var order in Model)
+    {
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <strong>@order.Pono</strong>
+                | Date: @order.Podate
+                | Supplier: @order.SupplierName
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Drug</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in order.Items)
+                        {
+                            <tr>
+                                <td>@item.DrugName</td>
+                                <td>@item.Qty</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+</div>

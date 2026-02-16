@@ -22,6 +22,9 @@ namespace CAS.Controllers
 
             var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
 
+                    return RedirectToAction("Index", usr.Role);
+                
+            }
 
 
             if (usr != null)

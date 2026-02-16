@@ -1,0 +1,28 @@
+﻿@model List<CAS.Models.Drug>
+
+<h2 class="mb-4">Inventory</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Drug Name</th>
+            <th>Description</th>
+            <th>Dosage</th>
+            <th>Expiry</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DrugTitle</td>
+                <td>@item.Description</td>
+                <td>@item.Dosage</td>
+                <td>@item.Expiry</td>
+
+            </tr>
+        }
+    </tbody>
+</table>

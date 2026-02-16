@@ -1,0 +1,51 @@
+﻿@model CAS.Models.Patient
+
+@{
+    ViewData["Title"] = "Patient Profile";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Profile</h2>
+
+    <div class="card shadow p-4">
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input class="form-control" value="@Model.PatientName" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mobile</label>
+            <input class="form-control" value="@Model.Phone" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" value="@Model.Email" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Date of Birth</label>
+            <input class="form-control" value="@Model.Dob?.ToShortDateString()" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Gender</label>
+            <input class="form-control" value="@Model.Gender" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea class="form-control" rows="3" readonly>@Model.Address</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Summary</label>
+            <textarea class="form-control" rows="3" readonly>@Model.Summary</textarea>
+        </div>
+
+        <a asp-action="EditProfile" class="btn btn-warning">
+            Edit Profile
+        </a>
+    </div>
+</div>

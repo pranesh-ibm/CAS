@@ -1,0 +1,69 @@
+﻿@model List<CAS.Models.Physician>
+
+@{
+    ViewData["Title"] = "Physician Details";
+}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4 text-center">Physician Details</h2>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var physician in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="card-body">
+
+                            <h4 class="card-title text-primary mb-3">
+                                @physician.PhysicianName
+                            </h4>
+
+                            <p>
+                                <strong>Specialization:</strong>
+                                @physician.Specialization
+                            </p>
+
+                            <p>
+                                <strong>Email:</strong>
+                                @physician.Email
+                            </p>
+
+                            <p>
+                                <strong>Phone:</strong>
+                                @physician.Phone
+                            </p>
+
+                            <p>
+                                <strong>Address:</strong>
+                                @physician.Address
+                            </p>
+
+                            <p>
+                                <strong>Summary:</strong>
+                                @physician.Summary
+                            </p>
+
+                            <span class="badge bg-success">
+                                @physician.PhysicianStatus
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+</div>
