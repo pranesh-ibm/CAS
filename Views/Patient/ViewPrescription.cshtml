@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Prescription Details";
+    var list = ViewBag.Data;
+}
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Prescription Details</h2>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (list != null)
+    {
+        <div class="row">
+
+            @foreach (var item in list)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm p-4">
+
+                        <h5 class="text-primary mb-3">
+                            Physician: @item.PhysicianName
+                        </h5>
+
+                        <p><strong>Advice:</strong> @item.Advice</p>
+                        <p><strong>Note:</strong> @item.Note</p>
+
+                        <hr />
+
+                        <h6 class="text-success mb-3">
+                            Drug Details
+                        </h6>
+
+                        <p><strong>Drug:</strong> @item.DrugTitle</p>
+                        <p><strong>Description:</strong> @item.Description</p>
+                        <p><strong>Prescription:</strong> @item.Prescription</p>
+                        <p><strong>Dosage:</strong> @item.Dosage</p>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

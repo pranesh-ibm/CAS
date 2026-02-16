@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Success";
+}
+
+<div class="container mt-5 text-center">
+
+    <div class="alert alert-success">
+        <h4>Appointment submitted successfully!</h4>
+        <p>You will be redirected shortly...</p>
+    </div>
+
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = '@Url.Action("Index", "Patient")';
+    }, 3000); // 3 seconds
+</script>

@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Check Appointment";
+    var list = ViewBag.Data;
+}
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Appointment Status</h2>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (list != null)
+    {
+        <div class="row">
+
+            @foreach (var item in list)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm p-4">
+
+                        <h5 class="text-primary mb-3">
+                            Appointment Details
+                        </h5>
+
+                        <p><strong>Criticality:</strong> @item.Criticality</p>
+                        <p><strong>Reason:</strong> @item.Reason</p>
+                        <p><strong>Note:</strong> @item.Note</p>
+
+                        <hr />
+
+                        @if (item.Status == "Yet to assign an appointment")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                @item.Status
+                            </span>
+                        }
+                        else
+                        {
+                            <p>
+                                <strong>Physician:</strong>
+                                @item.PhysicianName
+                            </p>
+
+                            <p>
+                                <strong>Date:</strong>
+                                @item.ScheduleDate?.ToString("dd-MMM-yyyy")
+                            </p>
+
+                            <p>
+                                <strong>Time:</strong>
+                                @item.ScheduleTime?.ToString("hh:mm tt")
+                            </p>
+
+                            <span class="badge bg-success">
+                                @item.Status
+                            </span>
+                        }
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

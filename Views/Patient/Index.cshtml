@@ -31,7 +31,7 @@
             <div class="card shadow">
                 <div class="card-body text-center">
                     <h5 class="card-title">Drug Inventory</h5>
-                    <a asp-controller="Inventory" asp-action="Index"
+                    <a asp-controller="Patient" asp-action="ViewInventory"
                        class="btn btn-success w-100">
                         View Inventory
                     </a>
@@ -44,12 +44,12 @@
             <div class="card shadow">
                 <div class="card-body text-center">
                     <h5 class="card-title">Physician Details</h5>
-                    <a asp-controller="Physician" asp-action="Directory"
+                    <a asp-controller="Patient" asp-action="PhysicianDetails"
                        class="btn btn-info w-100 mb-2">
                         View Physician Details
                     </a>
 
-                    <a asp-controller="Physician" asp-action="Advice"
+                    <a asp-controller="Patient" asp-action="PhysicianAdvice"
                        class="btn btn-secondary w-100">
                         View Advice
                     </a>
@@ -62,12 +62,12 @@
             <div class="card shadow">
                 <div class="card-body text-center">
                     <h5 class="card-title">Appointments</h5>
-                    <a asp-controller="Appointment" asp-action="Create"
+                    <a asp-controller="Patient" asp-action="MakeAppointment"
                        class="btn btn-primary w-100 mb-2">
                         Make Appointment
                     </a>
 
-                    <a asp-controller="Appointment" asp-action="MyAppointments"
+                    <a asp-controller="Patient" asp-action="CheckAppointment"
                        class="btn btn-dark w-100">
                         Check Appointments
                     </a>
@@ -76,17 +76,7 @@
         </div>
 
         <!-- Prescription -->
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Prescriptions</h5>
-                    <a asp-controller="Prescription" asp-action="MyPrescriptions"
-                       class="btn btn-danger w-100">
-                        View Prescriptions
-                    </a>
-                </div>
-            </div>
-        </div>
+        
 
     </div>
 </div>

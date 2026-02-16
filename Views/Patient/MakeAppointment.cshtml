@@ -1,0 +1,56 @@
+﻿@model CAS.Models.Appointment
+
+@{
+    ViewData["Title"] = "Make Appointment";
+}
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Make Appointment</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-center">
+            @TempData["Success"]
+        </div>
+    }
+
+    <form asp-action="MakeAppointment" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Criticality</label>
+            <select asp-for="Criticality" class="form-control">
+                <option value="">-- Select --</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Reason</label>
+            <input asp-for="Reason" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Note</label>
+            <textarea asp-for="Note" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Preferred Date</label>
+            <input type="date" name="preferredDate" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Preferred Time</label>
+            <input type="time" name="preferredTime" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Submit Appointment
+        </button>
+
+    </form>
+
+</div>
