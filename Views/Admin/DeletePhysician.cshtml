@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "DeletePhysician";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h1>DeletePhysician</h1>
@@ -55,9 +56,9 @@
         </dd>
     </dl>
     
-    <form asp-action="DeletePhysician">
+    <form asp-action="DeletePhysician" onsubmit="return confirm('Are you sure you want to delete this Physician?')" ;>
         <input type="hidden" asp-for="PhysicianId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="GetPhysiciansDetails">Back to List</a>
+        <a asp-action="GetPhysiciansDetail">Back to List</a>
     </form>
 </div>

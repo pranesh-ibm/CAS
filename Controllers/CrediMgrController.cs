@@ -7,54 +7,54 @@ namespace CAS.Controllers
 {
     public class CrediMgrController : Controller
     {
-     
-            [HttpGet]
-            public IActionResult Login()
-            {
-                return View();
-            }
 
-            [HttpPost]
-            public async Task<IActionResult> Login(string username, string password)
-            {
-
-                Models.CasContext db = new Models.CasContext();
-
-                var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
-
-
-
-                if (usr != null)
-                {
-                    var claims = new List<Claim>
+        [HttpGet]
+        public IActionResult Login()
         {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, usr.Role)
-        };
+            return View();
+        }
 
-                    var identity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
 
-                    var principal = new ClaimsPrincipal(identity);
+            Models.CasContext db = new Models.CasContext();
 
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        principal);
+            var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
 
-                    return RedirectToAction("Index", usr.Role);
-                }
 
-                ModelState.AddModelError("", "Invalid credentials");
 
-                return View();
+            if (usr != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, usr.Role)
+                };
+
+                var identity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal);
+
+                return RedirectToAction("Index", usr.Role);
             }
+
+            ModelState.AddModelError("", "Invalid credentials");
+
+            return View();
+        }
 
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Admin");
         }
 
 
@@ -66,3 +66,10 @@ namespace CAS.Controllers
 
     }
 }
+
+
+
+
+
+
+

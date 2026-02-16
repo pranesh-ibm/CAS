@@ -1,0 +1,86 @@
+﻿@model IEnumerable<CAS.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Pending Appointments";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- ================= PAGE HEADER ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Pending Appointments</h2>
+            @* <p class="text-muted mb-0">View all appointments that require scheduling</p> *@
+        </div>
+    </div>
+
+    <!-- ================= TABLE CARD ================= -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Patient</th>
+                            <th>Appointment Date</th>
+                            <th>Criticality</th>
+                            <th>Reason</th>
+                            <th>Note</th>
+                            <th>Status</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Patient.PatientName</td>
+                                <td>@item.AppointmentDate.ToString("dd MMM yyyy HH:mm")</td>
+                                <td>@item.Criticality</td>
+                                <td>@item.Reason</td>
+                                <td>@item.Note</td>
+
+                                <!-- Status Badge -->
+                                <td>
+                                    @if (item.ScheduleStatus == "Scheduled")
+                                    {
+                                        <span class="badge bg-success">Scheduled</span>
+                                    }
+                                    else if (item.ScheduleStatus == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (item.ScheduleStatus == "Cancelled")
+                                    {
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@item.ScheduleStatus</span>
+                                    }
+                                </td>
+
+                                <!-- Action Button -->
+                                <td class="text-end">
+                                    <a asp-controller="Admin"
+                                       asp-action="CreateSchedule"
+                                       asp-route-id="@item.AppointmentId"
+                                       class="btn btn-sm btn-primary">
+                                        <i class="fas fa-calendar-plus me-1"></i> Schedule
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>

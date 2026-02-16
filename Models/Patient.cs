@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace CAS.Models;
 
+
 public partial class Patient
 {
     public int PatientId { get; set; }
@@ -21,7 +22,7 @@ public partial class Patient
 
     public string? Summary { get; set; }
 
-    public string PatientStatus { get; set; } = null!;
+    public string? PatientStatus { get; set; }
 
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

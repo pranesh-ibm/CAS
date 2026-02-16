@@ -1,0 +1,195 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>CAS | Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top px-4">
+        <div class="container-fluid">
+
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-primary" asp-controller="Admin" asp-action="Index">
+                <i class="fas fa-hospital-symbol me-2"></i>
+                Clinic Automation System
+            </a>
+
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+
+                <!-- Notification -->
+                @* <div class="dropdown me-4">
+                    <a class="nav-link position-relative" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fs-5"></i>
+                        <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+                            @ViewBag.PendingPatientsCount
+                        </span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0" style="min-width: 220px;">
+
+                        <!-- Dropdown Header -->
+                        <li class="dropdown-header bg-light fw-bold py-2 px-3 text-uppercase">
+                            Notifications
+                        </li>
+
+                        <!-- Pending Patients -->
+                        <li>
+                            <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
+                               asp-controller="Admin"
+                               asp-action="PendingPatients">
+                                <span>Pending Patients</span>
+                                <span class="badge bg-danger rounded-pill">@ViewBag.PendingPatientsCount</span>
+                            </a>
+                        </li>
+
+                        <!-- Pending Schedules -->
+                        <li>
+                            <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
+                               asp-controller="Admin"
+                               asp-action="PendingAppointments">
+                                <span>Pending Schedules</span>
+                                <span class="badge bg-warning text-dark rounded-pill">@ViewBag.PendingSchedulesCount</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div> *@
+
+                <!-- Profile -->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fs-5 me-2"></i>
+                        <span>Admin</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="min-width: 180px;">
+                        <!-- Profile Section (Optional for future enhancement) -->
+                        <li class="dropdown-header fw-bold text-secondary py-2 px-3">
+                            Account
+                        </li>
+
+                        <!-- Logout Action -->
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center text-danger py-2 px-3"
+                               asp-controller="CrediMgr" asp-action="Logout">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= LAYOUT WRAPPER ================= -->
+    <div class="d-flex layout-wrapper">
+
+        <!-- ================= SIDEBAR ================= -->
+        <div class="sidebar bg-dark text-white">
+
+            <div class="sidebar-heading text-center py-4 fw-bold">
+                Admin Panel
+            </div>
+
+            <ul class="nav flex-column px-2">
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">
+                        <i class="fas fa-home me-2"></i> Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="GetPatientsDetail">
+                        <i class="fas fa-user-injured me-2"></i> Patients
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="GetPhysiciansDetail">
+                        <i class="fas fa-user-md me-2"></i> Physicians
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="GetChemistsDetail">
+                        <i class="fas fa-capsules me-2"></i> Chemists
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="GetSuppliersDetail">
+                        <i class="fas fa-truck me-2"></i> Suppliers
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="GetAppointmentDetails">
+                        <i class="fas fa-calendar-check me-2"></i> Appointments
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Admin" asp-action="GetScheduleDetails">
+                        <i class="fas fa-clock me-2"></i> Schedules
+                    </a>
+                </li>
+
+                <hr class="bg-secondary" />
+
+                <li class="nav-item">
+                    <a class="nav-link text-warning" asp-controller="Admin" asp-action="PendingPatients">
+                        <i class="fas fa-user-clock me-2"></i> Pending Patients
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-danger" asp-controller="Admin" asp-action="PendingAppointments">
+                        <i class="fas fa-exclamation-circle me-2"></i> Pending Schedules
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <div class="main-content flex-grow-1 p-4">
+            @RenderBody()
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+    <script>
+        document.getElementById("sidebarToggle")
+            .addEventListener("click", function () {
+                document.getElementById("sidebar")
+                    .classList.toggle("collapsed");
+            });
+    </script>

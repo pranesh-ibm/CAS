@@ -1,77 +1,96 @@
 ﻿@model IEnumerable<CAS.Models.Patient>
-
 @{
-    ViewData["Title"] = "GetPatientsDetail";
+    ViewData["Title"] = "Patients";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>GetPatientsDetail</h1>
+<div class="container-fluid px-4 py-4">
 
-<p>
-    <a asp-action="CreatePatient">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PatientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Dob)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Summary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PatientStatus)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PatientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dob)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PatientStatus)
-            </td>
-            <td>
-                    <a asp-action="EditPatient" asp-route-id="@item.PatientId">Edit</a> |
-                    <a asp-action="GetPatientDetails" asp-route-id="@item.PatientId">Details</a> |
-                    <a asp-action="DeletePatient" asp-route-id="@item.PatientId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <!-- ================= PAGE HEADER ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Patients Management</h2>
+            <p class="text-muted mb-0">Manage and monitor all registered patients</p>
+        </div>
+
+        <a asp-action="CreatePatient" class="btn btn-primary px-4">
+            <i class="fas fa-plus me-2"></i> Add New Patient
+        </a>
+    </div>
+
+    <!-- ================= TABLE CARD ================= -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>DOB</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.PatientName</td>
+                                <td>@(item.Dob.HasValue? item.Dob.Value.ToString("dd MMM yyyy") : "-")</td>
+                                <td>@item.Gender</td>
+                                <td>@item.Phone</td>
+                                <td>@item.Email</td>
+
+                                <!-- Status Badge -->
+                                <td>
+                                    @if (item.PatientStatus == "Active")
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else if (item.PatientStatus == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@item.PatientStatus</span>
+                                    }
+                                </td>
+
+                                <!-- Action Buttons -->
+                                <td class="text-end">
+                                    <a asp-action="EditPatient"
+                                       asp-route-id="@item.PatientId"
+                                       class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a asp-action="GetPatientDetails"
+                                       asp-route-id="@item.PatientId"
+                                       class="btn btn-sm btn-outline-info me-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                    <a asp-action="DeletePatient"
+                                       asp-route-id="@item.PatientId"
+                                       class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>

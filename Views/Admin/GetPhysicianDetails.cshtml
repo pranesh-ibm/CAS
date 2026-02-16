@@ -2,9 +2,10 @@
 
 @{
     ViewData["Title"] = "GetPhysicianDetails";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>GetPhysicianDetails</h1>
+<h1>PhysicianGetDetailsById</h1>
 
 <div>
     <h4>Physician</h4>
@@ -55,6 +56,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.PhysicianId">Edit</a> |
+    <a asp-action="EditPhysician" asp-route-id="@Model?.PhysicianId">Edit</a> |
     <a asp-action="GetPhysiciansDetail">Back to List</a>
 </div>

@@ -1,104 +1,137 @@
 ﻿@{
-    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<style>
-    .dashboard-header {
-        background: linear-gradient(135deg, #4e73df, #1cc88a);
-        color: white;
-        padding: 40px;
-        border-radius: 15px;
-    }
+<div class="container-fluid px-4 py-4">
 
-    .dashboard-card {
-        transition: all 0.3s ease-in-out;
-        border: none;
-        border-radius: 15px;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    }
-
-    .dashboard-icon {
-        font-size: 40px;
-        margin-bottom: 15px;
-    }
-
-    .btn-custom {
-        border-radius: 30px;
-        font-weight: 500;
-    }
-</style>
-
-<div class="container mt-5">
-
-    <!-- Header -->
-    <div class="dashboard-header text-center mb-5 shadow">
-        <h1 class="fw-bold">Admin Dashboard</h1>
-        <p class="mb-0">Manage all system modules efficiently</p>
+    <!-- ================= HEADER ================= -->
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark">Dashboard Overview</h2>
+        @* <p class="text-muted mb-0">Real-time statistics of the Clinic Automation System</p> *@
     </div>
 
-    <!-- Cards -->
+    <!-- ================= STAT CARDS ================= -->
     <div class="row g-4">
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-primary">🧑</div>
-                    <h5 class="card-title fw-bold">Patients</h5>
-                    <p class="card-text text-muted">Manage patient records</p>
-                    <a asp-controller="Admin" asp-action="GetPatientsDetail"
-                       class="btn btn-primary btn-custom w-100">Open</a>
+        <!-- Patients -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">TOTAL PATIENTS</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.TotalPatients</h3>
+                    </div>
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div> *@
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-success">👨‍⚕️</div>
-                    <h5 class="card-title fw-bold">Physicians</h5>
-                    <p class="card-text text-muted">Manage physician details</p>
-                    <a asp-controller="Admin" asp-action="GetPhysiciansDetail"
-                       class="btn btn-success btn-custom w-100">Open</a>
+        <!-- Physicians -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">TOTAL PHYSICIANS</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.TotalPhysicians</h3>
+                    </div>
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-user-md"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div> *@
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-warning">💊</div>
-                    <h5 class="card-title fw-bold">Chemists</h5>
-                    <p class="card-text text-muted">Manage chemist info</p>
-                    <a asp-controller="Admin" asp-action="GetChemistsDetail"
-                       class="btn btn-warning btn-custom w-100 text-white">Open</a>
+        <!-- Chemists -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">TOTAL CHEMISTS</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.TotalChemists</h3>
+                    </div>
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-capsules"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div> *@
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-info">🚚</div>
-                    <h5 class="card-title fw-bold">Suppliers</h5>
-                    <p class="card-text text-muted">Manage supplier records</p>
-                    <a asp-controller="Admin" asp-action="GetSuppliersDetail"
-                       class="btn btn-info btn-custom w-100 text-white">Open</a>
+        <!-- Suppliers -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">TOTAL SUPPLIERS</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.TotalSuppliers</h3>
+                    </div>
+                    <div class="stat-icon bg-info">
+                        <i class="fas fa-truck"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div> *@
+
+        <!-- Appointments -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">TOTAL APPOINTMENTS</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.TotalAppointments</h3>
+                    </div>
+                    <div class="stat-icon bg-secondary">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+
+        <!-- Schedules -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">TOTAL SCHEDULES</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.TotalSchedules</h3>
+                    </div>
+                    <div class="stat-icon bg-dark">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+
+        <!-- Pending Patients -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm border-start border-4 border-danger">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">PENDING PATIENTS</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.PendingPatientsCount</h3>
+                    </div>
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+
+        <!-- Pending Schedules -->
+        @* <div class="col-xxl-3 col-xl-4 col-md-6">
+            <div class="card stat-card h-100 border-0 shadow-sm border-start border-4 border-warning">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1 small">PENDING SCHEDULES</p>
+                        <h3 class="fw-bold mb-0">@ViewBag.PendingSchedulesCount</h3>
+                    </div>
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div> *@
 
     </div>
-
-    <!-- Logout -->
-    <div class="text-center mt-5">
-        <a asp-controller="CrediMgr" asp-action="Logout"
-           class="btn btn-danger btn-lg px-5 btn-custom shadow">
-            Logout
-        </a>
-    </div>
-
 </div>

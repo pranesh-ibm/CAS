@@ -1,0 +1,71 @@
+﻿@model IEnumerable<CAS.Models.Physician>
+
+@{
+    ViewData["Title"] = "GetPhysiciansDetail";
+}
+
+<h1>GetPhysiciansDetail</h1>
+
+<p>
+    <a asp-action="CreatePhysician">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PhysicianName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Specialization)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Summary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhysicianStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhysicianName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Specialization)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Summary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhysicianStatus)
+            </td>
+            <td>
+                <a asp-action="EditPhysician" asp-route-id="@item.PhysicianId">Edit</a> |
+                <a asp-action="GetPhysicianDetails" asp-route-id="@item.PhysicianId">Details</a> |
+                <a asp-action="DeletePhysician" asp-route-id="@item.PhysicianId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

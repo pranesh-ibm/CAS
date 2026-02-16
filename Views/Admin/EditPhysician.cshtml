@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "EditPhysician";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h1>EditPhysician</h1>
@@ -44,8 +45,26 @@
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhysicianStatus" class="control-label"></label>
-                <input asp-for="PhysicianStatus" class="form-control" />
+                <label class="control-label d-block">Physician Status</label>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio"
+                           asp-for="PhysicianStatus" value="Pending" />
+                    <label class="form-check-label">Pending</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio"
+                           asp-for="PhysicianStatus" value="Active" />
+                    <label class="form-check-label">Active</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio"
+                           asp-for="PhysicianStatus" value="Inactive" />
+                    <label class="form-check-label">Inactive</label>
+                </div>
+
                 <span asp-validation-for="PhysicianStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,6 +78,3 @@
     <a asp-action="GetPhysiciansDetail">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
