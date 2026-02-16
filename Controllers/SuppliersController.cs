@@ -1,6 +1,7 @@
 ﻿using CAS.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace CAS.Controllers
@@ -32,7 +33,6 @@ namespace CAS.Controllers
             return View(supplier);
         }
 
-        // 🟡 View Pending Orders
         public IActionResult PendingOrders()
         {
             var username = User.Identity?.Name;
@@ -43,10 +43,13 @@ namespace CAS.Controllers
             var orders = _context.PurchaseOrderHeaders
                 .Where(o => o.SupplierId == user.RoleReferenceId
                          && o.PoStatus == "Pending")
+                .Include(o => o.PurchaseProductLines)
+                    .ThenInclude(p => p.Drug)
                 .ToList();
 
             return View(orders);
         }
+
 
         // 🟢 Order History (Approved + Rejected)
         public IActionResult OrderHistory()

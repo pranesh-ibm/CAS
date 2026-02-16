@@ -77,7 +77,6 @@ namespace CAS_Project.Controllers
         }
 
         [HttpPost]
-
         public IActionResult Edit(Chemist model)
         {
             var chemist = _context.Chemists.Find(model.ChemistId);
@@ -94,6 +93,7 @@ namespace CAS_Project.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public IActionResult OrderDrug(int SupplierId, List<int> DrugIds, List<int> Quantities)
         {
             int count = _context.PurchaseOrderHeaders.Count() + 1;
