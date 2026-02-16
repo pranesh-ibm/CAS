@@ -1,36 +1,38 @@
-﻿@model List<CAS.Models.DrugRequest>
+﻿@model List<CAS.Models.PurchaseOrderHeader>
 
-<h2 class="mb-4">Pending Orders</h2>
+<div class="container mt-4">
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Order ID</th>
-            <th>Drug Details</th>
-            <th>Request Date</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+    <h2>Pending Orders</h2>
 
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-bordered">
+        <thead class="table-dark">
             <tr>
-                <td>@item.DrugRequestId</td>
-                <td>@item.DrugsInfoText</td>
-                <td>@item.RequestDate</td>
-                <td>
-                    <a class="btn btn-success btn-sm"
-                       href="/Supplier/Approve/@item.DrugRequestId">
-                        Approve
-                    </a>
-
-                    <a class="btn btn-danger btn-sm"
-                       href="/Supplier/Reject/@item.DrugRequestId">
-                        Reject
-                    </a>
-                </td>
+                <th>PO No</th>
+                <th>Date</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Pono</td>
+                    <td>@order.Podate</td>
+                    <td>
+                        <a href="/Supplier/Approve/@order.Poid"
+                           class="btn btn-success btn-sm">
+                            Approve
+                        </a>
+
+                        <a href="/Supplier/Reject/@order.Poid"
+                           class="btn btn-danger btn-sm">
+                            Reject
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

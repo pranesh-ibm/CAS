@@ -1,9 +1,11 @@
 ﻿using CAS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CAS_Project.Controllers
 {
+    [Authorize(Roles = "Chemist")]
     public class ChemistController : Controller
     {
         private readonly CasContext _context;
@@ -34,7 +36,31 @@ namespace CAS_Project.Controllers
 
             return View(chemist);
         }
+        // GET: Edit Profile
+        public IActionResult Edit()
+        {
+            var username = User.Identity?.Name;
 
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserName == username);
+
+            var chemist = _context.Chemists
+                .FirstOrDefault(c => c.ChemistId == user.RoleReferenceId);
+
+            return View(chemist);
+        }
+        public IActionResult ViewProfile()
+        {
+            var username = User.Identity?.Name;
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserName == username);
+
+            var chemist = _context.Chemists
+                .FirstOrDefault(c => c.ChemistId == user.RoleReferenceId);
+
+            return View(chemist);
+        }
 
 
         public IActionResult ViewInventory()
@@ -51,8 +77,23 @@ namespace CAS_Project.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
-        [HttpPost]
+
+        public IActionResult Edit(Chemist model)
+        {
+            var chemist = _context.Chemists.Find(model.ChemistId);
+
+            if (chemist != null)
+            {
+                chemist.Email = model.Email;
+                chemist.Address = model.Address;
+                chemist.Summary = model.Summary;
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public IActionResult OrderDrug(int SupplierId, List<int> DrugIds, List<int> Quantities)
         {
             int count = _context.PurchaseOrderHeaders.Count() + 1;
@@ -62,7 +103,8 @@ namespace CAS_Project.Controllers
             {
                 Pono = poNumber,
                 Podate = DateOnly.FromDateTime(DateTime.Now),
-                SupplierId = SupplierId
+                SupplierId = SupplierId,
+                PoStatus = "Pending" 
             };
 
             _context.PurchaseOrderHeaders.Add(orderHeader);
@@ -75,6 +117,7 @@ namespace CAS_Project.Controllers
                     Poid = orderHeader.Poid,
                     DrugId = DrugIds[i],
                     Qty = Quantities[i],
+                   
                 };
 
                 _context.PurchaseProductLines.Add(productLine);
@@ -88,6 +131,7 @@ namespace CAS_Project.Controllers
 
 
 
+
         public IActionResult MyOrders()
         {
             var orders = _context.PurchaseOrderHeaders
@@ -96,6 +140,7 @@ namespace CAS_Project.Controllers
                     po.Poid,
                     po.Pono,
                     po.Podate,
+                    po.PoStatus,
                     SupplierName = po.Supplier.SupplierName, 
                     Items = po.PurchaseProductLines
                         .Select(p => new
