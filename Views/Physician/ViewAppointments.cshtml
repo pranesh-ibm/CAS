@@ -1,0 +1,41 @@
+@model CAS.Models.ViewModel.AppointmentListViewModel
+
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<h2>My Appointments / Schedules</h2>
+
+@if (Model == null || Model.Schedules == null || !Model.Schedules.Any())
+{
+    <div class="text-center py-5 text-muted">
+        <h5 class="mb-2">No appointments scheduled</h5>
+        <p class="mb-3">You have no appointments scheduled. Patients will appear here once appointments are created.</p>
+        <a asp-action="ViewAppointments" class="btn btn-outline-secondary me-2">Refresh</a>
+        <a asp-action="Index" class="btn btn-link">Back to Dashboard</a>
+    </div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var s in Model.Schedules)
+        {
+            <tr>
+                <td>@s.Appointment.Patient.PatientName</td>
+                <td>@s.ScheduleDate.ToString()</td>
+                <td>@s.ScheduleTime.ToString()</td>
+                <td>@s.ScheduleStatus</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

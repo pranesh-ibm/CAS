@@ -1,0 +1,87 @@
+@model CAS.Models.ViewModel.CreatePrescriptionViewModel
+
+@{
+    ViewData["Title"] = "Create Prescription";
+}
+
+<h2>Create Prescription</h2>
+
+<form asp-action="CreatePrescription" method="post" novalidate>
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="mb-3">
+        <label class="form-label">Schedule (Patient & Date)</label>
+        <select name="ScheduleId" class="form-select" required>
+            <option value="">-- Select --</option>
+            @foreach (var s in Model.Schedules)
+            {
+                <option value="@s.ScheduleId">@s.Appointment.Patient.PatientName - @s.ScheduleDate.ToString()</option>
+            }
+        </select>
+        <div class="invalid-feedback">This field is required</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Drug</label>
+        <select name="DrugId" class="form-select" required>
+            <option value="">-- Select Drug --</option>
+            @foreach (var d in Model.Drugs)
+            {
+                <option value="@d.DrugId">@d.DrugTitle</option>
+            }
+        </select>
+        <div class="invalid-feedback">This field is required</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Prescription Details</label>
+        <textarea name="Prescription" class="form-control" required></textarea>
+        <div class="invalid-feedback">This field is required</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Dosage</label>
+        <input name="Dosage" class="form-control" required />
+        <div class="invalid-feedback">This field is required</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Advice</label>
+        <textarea name="Advice" class="form-control" required></textarea>
+        <div class="invalid-feedback">This field is required</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Note</label>
+        <textarea name="Note" class="form-control" required></textarea>
+        <div class="invalid-feedback">This field is required</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Bootstrap style validation: add/remove is-invalid class
+        (function () {
+            var forms = document.querySelectorAll('form[novalidate]');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    var controls = form.querySelectorAll('input,select,textarea');
+                    controls.forEach(function (c) {
+                        if (typeof c.checkValidity === 'function' && !c.checkValidity()) {
+                            c.classList.add('is-invalid');
+                        } else {
+                            c.classList.remove('is-invalid');
+                        }
+                    });
+                }, false);
+            });
+        })();
+    </script>
+}
