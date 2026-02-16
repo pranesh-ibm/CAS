@@ -8,6 +8,14 @@ namespace CAS.Controllers
     public class CrediMgrController : Controller
     {
 
+        public IActionResult RegisterPatient()
+        {
+            return View();
+        }
+
+
+
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -22,9 +30,8 @@ namespace CAS.Controllers
 
             var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
 
-                    return RedirectToAction("Index", usr.Role);
-                
-            }
+                    
+            //}
 
 
             if (usr != null)

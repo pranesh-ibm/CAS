@@ -628,10 +628,12 @@
 
 /////////////////////////////////////////////////////////////////////////////////////
 using CAS.Models;
+using CAS.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 namespace Medi_Clinic.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -643,9 +645,24 @@ namespace Medi_Clinic.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new AdminDashboardViewModel
+            {
+                TotalPatients = await _context.Patients.CountAsync(),
+                TotalPhysicians = await _context.Physicians.CountAsync(),
+                TotalChemists = await _context.Chemists.CountAsync(),
+                TotalSuppliers = await _context.Suppliers.CountAsync(),
+                TodayAppointments = await _context.Appointments.CountAsync(),
+
+                PendingPatients = await _context.Patients.CountAsync(p => p.PatientStatus == "Pending"),
+
+                PendingAppointments = await _context.Appointments.CountAsync(a => a.ScheduleStatus == "Pending"),
+
+                TotalAppointments = await _context.Schedules.CountAsync(s => s.ScheduleDate == DateOnly.FromDateTime(DateTime.Today))
+
+            };
+            return View(model);
         }
 
         //  GET: AdminPatient
