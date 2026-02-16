@@ -1,0 +1,41 @@
+@model CAS.Models.ViewModel.DrugListViewModel
+
+@{
+    ViewData["Title"] = "Drugs";
+}
+
+<h2>Available Drugs</h2>
+
+@if (Model == null || Model.Drugs == null || !Model.Drugs.Any())
+{
+    <div class="text-center py-5 text-muted">
+        <h5 class="mb-2">No drugs available</h5>
+        <p class="mb-3">There are currently no active drugs in the system. Please check back later or contact the pharmacy team.</p>
+        <a asp-action="ViewDrugs" class="btn btn-outline-secondary me-2">Refresh</a>
+        <a asp-action="OrderDrugs" class="btn btn-primary">Order Drugs</a>
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Expiry</th>
+                <th>Dosage</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var d in Model.Drugs)
+        {
+            <tr>
+                <td>@d.DrugTitle</td>
+                <td>@d.Description</td>
+                <td>@(d.Expiry.HasValue ? d.Expiry.Value.ToString() : "-")</td>
+                <td>@d.Dosage</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

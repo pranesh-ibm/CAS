@@ -1,0 +1,41 @@
+@model CAS.Models.ViewModel.PatientListViewModel
+
+@{
+    ViewData["Title"] = "View Patients";
+}
+
+<h2>Assigned Patients</h2>
+
+@if (Model == null || Model.Patients == null || !Model.Patients.Any())
+{
+    <div class="text-center py-5 text-muted">
+        <h5 class="mb-2">No patients assigned</h5>
+        <p class="mb-3">There are currently no patients linked to your account. This could be because schedules haven't been created or patients haven't been assigned yet.</p>
+        <a asp-action="ViewPatients" class="btn btn-outline-secondary me-2">Refresh</a>
+        <a asp-action="Index" class="btn btn-link">Back to Dashboard</a>
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model.Patients)
+        {
+            <tr>
+                <td>@p.PatientName</td>
+                <td>@p.Phone</td>
+                <td>@p.Email</td>
+                <td>@p.Address</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
