@@ -1,7 +1,7 @@
 @model CAS.Models.ViewModel.PhysicianProfileViewModel
 @{
     ViewData["Title"] = "Physician Dashboard";
-    var username = User.Identity?.Name ?? Model.PhysicianName ?? "Physician";
+    var username = Model.PhysicianName ?? "Physician";
 }
 
 <style>
@@ -36,29 +36,14 @@
     <div class="gradient-header text-center mb-4">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="fw-bold mb-0">Welcome, @username 👋</h2>
-                <p class="mb-0">Physician Dashboard</p>
+                <h2 class="fw-bold mb-1 text-start">Welcome, @username👋</h2>
+                <p class="mb-0 text-start">Physician Dashboard</p>
             </div>
+
+
+@await Html.PartialAsync("_SuccessModal")
             <div class="text-end">
                 <a asp-action="EditProfile" class="btn btn-outline-light">Edit Profile</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card p-3 profile-card h-100">
-                <h5 class="mb-1">@Model.PhysicianName</h5>
-                <small class="text-muted">@Model.Specialization</small>
-                <p class="mt-3 mb-1"><strong>Email:</strong> @Model.Email</p>
-                <p class="mb-1"><strong>Phone:</strong> @Model.Phone</p>
-                <p class="mb-0 text-truncate"><strong>Address:</strong> @Model.Address</p>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card p-3 h-100">
-                <h6>Summary</h6>
-                <p class="text-muted">@Model.Summary</p>
             </div>
         </div>
     </div>
@@ -67,8 +52,16 @@
 
         <div class="col-md-4 mb-4">
             <div class="card action-card p-4 h-100">
+                <h5>📅 View Appointments</h5>
+                <p class="text-muted">Manage your appointment schedule</p>
+                <a asp-controller="Physician" asp-action="ViewAppointments" class="btn btn-info btn-modern">Open</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card action-card p-4 h-100">
                 <h5>🧑‍⚕️ View Patients</h5>
-                <p class="text-muted">Browse and search your patients</p>
+                <p class="text-muted">Browse your patients</p>
                 <a asp-controller="Physician" asp-action="ViewPatients" class="btn btn-primary btn-modern">Open</a>
             </div>
         </div>
@@ -91,9 +84,9 @@
 
         <div class="col-md-4 mb-4">
             <div class="card action-card p-4 h-100">
-                <h5>📅 View Appointments</h5>
-                <p class="text-muted">Manage your appointment schedule</p>
-                <a asp-controller="Physician" asp-action="ViewAppointments" class="btn btn-info btn-modern">Open</a>
+                <h5>🛒 Order Drugs</h5>
+                <p class="text-muted">Place drug requests</p>
+                <a asp-controller="Physician" asp-action="OrderDrugs" class="btn btn-danger btn-modern">Order</a>
             </div>
         </div>
 
@@ -107,9 +100,9 @@
 
         <div class="col-md-4 mb-4">
             <div class="card action-card p-4 h-100">
-                <h5>🛒 Order Drugs</h5>
-                <p class="text-muted">Place drug requests</p>
-                <a asp-controller="Physician" asp-action="OrderDrugs" class="btn btn-danger btn-modern">Order</a>
+                <h5>📜 View Drug Requests</h5>
+                <p class="text-muted">See your past drug requests</p>
+                <a asp-controller="Physician" asp-action="ViewDrugRequests" class="btn btn-secondary btn-modern">History</a>
             </div>
         </div>
 

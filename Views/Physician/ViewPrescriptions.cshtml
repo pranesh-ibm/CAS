@@ -4,6 +4,8 @@
     ViewData["Title"] = "View Prescriptions";
 }
 
+@await Html.PartialAsync("_SuccessModal")
+
 <h2>Prescriptions</h2>
 
 @if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
@@ -40,4 +42,17 @@ else
         }
         </tbody>
     </table>
+}
+
+@section Scripts {
+    <script>
+        (function(){
+            var modalEl = document.getElementById('successModal');
+            if (modalEl && typeof bootstrap !== 'undefined'){
+                var modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+        })();
+    </script>
+}
 }

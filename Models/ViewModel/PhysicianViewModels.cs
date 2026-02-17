@@ -51,6 +51,11 @@ namespace CAS.Models.ViewModel
         public List<Drug> Drugs { get; set; } = new List<Drug>();
     }
 
+    public class DrugRequestListViewModel
+    {
+        public List<DrugRequest> Requests { get; set; } = new List<DrugRequest>();
+    }
+
     public class OrderDrugsViewModel
     {
         public OrderDrugsFormModel Form { get; set; } = new OrderDrugsFormModel();

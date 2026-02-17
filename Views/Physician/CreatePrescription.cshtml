@@ -6,8 +6,9 @@
 
 <h2>Create Prescription</h2>
 
-<form asp-action="CreatePrescription" method="post" novalidate>
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<form id="createPrescForm" asp-action="CreatePrescription" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <div id="createPrescSummary" class="text-danger mb-3"></div>
 
     <div class="mb-3">
         <label class="form-label">Schedule (Patient & Date)</label>
@@ -57,7 +58,7 @@
         <div class="invalid-feedback">This field is required</div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="button" id="createPrescBtn" class="btn btn-primary">Create</button>
 </form>
 
 @section Scripts {
@@ -65,23 +66,85 @@
     <script>
         // Bootstrap style validation: add/remove is-invalid class
         (function () {
-            var forms = document.querySelectorAll('form[novalidate]');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    var controls = form.querySelectorAll('input,select,textarea');
-                    controls.forEach(function (c) {
-                        if (typeof c.checkValidity === 'function' && !c.checkValidity()) {
-                            c.classList.add('is-invalid');
-                        } else {
-                            c.classList.remove('is-invalid');
+            var form = document.getElementById('createPrescForm');
+            var btn = document.getElementById('createPrescBtn');
+            var summary = document.getElementById('createPrescSummary');
+            if (!form || !btn) return;
+
+            btn.addEventListener('click', function(e){
+                e.preventDefault();
+                summary.innerText = '';
+
+                if (!validateForm(form)) return;
+
+                (async function(){
+                    try {
+                        var fd = new FormData(form);
+                        var res = await fetch(form.action, { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }, body: fd });
+                        if (!res.ok) {
+                            var err = 'An error occurred while creating prescription.';
+                            try { var body = await res.json(); if (body && body.message) err = body.message; } catch(e){}
+                            summary.innerText = err;
+                            return;
                         }
-                    });
-                }, false);
+                        var json = await res.json();
+                        if (json && json.success) {
+                            showModalAndRedirect(json.message || 'Prescription created', '@Url.Action("Index", "Physician")');
+                            return;
+                        }
+                        summary.innerText = (json && json.message) ? json.message : 'Unexpected response.';
+                    } catch (ex) {
+                        summary.innerText = 'Network error while creating prescription.';
+                    }
+                })();
             });
+
+            function showModalAndRedirect(message, url) {
+                var modalId = 'ajaxSuccessModalPresc';
+                var existing = document.getElementById(modalId);
+                if (existing) existing.remove();
+
+                var html = '<div class="modal fade" id="' + modalId + '" tabindex="-1" aria-hidden="true">' +
+                    '<div class="modal-dialog modal-dialog-centered"><div class="modal-content">' +
+                    '<div class="modal-header"><h5 class="modal-title">Success</h5>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>' +
+                    '<div class="modal-body">' + encodeHtml(message) + '</div>' +
+                    '<div class="modal-footer"><button id="ajaxOkBtnPresc" type="button" class="btn btn-primary">OK</button></div>' +
+                    '</div></div></div>';
+
+                var div = document.createElement('div');
+                div.innerHTML = html;
+                document.body.appendChild(div);
+                var modalEl = document.getElementById(modalId);
+                var modal = new bootstrap.Modal(modalEl);
+                modal.show();
+                document.getElementById('ajaxOkBtnPresc').addEventListener('click', function(){
+                    modal.hide();
+                    window.location = url;
+                });
+            }
+
+            function encodeHtml(s){ var div = document.createElement('div'); div.innerText = s; return div.innerHTML; }
+            function validateForm(formEl) {
+                var controls = formEl.querySelectorAll('input,select,textarea');
+                var ok = true;
+                controls.forEach(function(c){
+                    if (c.type === 'hidden') return;
+                    var valid = true;
+                    if (typeof c.checkValidity === 'function') valid = c.checkValidity();
+                    if (!valid) {
+                        c.classList.add('is-invalid');
+                        var fb = c.parentNode.querySelector('.invalid-feedback') || c.parentNode.querySelector('.text-danger');
+                        if (!fb) { fb = document.createElement('div'); fb.className='invalid-feedback'; c.parentNode.appendChild(fb); }
+                        try { fb.innerText = c.validationMessage || 'This field is required'; } catch(e){}
+                        ok = false;
+                    } else {
+                        c.classList.remove('is-invalid');
+                        var fb = c.parentNode.querySelector('.invalid-feedback'); if (fb) fb.innerText = '';
+                    }
+                });
+                return ok;
+            }
         })();
     </script>
 }

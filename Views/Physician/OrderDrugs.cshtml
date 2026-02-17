@@ -6,38 +6,107 @@
 
 <h2>Order Drugs</h2>
 
-<form asp-action="OrderDrugs" method="post" novalidate>
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<form id="orderDrugsForm" asp-action="OrderDrugs" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <div id="orderDrugsSummary" class="text-danger mb-3"></div>
 
     <div class="mb-3">
-        <label class="form-label">Drugs (details / quantities)</label>
+        <label class="form-label">Drug name</label>
         <textarea name="DrugsInfoText" class="form-control" required>@Model.Form.DrugsInfoText</textarea>
         <div class="invalid-feedback">This field is required</div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit Order</button>
+    <button type="button" id="orderDrugsBtn" class="btn btn-primary">Submit Order</button>
 </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
         (function () {
-            var form = document.querySelector('form[novalidate]');
-            if (!form) return;
-            form.addEventListener('submit', function (e) {
-                if (!form.checkValidity()) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                var controls = form.querySelectorAll('input,textarea,select');
-                controls.forEach(function (c) {
-                    if (typeof c.checkValidity === 'function' && !c.checkValidity()) {
+            var form = document.getElementById('orderDrugsForm');
+            var btn = document.getElementById('orderDrugsBtn');
+            var summary = document.getElementById('orderDrugsSummary');
+            if (!form || !btn) return;
+
+            btn.addEventListener('click', function(e){
+                e.preventDefault();
+                summary.innerText = '';
+
+                if (!validateForm(form)) return;
+
+                var data = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', form.action);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState !== 4) return;
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            var resp = JSON.parse(xhr.responseText);
+                            if (resp && resp.success) {
+                                showModalAndRedirect(resp.message || 'Order submitted', '@Url.Action("Index", "Physician")');
+                                return;
+                            }
+                        } catch (ex){
+                            window.location = '@Url.Action("Index", "Physician")';
+                            return;
+                        }
+                    }
+                    var msg = 'An error occurred while submitting order.';
+                    try { var body = JSON.parse(xhr.responseText); if (body && body.message) msg = body.message; } catch(e){}
+                    summary.innerText = msg;
+                };
+                xhr.send(data);
+            });
+
+            function showModalAndRedirect(message, url) {
+                var modalId = 'ajaxSuccessModalOrder';
+                var existing = document.getElementById(modalId);
+                if (existing) existing.remove();
+
+                var html = '<div class="modal fade" id="' + modalId + '" tabindex="-1" aria-hidden="true">' +
+                    '<div class="modal-dialog modal-dialog-centered"><div class="modal-content">' +
+                    '<div class="modal-header"><h5 class="modal-title">Success</h5>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>' +
+                    '<div class="modal-body">' + encodeHtml(message) + '</div>' +
+                    '<div class="modal-footer"><button id="ajaxOkBtnOrder" type="button" class="btn btn-primary">OK</button></div>' +
+                    '</div></div></div>';
+
+                var div = document.createElement('div');
+                div.innerHTML = html;
+                document.body.appendChild(div);
+                var modalEl = document.getElementById(modalId);
+                var modal = new bootstrap.Modal(modalEl);
+                modal.show();
+                document.getElementById('ajaxOkBtnOrder').addEventListener('click', function(){
+                    modal.hide();
+                    window.location = url;
+                });
+            }
+
+            function encodeHtml(s){ var div = document.createElement('div'); div.innerText = s; return div.innerHTML; }
+            function validateForm(formEl) {
+                var controls = formEl.querySelectorAll('input,textarea,select');
+                var ok = true;
+                controls.forEach(function(c){
+                    if (c.type === 'hidden') return;
+                    var valid = true;
+                    if (typeof c.checkValidity === 'function') valid = c.checkValidity();
+                    if (!valid) {
                         c.classList.add('is-invalid');
+                        var fb = c.parentNode.querySelector('.invalid-feedback') || c.parentNode.querySelector('.text-danger');
+                        if (!fb) { fb = document.createElement('div'); fb.className='invalid-feedback'; c.parentNode.appendChild(fb); }
+                        try { fb.innerText = c.validationMessage || 'This field is required'; } catch(e){}
+                        ok = false;
                     } else {
                         c.classList.remove('is-invalid');
+                        var fb = c.parentNode.querySelector('.invalid-feedback'); if (fb) fb.innerText = '';
                     }
                 });
-            });
+                return ok;
+            }
         })();
     </script>
+
+@await Html.PartialAsync("_SuccessModal")
 }

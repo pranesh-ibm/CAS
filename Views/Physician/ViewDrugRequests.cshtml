@@ -1,0 +1,37 @@
+@model CAS.Models.ViewModel.DrugRequestListViewModel
+
+@{
+    ViewData["Title"] = "Drug Request History";
+}
+
+<h2>Drug Request History</h2>
+
+@if (Model?.Requests == null || !Model.Requests.Any())
+{
+    <div class="alert alert-info">
+        You have not placed any drug requests yet.
+        <a asp-controller="Physician" asp-action="OrderDrugs" class="btn btn-sm btn-primary ms-3">Place a Request</a>
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Request Date</th>
+                <th>Drug</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var r in Model.Requests)
+        {
+            <tr>
+                <td>@r.RequestDate.ToString("g")</td>
+                <td>@r.DrugsInfoText</td>
+                <td>@r.RequestStatus</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

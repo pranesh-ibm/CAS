@@ -77,7 +77,16 @@ public class PhysicianController : Controller
         var physicianId = GetPhysicianId();
         if (physicianId == null) return RedirectToAction("Login", "CrediMgr");
 
-        if (!ModelState.IsValid) return View(model);
+        var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        if (!ModelState.IsValid)
+        {
+            if (isAjax)
+            {
+                var first = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).FirstOrDefault() ?? "Validation failed.";
+                return BadRequest(new { success = false, message = first });
+            }
+            return View(model);
+        }
 
         var physician = await _context.Physicians.FindAsync(physicianId.Value);
         if (physician == null) return NotFound();
@@ -93,6 +102,12 @@ public class PhysicianController : Controller
         _context.Update(physician);
         await _context.SaveChangesAsync();
 
+        if (isAjax)
+        {
+            return Json(new { success = true, message = "Profile updated successfully." });
+        }
+
+        TempData["SuccessMessage"] = "Profile updated successfully.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -149,6 +164,13 @@ public class PhysicianController : Controller
 
         if (!ModelState.IsValid)
         {
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                var first = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).FirstOrDefault() ?? "Validation failed.";
+                return BadRequest(new { success = false, message = first });
+            }
+
             // reload lists
             var vm = new CreatePrescriptionViewModel
             {
@@ -182,6 +204,13 @@ public class PhysicianController : Controller
         _context.PhysicianPrescrips.Add(prescrip);
         await _context.SaveChangesAsync();
 
+        var isAjaxResp = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        if (isAjaxResp)
+        {
+            return Json(new { success = true, message = "Prescription created successfully." });
+        }
+
+        TempData["SuccessMessage"] = "Prescription created successfully.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -228,6 +257,21 @@ public class PhysicianController : Controller
         return View(vm);
     }
 
+    // View drug requests made by this physician
+    public async Task<IActionResult> ViewDrugRequests()
+    {
+        var physicianId = GetPhysicianId();
+        if (physicianId == null) return RedirectToAction("Login", "CrediMgr");
+
+        var requests = await _context.DrugRequests
+            .Where(r => r.PhysicianId == physicianId)
+            .OrderByDescending(r => r.RequestDate)
+            .ToListAsync();
+
+        var vm = new DrugRequestListViewModel { Requests = requests };
+        return View(vm);
+    }
+
     // GET Order Drugs
     public IActionResult OrderDrugs()
     {
@@ -247,6 +291,13 @@ public class PhysicianController : Controller
 
         if (!ModelState.IsValid)
         {
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                var first = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).FirstOrDefault() ?? "Validation failed.";
+                return BadRequest(new { success = false, message = first });
+            }
+
             return View(new OrderDrugsViewModel { Form = form });
         }
 
@@ -261,6 +312,13 @@ public class PhysicianController : Controller
         _context.DrugRequests.Add(req);
         await _context.SaveChangesAsync();
 
+        var isAjax2 = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        if (isAjax2)
+        {
+            return Json(new { success = true, message = "Drug request submitted successfully." });
+        }
+
+        TempData["SuccessMessage"] = "Drug request submitted successfully.";
         return RedirectToAction(nameof(Index));
     }
 }
