@@ -14,8 +14,20 @@
     }
 
     .profile-card {
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        position: relative;
+    }
+
+    .edit-btn {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        border-radius: 25px;
+        padding: 6px 18px;
+        font-weight: 500;
     }
 
     .action-card {
@@ -34,33 +46,46 @@
         padding: 8px 20px;
         font-weight: 500;
     }
+
+    .status-badge {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 13px;
+    }
 </style>
 
 <div class="container mt-4">
 
-    <!-- Gradient Header -->
+    <!-- Header -->
     <div class="gradient-header text-center mb-5">
         <h2 class="fw-bold">Welcome, @Model.ChemistName 👋</h2>
         <p class="mb-0">Chemist Control Panel</p>
     </div>
 
     <!-- Profile Section -->
-    <div class="card shadow-lg p-4 mb-4" style="border-radius:15px;">
+    <div class="profile-card mb-5">
 
-        <h3 class="text-center mb-4">Profile</h3>
+        <h3>🏥 My Profile</h3>
 
-        <div class="d-grid gap-3">
+        <!-- Edit Button -->
+        <a asp-action="EditProfile"
+           class="btn btn-outline-primary edit-btn">
+            ✏ Edit
+        </a>
 
-            <a asp-action="ViewProfile"
-               class="btn btn-primary btn-lg"
-               style="border-radius:10px;">
-                View Profile
-            </a>
+        <hr />
 
-        </div>
+        <p><strong>📧 Email:</strong> @Model.Email</p>
+        <p><strong>📞 Phone:</strong> @Model.Phone</p>
+        <p><strong>📍 Address:</strong> @Model.Address</p>
+        <p>
+            <strong>📌 Status:</strong>
+            <span class="status-badge">Active</span>
+        </p>
 
     </div>
-
 
     <!-- Actions -->
     <div class="row text-center">
@@ -94,6 +119,18 @@
                 <a href="/Chemist/MyOrders"
                    class="btn btn-dark btn-modern">
                     View
+                </a>
+            </div>
+        </div>
+
+        <!-- NEW: Drug Requests from Physician -->
+        <div class="col-md-4 mb-4">
+            <div class="card action-card p-4">
+                <h5>💊 Drug Requests</h5>
+                <p class="text-muted">Approve / Reject physician requests</p>
+                <a href="/Chemist/DrugRequests"
+                   class="btn btn-warning btn-modern">
+                    Manage
                 </a>
             </div>
         </div>

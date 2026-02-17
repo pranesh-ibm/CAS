@@ -32,6 +32,19 @@ namespace CAS.Controllers
 
             return View(supplier);
         }
+        public IActionResult EditProfile()
+        {
+            var username = User.Identity?.Name;
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserName == username);
+
+            var supplier = _context.Suppliers
+                .FirstOrDefault(s => s.SupplierId == user.RoleReferenceId);
+
+            return View(supplier);
+        }
+
 
         public IActionResult PendingOrders()
         {
@@ -52,23 +65,29 @@ namespace CAS.Controllers
 
 
         // 🟢 Order History (Approved + Rejected)
-        public IActionResult OrderHistory()
+
+  
+         public IActionResult OrderHistory()
         {
             var username = User.Identity?.Name;
-
             var user = _context.Users
                 .FirstOrDefault(u => u.UserName == username);
-
             var orders = _context.PurchaseOrderHeaders
                 .Where(o => o.SupplierId == user.RoleReferenceId
-                         && o.PoStatus != "Pending")
+                && o.PoStatus != "Pending")
+                .Include(o => o.PurchaseProductLines)
+                .ThenInclude(p => p.Drug)
                 .ToList();
 
             return View(orders);
-        }
+         }
 
-        // ✅ Approve
-        public IActionResult Approve(int id)
+
+
+
+
+    // ✅ Approve
+    public IActionResult Approve(int id)
         {
             var order = _context.PurchaseOrderHeaders.Find(id);
 
@@ -94,5 +113,23 @@ namespace CAS.Controllers
 
             return RedirectToAction("PendingOrders");
         }
+        [HttpPost]
+        public IActionResult EditProfile(Supplier model)
+        {
+            var supplier = _context.Suppliers.Find(model.SupplierId);
+
+            if (supplier != null)
+            {
+                supplier.Email = model.Email;
+                supplier.Phone = model.Phone;
+                supplier.Address = model.Address;
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

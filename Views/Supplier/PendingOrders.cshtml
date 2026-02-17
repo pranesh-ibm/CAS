@@ -1,51 +1,63 @@
 ﻿@model IEnumerable<CAS.Models.PurchaseOrderHeader>
 
 <div class="container mt-4">
-    <h2>Pending Orders</h2>
+    <h2 class="mb-4">Pending Orders</h2>
 
-    @foreach (var order in Model)
+    @if (!Model.Any())
     {
-        <div class="card mb-4 shadow-sm">
-
-            <div class="card-header bg-dark text-white">
-                <strong>@order.Pono</strong>
-                | Date: @order.Podate
-            </div>
-
-            <div class="card-body">
-
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Medicine</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in order.PurchaseProductLines)
-                        {
-                            <tr>
-                                <td>@item.Drug.DrugTitle</td> <!-- use DrugName if needed -->
-                                <td>@item.Qty</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-                <a asp-action="Approve"
-                   asp-route-id="@order.Poid"
-                   class="btn btn-success">
-                    Approve
-                </a>
-
-                <a asp-action="Reject"
-                   asp-route-id="@order.Poid"
-                   class="btn btn-danger">
-                    Reject
-                </a>
-
-            </div>
+        <div class="alert alert-info text-center p-4 shadow-sm">
+            <h5 class="mb-2">📦 No Pending Orders</h5>
+            <p class="mb-0">There are no pending purchase orders at the moment.</p>
         </div>
     }
-</div>
+    else
+    {
+        @foreach (var order in Model)
+        {
+            <div class="card mb-4 shadow-lg border-0" style="border-radius:12px;">
 
+                <div class="card-header text-white"
+                     style="background: linear-gradient(135deg,#1f4037,#99f2c8); border-radius:12px 12px 0 0;">
+                    <strong>PO No: @order.Pono</strong>
+                    <span class="ms-3">Date: @order.Podate</span>
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in order.PurchaseProductLines)
+                            {
+                                <tr>
+                                    <td>@item.Drug.DrugTitle</td>
+                                    <td>@item.Qty</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="mt-3">
+                        <a asp-action="Approve"
+                           asp-route-id="@order.Poid"
+                           class="btn btn-success me-2">
+                            ✔ Approve
+                        </a>
+
+                        <a asp-action="Reject"
+                           asp-route-id="@order.Poid"
+                           class="btn btn-danger">
+                            ✖ Reject
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+</div>

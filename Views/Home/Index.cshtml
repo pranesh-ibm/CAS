@@ -1,8 +1,174 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "MedAxis";
 }
 
-<div class="text-center">
-    <h1 class="display-4" >Welcome</h1>
-    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-premium {
+        border-radius: 30px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-premium:hover {
+            transform: translateY(-4px);
+        }
+
+    .glass-card {
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 25px;
+        color: white;
+        transition: 0.3s;
+    }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+    .feature-card {
+        border-radius: 20px;
+        transition: 0.3s;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+        }
+
+    .section-light {
+        background-color: #f1f5f9;
+    }
+
+    .footer {
+        background: #0f172a;
+        color: white;
+    }
+</style>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <div>
+        <h1 class="display-2 fw-bold">MedAxis</h1>
+        <p class="lead mt-3">
+            Smart Healthcare Automation Platform
+        </p>
+
+        <!-- Buttons -->
+        <div class="mt-4">
+            <a asp-controller="CrediMgr"
+               asp-action="Login"
+               class="btn btn-light btn-lg btn-premium me-3 shadow">
+                Login
+            </a>
+
+            <a asp-controller="Users"
+               asp-action="Create"
+               class="btn btn-outline-light btn-lg btn-premium shadow">
+                Register
+            </a>
+        </div>
+
+        <!-- Role Cards -->
+        <div class="row mt-5 justify-content-center">
+            <div class="col-md-3 m-2 glass-card">
+                <h4>👨‍⚕ Physician</h4>
+                <p>Manage prescriptions & appointments</p>
+            </div>
+
+            <div class="col-md-3 m-2 glass-card">
+                <h4>💊 Chemist</h4>
+                <p>Inventory & drug ordering system</p>
+            </div>
+
+            <div class="col-md-3 m-2 glass-card">
+                <h4>🏭 Supplier</h4>
+                <p>Approve & manage purchase orders</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FEATURES SECTION -->
+<div class="container py-5 section-light">
+    <h2 class="text-center mb-5 fw-bold">Why MedAxis?</h2>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow feature-card p-4 border-0">
+                <h4>📅 Appointment Management</h4>
+                <p>Streamlined scheduling between patients and physicians.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow feature-card p-4 border-0">
+                <h4>💊 Digital Prescription</h4>
+                <p>Secure and real-time prescription tracking system.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow feature-card p-4 border-0">
+                <h4>🔄 Automated Procurement</h4>
+                <p>Chemist orders → Supplier approval → Inventory update.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- WORKFLOW SECTION -->
+<div class="container py-5 text-center">
+    <h2 class="fw-bold mb-4">System Workflow</h2>
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <h5>1️⃣ Physician</h5>
+            <p>Creates digital prescription</p>
+        </div>
+
+        <div class="col-md-3">
+            <h5>2️⃣ Chemist</h5>
+            <p>Manages drugs & places order</p>
+        </div>
+
+        <div class="col-md-3">
+            <h5>3️⃣ Supplier</h5>
+            <p>Approves or rejects purchase order</p>
+        </div>
+
+        <div class="col-md-3">
+            <h5>4️⃣ MedAxis</h5>
+            <p>Updates system & tracks inventory</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer text-center py-4">
+    <h5 class="mb-2">MedAxis</h5>
+    <p class="mb-0">© 2026 MedAxis Healthcare Automation</p>
+    <small>Developed by Your Team</small>
 </div>

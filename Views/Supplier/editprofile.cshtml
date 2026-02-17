@@ -1,0 +1,103 @@
+﻿@model CAS.Models.Supplier
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<style>
+    .edit-card {
+        max-width: 650px;
+        margin: 50px auto;
+        padding: 35px;
+        border-radius: 20px;
+        background: white;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .edit-header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .btn-modern {
+        border-radius: 25px;
+        padding: 8px 25px;
+        font-weight: 500;
+        transition: 0.3s ease;
+    }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+        }
+
+    .note-text {
+        font-size: 14px;
+        color: gray;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="container">
+
+    <div class="edit-card">
+
+        <div class="edit-header">
+            <h3>✏ Edit Supplier Profile</h3>
+            <p class="mb-0">Update your contact information</p>
+        </div>
+
+        <form asp-action="EditProfile" method="post">
+
+            <input type="hidden" asp-for="SupplierId" />
+
+            <!-- Supplier Name (Readonly) -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Supplier Name</label>
+                <input asp-for="SupplierName" class="form-control" readonly />
+                <div class="note-text">(Name cannot be changed)</div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Phone</label>
+                <input asp-for="Phone" class="form-control" />
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Address</label>
+                <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    💾 Save Changes
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary btn-modern ms-2">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
