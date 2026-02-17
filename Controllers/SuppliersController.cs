@@ -1,9 +1,12 @@
 ﻿using CAS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace CAS_Project.Controllers
+namespace CAS.Controllers
 {
+    [Authorize(Roles = "Supplier")]
     public class SupplierController : Controller
     {
         private readonly CasContext _context;
@@ -13,72 +16,83 @@ namespace CAS_Project.Controllers
             _context = context;
         }
 
-        // 1️⃣ View Pending Orders
+        // 🟢 Supplier Profile Page (Like Chemist)
+        public IActionResult Index()
+        {
+            var username = User.Identity?.Name;
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+                return RedirectToAction("Login", "CrediMgr");
+
+            var supplier = _context.Suppliers
+                .FirstOrDefault(s => s.SupplierId == user.RoleReferenceId);
+
+            return View(supplier);
+        }
+
         public IActionResult PendingOrders()
         {
-            var orders = _context.DrugRequests
-                .Where(o => o.RequestStatus == "Pending")
-                .OrderByDescending(o => o.RequestDate)
+            var username = User.Identity?.Name;
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserName == username);
+
+            var orders = _context.PurchaseOrderHeaders
+                .Where(o => o.SupplierId == user.RoleReferenceId
+                         && o.PoStatus == "Pending")
+                .Include(o => o.PurchaseProductLines)
+                    .ThenInclude(p => p.Drug)
                 .ToList();
 
             return View(orders);
         }
 
-        // 2️⃣ Approve Order
-        public IActionResult Approve(int id)
-        {
-            var order = _context.DrugRequests.Find(id);
 
-            if (order != null)
-            {
-                order.RequestStatus = "Approved";
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("PendingOrders");
-        }
-
-        // 3️⃣ Reject Order
-        public IActionResult Reject(int id)
-        {
-            var order = _context.DrugRequests.Find(id);
-
-            if (order != null)
-            {
-                order.RequestStatus = "Rejected";
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("PendingOrders");
-        }
-
-        // 4️⃣ Order History
+        // 🟢 Order History (Approved + Rejected)
         public IActionResult OrderHistory()
         {
-            var orders = _context.DrugRequests
-                .Where(o => o.RequestStatus != "Pending")
-                .OrderByDescending(o => o.RequestDate)
+            var username = User.Identity?.Name;
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.UserName == username);
+
+            var orders = _context.PurchaseOrderHeaders
+                .Where(o => o.SupplierId == user.RoleReferenceId
+                         && o.PoStatus != "Pending")
                 .ToList();
 
             return View(orders);
         }
-        public IActionResult Dashboard()
+
+        // ✅ Approve
+        public IActionResult Approve(int id)
         {
-            var totalOrders = _context.DrugRequests.Count();
-            var pendingOrders = _context.DrugRequests
-                .Count(o => o.RequestStatus == "Pending");
-            var approvedOrders = _context.DrugRequests
-                .Count(o => o.RequestStatus == "Approved");
-            var rejectedOrders = _context.DrugRequests
-                .Count(o => o.RequestStatus == "Rejected");
+            var order = _context.PurchaseOrderHeaders.Find(id);
 
-            ViewBag.TotalOrders = totalOrders;
-            ViewBag.PendingOrders = pendingOrders;
-            ViewBag.ApprovedOrders = approvedOrders;
-            ViewBag.RejectedOrders = rejectedOrders;
+            if (order != null)
+            {
+                order.PoStatus = "Approved";
+                _context.SaveChanges();
+            }
 
-            return View();
+            return RedirectToAction("PendingOrders");
         }
 
+        // ❌ Reject
+        public IActionResult Reject(int id)
+        {
+            var order = _context.PurchaseOrderHeaders.Find(id);
+
+            if (order != null)
+            {
+                order.PoStatus = "Rejected";
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("PendingOrders");
+        }
     }
 }

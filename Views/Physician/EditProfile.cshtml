@@ -1,0 +1,83 @@
+@model CAS.Models.ViewModel.PhysicianProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<h2>Edit Profile</h2>
+
+<form id="physEditForm" asp-controller="Physician" asp-action="EditProfile" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="PhysicianId" />
+
+    <div class="mb-3">
+        <label asp-for="PhysicianName" class="form-label"></label>
+        <input asp-for="PhysicianName" class="form-control" />
+        <span asp-validation-for="PhysicianName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Specialization" class="form-label"></label>
+        <input asp-for="Specialization" class="form-control" />
+        <span asp-validation-for="Specialization" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Summary" class="form-label"></label>
+        <textarea asp-for="Summary" class="form-control"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+
+    <button type="submit" id="physSaveBtn" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function(){
+            var form = document.getElementById('physEditForm');
+            if(!form) return;
+
+            // Add Bootstrap invalid class handling based on validation
+            form.addEventListener('submit', function (e) {
+                // Let unobtrusive validation run first
+                if (!form.checkValidity && typeof $ === 'undefined') return;
+                // Delay to allow client validation messages to be set
+                setTimeout(function(){
+                    var controls = form.querySelectorAll('[name]');
+                    controls.forEach(function(c){
+                        var valid = true;
+                        if (typeof c.checkValidity === 'function') {
+                            valid = c.checkValidity();
+                        }
+                        if (!valid) {
+                            c.classList.add('is-invalid');
+                        } else {
+                            c.classList.remove('is-invalid');
+                        }
+                    });
+                }, 1);
+            });
+        })();
+    </script>
+}

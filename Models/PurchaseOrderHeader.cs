@@ -12,6 +12,8 @@ public partial class PurchaseOrderHeader
     public DateOnly Podate { get; set; }
 
     public int SupplierId { get; set; }
+    public string? PoStatus { get; set; }
+
 
     public virtual ICollection<PurchaseProductLine> PurchaseProductLines { get; set; } = new List<PurchaseProductLine>();
 

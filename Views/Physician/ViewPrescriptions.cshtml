@@ -1,0 +1,43 @@
+@model CAS.Models.ViewModel.PrescriptionListViewModel
+
+@{
+    ViewData["Title"] = "View Prescriptions";
+}
+
+<h2>Prescriptions</h2>
+
+@if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
+{
+    <div class="text-center py-5 text-muted">
+        <h5 class="mb-2">No prescriptions found</h5>
+        <p class="mb-3">There are no prescriptions available for your account right now.</p>
+        <a asp-action="CreatePrescription" class="btn btn-primary me-2">Create Prescription</a>
+        <a asp-action="ViewPrescriptions" class="btn btn-outline-secondary">Refresh</a>
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Drug</th>
+                <th>Prescription</th>
+                <th>Dosage</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model.Prescriptions)
+        {
+            <tr>
+                <td>@p.PhysicianAdvice.Schedule.Appointment.Patient.PatientName</td>
+                <td>@p.Drug.DrugTitle</td>
+                <td>@p.Prescription</td>
+                <td>@p.Dosage</td>
+                <td>@p.PhysicianAdvice.Schedule.ScheduleDate.ToString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

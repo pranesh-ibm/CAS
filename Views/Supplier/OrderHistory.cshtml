@@ -1,26 +1,28 @@
-﻿@model List<CAS.Models.DrugRequest>
+﻿@model List<CAS.Models.PurchaseOrderHeader>
 
-<h2 class="mb-4">Order History</h2>
+<div class="container mt-4">
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Order ID</th>
-            <th>Drug Details</th>
-            <th>Request Date</th>
-            <th>Status</th>
-        </tr>
-    </thead>
+    <h2>Order History</h2>
 
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-bordered">
+        <thead class="table-dark">
             <tr>
-                <td>@item.DrugRequestId</td>
-                <td>@item.DrugsInfoText</td>
-                <td>@item.RequestDate</td>
-                <td>@item.RequestStatus</td>
+                <th>PO No</th>
+                <th>Date</th>
+                <th>Status</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Pono</td>
+                    <td>@order.Podate</td>
+                    <td>@order.PoStatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
