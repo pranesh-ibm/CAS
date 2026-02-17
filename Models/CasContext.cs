@@ -135,9 +135,6 @@ public partial class CasContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Gender).HasMaxLength(10);
             entity.Property(e => e.PatientName).HasMaxLength(100);
-            entity.Property(e => e.PatientStatus)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.Phone).HasMaxLength(20);
             entity.Property(e => e.Summary).HasMaxLength(500);
         });

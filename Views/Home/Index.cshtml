@@ -171,4 +171,20 @@
     <h5 class="mb-2">MedAxis</h5>
     <p class="mb-0">© 2026 MedAxis Healthcare Automation</p>
     <small>Developed by Your Team</small>
+@if (TempData["ShowSuccess"] != null && (bool)TempData["ShowSuccess"])
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '@TempData["SuccessMessage"]',
+            confirmButtonColor: '#3085D6'
+        });
+    </script>
+}
+
+<div class="text-center">
+    <h1 class="display-4" >Welcome</h1>
+    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
 </div>
