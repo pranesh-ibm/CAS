@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CAS_Project.Controllers
+namespace CAS.Controllers
 {
     [Authorize(Roles = "Chemist")]
     public class ChemistController : Controller
@@ -37,24 +37,16 @@ namespace CAS_Project.Controllers
             return View(chemist);
         }
         // GET: Edit Profile
-        public IActionResult Edit()
+        [HttpGet]
+        public IActionResult EditProfile()
         {
             var username = User.Identity?.Name;
 
             var user = _context.Users
                 .FirstOrDefault(u => u.UserName == username);
 
-            var chemist = _context.Chemists
-                .FirstOrDefault(c => c.ChemistId == user.RoleReferenceId);
-
-            return View(chemist);
-        }
-        public IActionResult ViewProfile()
-        {
-            var username = User.Identity?.Name;
-
-            var user = _context.Users
-                .FirstOrDefault(u => u.UserName == username);
+            if (user == null)
+                return RedirectToAction("Login", "CrediMgr");
 
             var chemist = _context.Chemists
                 .FirstOrDefault(c => c.ChemistId == user.RoleReferenceId);
@@ -75,17 +67,26 @@ namespace CAS_Project.Controllers
             ViewBag.Suppliers = _context.Suppliers.ToList();
             return View();
         }
+        public IActionResult DrugRequests()
+        {
+            var requests = _context.DrugRequests
+                .OrderByDescending(r => r.RequestDate)
+                .ToList();
+
+            return View(requests);
+        }
 
         [HttpPost]
-        public IActionResult Edit(Chemist model)
+        public IActionResult EditProfile(Chemist model)
         {
-            var chemist = _context.Chemists.Find(model.ChemistId);
+            var chemist = _context.Chemists
+                .FirstOrDefault(c => c.ChemistId == model.ChemistId);
 
             if (chemist != null)
             {
                 chemist.Email = model.Email;
                 chemist.Address = model.Address;
-                chemist.Summary = model.Summary;
+                chemist.Phone = model.Phone;
 
                 _context.SaveChanges();
             }
@@ -168,6 +169,33 @@ namespace CAS_Project.Controllers
 
             return RedirectToAction("MyOrders");
         }
+        public IActionResult Approve(int id)
+        {
+            var request = _context.DrugRequests.Find(id);
+
+            if (request != null)
+            {
+                request.RequestStatus = "Approved";
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("DrugRequests");
+        }
+        public IActionResult Reject(int id)
+        {
+            var request = _context.DrugRequests.Find(id);
+
+            if (request != null)
+            {
+                request.RequestStatus = "Rejected";
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("DrugRequests");
+        }
+
+
+
 
 
 

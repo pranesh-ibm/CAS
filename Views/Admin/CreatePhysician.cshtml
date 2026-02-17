@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "CreatePhysician";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h1>CreatePhysician</h1>
@@ -42,11 +43,7 @@
                 <input asp-for="Summary" class="form-control" />
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PhysicianStatus" class="control-label"></label>
-                <input asp-for="PhysicianStatus" class="form-control" />
-                <span asp-validation-for="PhysicianStatus" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -58,6 +55,3 @@
     <a asp-action="GetPhysiciansDetail">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

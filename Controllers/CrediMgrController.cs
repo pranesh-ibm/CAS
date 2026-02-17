@@ -1,61 +1,117 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using CAS.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CAS.Controllers
 {
     public class CrediMgrController : Controller
     {
-     
-            [HttpGet]
-            public IActionResult Login()
-            {
-                return View();
-            }
-
-            [HttpPost]
-            public async Task<IActionResult> Login(string username, string password)
-            {
-
-                Models.CasContext db = new Models.CasContext();
-
-                var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
-
-
-
-                if (usr != null)
-                {
-                    var claims = new List<Claim>
+        private readonly CasContext _context;
+        public CrediMgrController(CasContext context)
         {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, usr.Role)
-        };
+            _context = context;
+        }
 
-                    var identity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        public IActionResult RegisterPatient()
+        {
+            return View();
+        }
 
-                    var principal = new ClaimsPrincipal(identity);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterPatient([Bind("PatientId,PatientName,Dob,Gender,Address,Phone,Email,Summary")] Patient patient)
+        {
+            if (ModelState.IsValid)
+            {
+                patient.PatientStatus = "Pending";
+                _context.Add(patient);
+                await _context.SaveChangesAsync();
+                TempData["ShowSuccess"] = true;
+                TempData["SuccessMessage"] = "Registered successfully, Your Password will be First Five characters of your username and @ followed by last Four digits of your mobile number";
+                return RedirectToAction("Index","Home");
+            }
+            return View(patient);
+        }
 
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        principal);
 
-                    return RedirectToAction("Index", usr.Role);
-                
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult RegisterPatient(PatientRegisterModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Only add credentials in User table
+        //        var user = new User
+        //        {
+        //            UserName = model.UserName,
+        //            Password = HashPassword(model.Password),
+        //            Role = "Patient",
+        //            ApprovalStatus = "Pending" // Only for self-registered patients
+        //        };
+
+        //        _dbContext.Users.Add(user);
+        //        _dbContext.SaveChanges();
+
+        //        TempData["Success"] = "Patient registered successfully! Waiting for admin approval.";
+        //        return RedirectToAction("Index", "Admin");
+        //    }
+
+        //    return View(model);
+        //}
+
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+
+            Models.CasContext db = new Models.CasContext();
+
+            var usr = db.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+
+                    
+            //}
+
+
+            if (usr != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, usr.Role)
+                };
+
+                var identity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal);
+
+                return RedirectToAction("Index", usr.Role);
             }
 
-                ModelState.AddModelError("", "Invalid credentials");
+            ModelState.AddModelError("", "Invalid credentials");
 
-                return View();
-            }
+            return View();
+        }
 
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Admin");
         }
 
 
@@ -67,3 +123,10 @@ namespace CAS.Controllers
 
     }
 }
+
+
+
+
+
+
+

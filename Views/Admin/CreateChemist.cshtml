@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "CreateChemist";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h1>CreateChemist</h1>
@@ -53,6 +54,3 @@
     <a asp-action="GetChemistsDetail">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

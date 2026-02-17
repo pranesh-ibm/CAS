@@ -1,28 +1,65 @@
-﻿@model List<CAS.Models.PurchaseOrderHeader>
+﻿@model IEnumerable<CAS.Models.PurchaseOrderHeader>
 
 <div class="container mt-4">
+    <h2 class="mb-4">Order History</h2>
 
-    <h2>Order History</h2>
+    @foreach (var order in Model)
+    {
+        <div class="card mb-4 shadow border-0" style="border-radius:15px;">
 
-    <table class="table table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>PO No</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
+            <div class="card-header d-flex justify-content-between align-items-center"
+                 style="background: linear-gradient(90deg,#1f2937,#374151); color:white; border-radius:15px 15px 0 0;">
 
-        <tbody>
-            @foreach (var order in Model)
-            {
-                <tr>
-                    <td>@order.Pono</td>
-                    <td>@order.Podate</td>
-                    <td>@order.PoStatus</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                <div>
+                    <strong>@order.Pono</strong>
+                    <span class="ms-3">📅 @order.Podate</span>
+                </div>
 
+                <div>
+                    @if (order.PoStatus == "Approved")
+                    {
+                        <span class="badge bg-success px-3 py-2 fs-6">
+                            Approved
+                        </span>
+                    }
+                    else if (order.PoStatus == "Rejected")
+                    {
+                        <span class="badge bg-danger px-3 py-2 fs-6">
+                            Rejected
+                        </span>
+                    }
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Medicine</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in order.PurchaseProductLines)
+                        {
+                            <tr>
+                                <td>
+                                    💊 @item.Drug.DrugTitle
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        @item.Qty
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    }
 </div>

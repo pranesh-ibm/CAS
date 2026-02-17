@@ -1,104 +1,100 @@
-﻿@{
-    ViewData["Title"] = "Admin Dashboard";
+﻿@model CAS.Models.ViewModel.AdminDashboardViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<style>
-    .dashboard-header {
-        background: linear-gradient(135deg, #4e73df, #1cc88a);
-        color: white;
-        padding: 40px;
-        border-radius: 15px;
-    }
+<div class="container-fluid px-4 py-4">
 
-    .dashboard-card {
-        transition: all 0.3s ease-in-out;
-        border: none;
-        border-radius: 15px;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    }
-
-    .dashboard-icon {
-        font-size: 40px;
-        margin-bottom: 15px;
-    }
-
-    .btn-custom {
-        border-radius: 30px;
-        font-weight: 500;
-    }
-</style>
-
-<div class="container mt-5">
-
-    <!-- Header -->
-    <div class="dashboard-header text-center mb-5 shadow">
-        <h1 class="fw-bold">Admin Dashboard</h1>
-        <p class="mb-0">Manage all system modules efficiently</p>
+    <!-- ================= HEADER ================= -->
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark">Dashboard Overview</h2>
+        @* <p class="text-muted mb-0">Real-time statistics of the Clinic Automation System</p> *@
     </div>
 
-    <!-- Cards -->
-    <div class="row g-4">
+    <!-- ================= STAT CARDS ================= -->
+    <div class="container mt-4">
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-primary">🧑</div>
-                    <h5 class="card-title fw-bold">Patients</h5>
-                    <p class="card-text text-muted">Manage patient records</p>
-                    <a asp-controller="Admin" asp-action="GetPatientsDetail"
-                       class="btn btn-primary btn-custom w-100">Open</a>
+        
+
+        <div class="row">
+
+            <!-- Patients -->
+            <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3 shadow">
+                    <div class="card-body">
+                        <h5>Total Patients</h5>
+                        <h2>@Model.TotalPatients</h2>
+                    </div>
                 </div>
             </div>
+
+            <!-- Physicians -->
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3 shadow">
+                    <div class="card-body">
+                        <h5>Total Physicians</h5>
+                        <h2>@Model.TotalPhysicians</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chemists -->
+            <div class="col-md-3">
+                <div class="card text-white bg-warning mb-3 shadow">
+                    <div class="card-body">
+                        <h5>Total Chemists</h5>
+                        <h2>@Model.TotalChemists</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suppliers -->
+            <div class="col-md-3">
+                <div class="card text-white bg-danger mb-3 shadow">
+                    <div class="card-body">
+                        <h5>Total Suppliers</h5>
+                        <h2>@Model.TotalSuppliers</h2>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-success">👨‍⚕️</div>
-                    <h5 class="card-title fw-bold">Physicians</h5>
-                    <p class="card-text text-muted">Manage physician details</p>
-                    <a asp-controller="Admin" asp-action="GetPhysiciansDetail"
-                       class="btn btn-success btn-custom w-100">Open</a>
-                </div>
-            </div>
-        </div>
+        <div class="row mt-3">
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-warning">💊</div>
-                    <h5 class="card-title fw-bold">Chemists</h5>
-                    <p class="card-text text-muted">Manage chemist info</p>
-                    <a asp-controller="Admin" asp-action="GetChemistsDetail"
-                       class="btn btn-warning btn-custom w-100 text-white">Open</a>
+            <!-- Pending Patients -->
+            <div class="col-md-4">
+                <div class="card border-warning shadow">
+                    <div class="card-body">
+                        <h5>Pending Patients</h5>
+                        <h3 class="text-warning">@Model.PendingPatients</h3>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card dashboard-card shadow-sm text-center h-100 p-3">
-                <div class="card-body">
-                    <div class="dashboard-icon text-info">🚚</div>
-                    <h5 class="card-title fw-bold">Suppliers</h5>
-                    <p class="card-text text-muted">Manage supplier records</p>
-                    <a asp-controller="Admin" asp-action="GetSuppliersDetail"
-                       class="btn btn-info btn-custom w-100 text-white">Open</a>
+            <!-- Pending Appointments -->
+            <div class="col-md-4">
+                <div class="card border-danger shadow">
+                    <div class="card-body">
+                        <h5>Pending Appointments</h5>
+                        <h3 class="text-danger">@Model.PendingAppointments</h3>
+                    </div>
                 </div>
             </div>
+
+            <!-- Today's Appointments -->
+            <div class="col-md-4">
+                <div class="card border-info shadow">
+                    <div class="card-body">
+                        <h5>Today's Appointments</h5>
+                        <h3 class="text-info">@Model.TodayAppointments</h3>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
-    <!-- Logout -->
-    <div class="text-center mt-5">
-        <a asp-controller="CrediMgr" asp-action="Logout"
-           class="btn btn-danger btn-lg px-5 btn-custom shadow">
-            Logout
-        </a>
     </div>
-
 </div>

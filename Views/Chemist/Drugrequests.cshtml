@@ -1,0 +1,54 @@
+﻿@model List<CAS.Models.DrugRequest>
+
+<h2>Physician Drug Requests</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Physician</th>
+            <th>Details</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var req in Model)
+        {
+            <tr>
+                <td>@req.DrugRequestId</td>
+                <td>@req.PhysicianId</td>
+                <td>@req.DrugsInfoText</td>
+                <td>@req.RequestDate</td>
+
+                <td>
+                    @if (req.RequestStatus == "Approved")
+                    {
+                        <span class="badge bg-success">Approved</span>
+                    }
+                    else if (req.RequestStatus == "Rejected")
+                    {
+                        <span class="badge bg-danger">Rejected</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                </td>
+
+                <td>
+                    @if (req.RequestStatus == "Pending")
+                    {
+                        <a asp-action="Approve" asp-route-id="@req.DrugRequestId"
+                           class="btn btn-success btn-sm">Approve</a>
+
+                        <a asp-action="Reject" asp-route-id="@req.DrugRequestId"
+                           class="btn btn-danger btn-sm">Reject</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

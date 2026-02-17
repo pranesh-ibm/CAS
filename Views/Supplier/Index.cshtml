@@ -1,24 +1,118 @@
 ﻿@model CAS.Models.Supplier
 
+@{
+    ViewData["Title"] = "Supplier Dashboard";
+}
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        margin-bottom: 30px;
+    }
+
+    .profile-card {
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        padding: 30px;
+        background: white;
+        position: relative;
+    }
+
+    .profile-item {
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+    .profile-label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .edit-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        border-radius: 20px;
+        padding: 6px 15px;
+        font-size: 14px;
+    }
+
+    .action-btn {
+        border-radius: 25px;
+        padding: 10px 25px;
+        font-weight: 500;
+        margin-right: 10px;
+        transition: 0.3s ease;
+    }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+</style>
+
 <div class="container mt-4">
 
-    <h2>My Profile</h2>
-
-    <div class="card p-4 mb-4 shadow-sm">
-        <p><strong>Name:</strong> @Model.SupplierName</p>
-        <p><strong>Email:</strong> @Model.Email</p>
-        <p><strong>Phone:</strong> @Model.Phone</p>
-        <p><strong>Address:</strong> @Model.Address</p>
+    <!-- Header -->
+    <div class="dashboard-header text-center">
+        <h2 class="fw-bold">Welcome, @Model.SupplierName 👋</h2>
+        <p class="mb-0">Supplier Control Panel</p>
     </div>
 
-    <h4>Quick Actions</h4>
+    <!-- Profile Card -->
+    <div class="profile-card mb-4">
 
-    <a href="/Supplier/PendingOrders" class="btn btn-warning me-2">
-        View Pending Orders
-    </a>
+        <h3 class="mb-4">🏢 My Profile</h3>
 
-    <a href="/Supplier/OrderHistory" class="btn btn-secondary">
-        Order History
-    </a>
+        <!-- Edit Button -->
+        <a asp-action="EditProfile"
+           class="btn btn-outline-primary edit-btn">
+            ✏ Edit
+        </a>
+
+        <div class="profile-item">
+            <span class="profile-label">📧 Email:</span> @Model.Email
+        </div>
+
+        <div class="profile-item">
+            <span class="profile-label">📞 Phone:</span> @Model.Phone
+        </div>
+
+        <div class="profile-item">
+            <span class="profile-label">📍 Address:</span> @Model.Address
+        </div>
+
+        <div class="profile-item">
+            <span class="profile-label">📌 Status:</span>
+            @if (Model.SupplierStatus == "Active")
+            {
+                <span class="badge bg-success">Active</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">Inactive</span>
+            }
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="text-center">
+        <h4 class="mb-3">Quick Actions</h4>
+
+        <a asp-action="PendingOrders"
+           class="btn btn-warning action-btn">
+            📦 View Pending Orders
+        </a>
+
+        <a asp-action="OrderHistory"
+           class="btn btn-secondary action-btn">
+            📋 Order History
+        </a>
+    </div>
 
 </div>
