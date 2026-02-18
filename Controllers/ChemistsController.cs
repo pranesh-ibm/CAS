@@ -173,14 +173,28 @@ namespace CAS.Controllers
         {
             var request = _context.DrugRequests.Find(id);
 
-            if (request != null)
+            if (request != null && request.RequestStatus == "Pending")
             {
                 request.RequestStatus = "Approved";
+
+                var newDrug = new Drug
+                {
+                    DrugTitle = request.DrugsInfoText,
+                    Description = "Requested by Physician",
+                    Expiry = DateOnly.FromDateTime(DateTime.Now.AddYears(1)),
+                    Dosage = "Not Specified",
+                    DrugStatus = "Active"
+                };
+
+                _context.Drugs.Add(newDrug);
+
                 _context.SaveChanges();
             }
 
             return RedirectToAction("DrugRequests");
         }
+
+
         public IActionResult Reject(int id)
         {
             var request = _context.DrugRequests.Find(id);
