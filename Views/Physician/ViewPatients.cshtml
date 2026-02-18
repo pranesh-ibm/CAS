@@ -21,9 +21,9 @@ else
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Gender</th>
                 <th>Phone</th>
-                <th>Email</th>
-                <th>Address</th>
+                <th class="text-end">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -31,9 +31,11 @@ else
         {
             <tr>
                 <td>@p.PatientName</td>
+                <td>@(p.Gender ?? "-")</td>
                 <td>@p.Phone</td>
-                <td>@p.Email</td>
-                <td>@p.Address</td>
+                <td class="text-end">
+                    <a asp-action="PatientDetails" asp-route-id="@p.PatientId" class="btn btn-sm btn-outline-primary">View</a>
+                </td>
             </tr>
         }
         </tbody>
