@@ -23,7 +23,7 @@ else
                 <th>Patient</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Status</th>
+                <th class="text-end">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +33,9 @@ else
                 <td>@s.Appointment.Patient.PatientName</td>
                 <td>@s.ScheduleDate.ToString()</td>
                 <td>@s.ScheduleTime.ToString()</td>
-                <td>@s.ScheduleStatus</td>
+                <td class="text-end">
+                    <a asp-action="AppointmentDetails" asp-route-id="@s.AppointmentId" class="btn btn-sm btn-outline-primary">View</a>
+                </td>
             </tr>
         }
         </tbody>

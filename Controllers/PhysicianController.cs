@@ -129,6 +129,25 @@ public class PhysicianController : Controller
         return View(vm);
     }
 
+    public async Task<IActionResult> PatientDetails(int id)
+    {
+        var physicianId = GetPhysicianId();
+        if (physicianId == null) return RedirectToAction("Login", "CrediMgr");
+
+        var patient = await _context.Schedules
+            .AsNoTracking()
+            .Where(s => s.PhysicianId == physicianId && s.Appointment.PatientId == id)
+            .Select(s => s.Appointment.Patient)
+            .FirstOrDefaultAsync();
+
+        if (patient == null)
+        {
+            return NotFound();
+        }
+
+        return View(patient);
+    }
+
     // GET: Create Prescription
     public async Task<IActionResult> CreatePrescription()
     {
@@ -245,6 +264,35 @@ public class PhysicianController : Controller
 
         var vm = new AppointmentListViewModel { Schedules = schedules };
         return View(vm);
+    }
+
+    public async Task<IActionResult> AppointmentDetails(int id)
+    {
+        var physicianId = GetPhysicianId();
+        if (physicianId == null) return RedirectToAction("Login", "CrediMgr");
+
+        var appointment = await _context.Appointments
+            .AsNoTracking()
+            .Include(a => a.Patient)
+            .Include(a => a.Schedules)
+                .ThenInclude(s => s.PhysicianAdvices)
+                    .ThenInclude(pa => pa.PhysicianPrescrips)
+                        .ThenInclude(pp => pp.Drug)
+            .FirstOrDefaultAsync(a => a.AppointmentId == id);
+
+        if (appointment == null)
+        {
+            return NotFound();
+        }
+
+        // Ensure the current physician is associated with at least one schedule for this appointment
+        var hasAccess = appointment.Schedules.Any(s => s.PhysicianId == physicianId);
+        if (!hasAccess)
+        {
+            return Forbid();
+        }
+
+        return View(appointment);
     }
 
     public async Task<IActionResult> ViewDrugs()

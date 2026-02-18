@@ -1,0 +1,25 @@
+@model CAS.Models.Appointment
+
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Appointment Details</h2>
+    <a asp-action="ViewAppointments" class="btn btn-secondary">Back to Appointments</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title">Appointment #@Model.AppointmentId</h4>
+        <hr />
+        <div class="row g-3">
+            <div class="col-md-6"><strong>Patient:</strong> @(Model.Patient?.PatientName ?? "-")</div>
+            <div class="col-md-6"><strong>Date:</strong> @Model.AppointmentDate.ToString("g")</div>
+            <div class="col-md-6"><strong>Criticality:</strong> @(Model.Criticality ?? "-")</div>
+            <div class="col-md-6"><strong>Status:</strong> @(Model.ScheduleStatus ?? "-")</div>
+            <div class="col-12"><strong>Reason:</strong> @(Model.Reason ?? "-")</div>
+            <div class="col-12"><strong>Note:</strong> @(Model.Note ?? "-")</div>
+        </div>
+    </div>
+</div>
