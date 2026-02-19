@@ -2,139 +2,261 @@
 
 @{
     ViewData["Title"] = "Chemist Dashboard";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
 }
 
 <style>
-    .gradient-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    /* ================= PREMIUM BACKGROUND ================= */
+    .dashboard-wrapper {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
 
-    .profile-card {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        position: relative;
-    }
-
-    .edit-btn {
-        position: absolute;
-        top: 25px;
-        right: 25px;
-        border-radius: 25px;
-        padding: 6px 18px;
-        font-weight: 500;
-    }
-
-    .action-card {
-        border-radius: 15px;
-        transition: 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-        .action-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
 
-    .btn-modern {
-        border-radius: 25px;
-        padding: 8px 20px;
-        font-weight: 500;
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
-    .status-badge {
-        background-color: #28a745;
-        color: white;
-        padding: 5px 12px;
-        border-radius: 15px;
-        font-size: 13px;
+    /* ================= HEADER ================= */
+    .dashboard-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
     }
+
+    .dashboard-subtitle {
+        color: rgba(255,255,255,0.8);
+    }
+
+    /* ================= GLASS WELCOME CARD ================= */
+    .welcome-card {
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        color: #AFDDE5;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .welcome-card h4 {
+        color: #D3D9D4;
+        font-weight: 700;
+    }
+
+    .welcome-card p {
+        color: rgba(255,255,255,0.85);
+    }
+
+    /* ================= FUNCTIONAL CARDS ================= */
+    .dashboard-card {
+        background: white;
+        padding: 35px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        transition: all 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dashboard-card::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -150%;
+            left: -50%;
+            background: linear-gradient(45deg,#0FA4AF,#AFDDE5);
+            opacity: 0.08;
+            transition: 0.5s;
+            transform: rotate(25deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dashboard-card:hover::before {
+            top: -50%;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        .dashboard-card * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .dashboard-card h5 {
+            color: #024950;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+    /* ================= ICON STYLE ================= */
+    .dashboard-icon {
+        font-size: 40px;
+        color: #0FA4AF;
+        margin-bottom: 15px;
+    }
+
+    /* ================= BUTTON STYLE ================= */
+    .dashboard-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 30px;
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(15,164,175,0.7);
+            color: white;
+        }
+
+    .dashboard-btn-outline {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
 </style>
 
-<div class="container mt-4">
+<div class="dashboard-wrapper">
+    <div class="container">
 
-    <!-- Header -->
-    <div class="gradient-header text-center mb-5">
-        <h2 class="fw-bold">Welcome, @Model.ChemistName 👋</h2>
-        <p class="mb-0">Chemist Control Panel</p>
+        <!-- HEADER -->
+        <div class="text-center mb-5">
+            <h2 class="dashboard-title">Chemist Dashboard</h2>
+            <p class="dashboard-subtitle">
+                Manage inventory, orders & drug requests efficiently
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- LEFT WELCOME PANEL -->
+            <div class="col-lg-4">
+                <div class="welcome-card h-100 d-flex flex-column justify-content-center">
+                    <h4>Welcome, @Model.ChemistName 👋</h4>
+                    <p class="mt-3">
+                        Track inventory, manage drug requests,
+                        and process orders seamlessly.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT CARDS -->
+            <div class="col-lg-8">
+                <div class="row g-4">
+
+                    <!-- PROFILE -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">🏥</div>
+                            <h5>Profile</h5>
+                            <a asp-action="EditProfile"
+                               class="dashboard-btn">
+                                Edit Profile
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- INVENTORY -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">📦</div>
+                            <h5>Inventory</h5>
+                            <a asp-action="ViewInventory"
+                               class="dashboard-btn">
+                                View Inventory
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ORDER DRUG -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">📝</div>
+                            <h5>Order Drugs</h5>
+                            <a asp-action="OrderDrug"
+                               class="dashboard-btn">
+                                Place Order
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- MY ORDERS -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">📋</div>
+                            <h5>My Orders</h5>
+                            <a asp-action="MyOrders"
+                               class="dashboard-btn-outline">
+                                View Orders
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DRUG REQUESTS -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">💊</div>
+                            <h5>Drug Requests</h5>
+                            <a asp-action="DrugRequests"
+                               class="dashboard-btn-outline">
+                                Manage Requests
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <!-- Profile Section -->
-    <div class="profile-card mb-5">
-
-        <h3>🏥 My Profile</h3>
-
-        <!-- Edit Button -->
-        <a asp-action="EditProfile"
-           class="btn btn-outline-primary edit-btn">
-            ✏ Edit
-        </a>
-
-        <hr />
-
-        <p><strong>📧 Email:</strong> @Model.Email</p>
-        <p><strong>📞 Phone:</strong> @Model.Phone</p>
-        <p><strong>📍 Address:</strong> @Model.Address</p>
-        <p>
-            <strong>📌 Status:</strong>
-            <span class="status-badge">Active</span>
-        </p>
-
-    </div>
-
-    <!-- Actions -->
-    <div class="row text-center">
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4">
-                <h5>📦 Inventory</h5>
-                <p class="text-muted">Check available medicines</p>
-                <a href="/Chemist/ViewInventory"
-                   class="btn btn-primary btn-modern">
-                    View
-                </a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4">
-                <h5>📝 Order Drugs</h5>
-                <p class="text-muted">Place new drug request</p>
-                <a href="/Chemist/OrderDrug"
-                   class="btn btn-success btn-modern">
-                    Order
-                </a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4">
-                <h5>📋 My Orders</h5>
-                <p class="text-muted">Track order status</p>
-                <a href="/Chemist/MyOrders"
-                   class="btn btn-dark btn-modern">
-                    View
-                </a>
-            </div>
-        </div>
-
-        <!-- NEW: Drug Requests from Physician -->
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4">
-                <h5>💊 Drug Requests</h5>
-                <p class="text-muted">Approve / Reject physician requests</p>
-                <a href="/Chemist/DrugRequests"
-                   class="btn btn-warning btn-modern">
-                    Manage
-                </a>
-            </div>
-        </div>
-
-    </div>
-
 </div>

@@ -2,102 +2,182 @@
 
 @{
     ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
 }
 
 <style>
-    .edit-card {
-        max-width: 650px;
-        margin: 50px auto;
-        padding: 35px;
-        border-radius: 20px;
-        background: white;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+
+    /* ================= BACKGROUND ================= */
+    .edit-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        padding: 80px 0;
+        min-height: 100vh;
     }
 
-    .edit-header {
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
-        color: white;
-        padding: 25px;
-        border-radius: 15px;
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    .form-control {
-        border-radius: 10px;
-        padding: 10px;
-    }
-
-    .btn-modern {
-        border-radius: 25px;
-        padding: 8px 25px;
-        font-weight: 500;
-        transition: 0.3s ease;
-    }
-
-        .btn-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
 
-    .note-text {
-        font-size: 14px;
-        color: gray;
-        margin-top: 5px;
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
+
+    /* ================= CARD ================= */
+    .edit-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .edit-card h2 {
+        font-weight: 700;
+        color: #212A31;
+        margin-bottom: 30px;
+    }
+
+    /* ================= INPUTS ================= */
+    .form-label {
+        font-weight: 600;
+        color: #124E66;
+    }
+
+    .form-control,
+    textarea.form-control {
+        border-radius: 30px;
+        padding: 12px 20px;
+        border: 1px solid #e0e0e0;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 12px rgba(18,78,102,0.6);
+            border-color: #124E66;
+            transform: scale(1.02);
+        }
+
+        .form-control[readonly] {
+            background-color: #f2f2f2;
+            cursor: not-allowed;
+        }
+
+    /* ================= BUTTONS ================= */
+    .btn-update {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+        border: none;
+    }
+
+        .btn-update:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
+
+    .btn-cancel {
+        background: #2E3944;
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: #D3D9D4;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-cancel:hover {
+            background: #124E66;
+            transform: translateY(-4px);
+        }
+
 </style>
 
-<div class="container">
+<div class="edit-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-    <div class="edit-card">
+                <div class="edit-card">
 
-        <div class="edit-header">
-            <h3>✏ Edit Supplier Profile</h3>
-            <p class="mb-0">Update your contact information</p>
+                    <h2 class="text-center">Edit Profile</h2>
+
+                    <form asp-action="EditProfile" method="post">
+
+                        <input type="hidden" asp-for="SupplierId" />
+
+                        <div class="row g-4">
+
+                            <!-- Supplier Name (Readonly) -->
+                            <div class="col-md-6">
+                                <label class="form-label">Supplier Name</label>
+                                <input asp-for="SupplierName"
+                                       class="form-control"
+                                       readonly />
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input asp-for="Email"
+                                       class="form-control" />
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input asp-for="Phone"
+                                       class="form-control" />
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-md-12">
+                                <label class="form-label">Address</label>
+                                <textarea asp-for="Address"
+                                          rows="3"
+                                          class="form-control"></textarea>
+                            </div>
+
+                            <div class="col-md-12 text-center mt-4">
+                                <button type="submit"
+                                        class="btn btn-update me-3">
+                                    Update Profile
+                                </button>
+
+                                <a asp-action="Index"
+                                   class="btn btn-cancel">
+                                    Cancel
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
         </div>
-
-        <form asp-action="EditProfile" method="post">
-
-            <input type="hidden" asp-for="SupplierId" />
-
-            <!-- Supplier Name (Readonly) -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Supplier Name</label>
-                <input asp-for="SupplierName" class="form-control" readonly />
-                <div class="note-text">(Name cannot be changed)</div>
-            </div>
-
-            <!-- Email -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Email</label>
-                <input asp-for="Email" class="form-control" />
-            </div>
-
-            <!-- Phone -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Phone</label>
-                <input asp-for="Phone" class="form-control" />
-            </div>
-
-            <!-- Address -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Address</label>
-                <textarea asp-for="Address" class="form-control" rows="3"></textarea>
-            </div>
-
-            <!-- Buttons -->
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary btn-modern">
-                    💾 Save Changes
-                </button>
-
-                <a asp-action="Index" class="btn btn-secondary btn-modern ms-2">
-                    Cancel
-                </a>
-            </div>
-
-        </form>
-
     </div>
-
 </div>

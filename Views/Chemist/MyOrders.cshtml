@@ -1,54 +1,226 @@
 ﻿@model IEnumerable<dynamic>
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "My Orders";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
+}
 
-    <h2>My Orders</h2>
+<style>
 
-    @foreach (var order in Model)
-    {
-        <div class="card mb-3 shadow-sm">
-
-            <div class="card-header bg-dark text-white">
-                <strong>@order.Pono</strong>
-                | Date: @order.Podate
-                | Supplier: @order.SupplierName
-
-                <!-- STATUS BADGE -->
-                @if (order.PoStatus == "Pending")
-                {
-                    <span class="badge bg-warning ms-2">Pending</span>
-                }
-                else if (order.PoStatus == "Approved")
-                {
-                    <span class="badge bg-success ms-2">Approved</span>
-                }
-                else
-                {
-                    <span class="badge bg-danger ms-2">Rejected</span>
-                }
-            </div>
-
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Drug</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in order.Items)
-                        {
-                            <tr>
-                                <td>@item.DrugName</td>
-                                <td>@item.Qty</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
+    /* ================= BACKGROUND ================= */
+    .orders-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= PAGE TITLE ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= ORDER CARD ================= */
+    .order-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        overflow: hidden;
+        transition: 0.35s ease;
+        animation: fadeUp 0.8s ease;
+    }
+
+        .order-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.35);
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .order-header {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        padding: 20px 25px;
+        font-weight: 600;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-meta {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* ================= STATUS BADGES ================= */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background: #ffc107;
+        color: #000;
+    }
+
+    .status-approved {
+        background: #198754;
+        color: white;
+    }
+
+    .status-rejected {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* ================= TABLE ================= */
+    .table {
+        margin: 0;
+    }
+
+        .table thead {
+            background: rgba(18,78,102,0.08);
+        }
+
+            .table thead th {
+                border: none;
+                padding: 15px;
+                font-weight: 700;
+                color: #024950;
+            }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: 0.3s;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(18,78,102,0.06);
+                transform: scale(1.01);
+            }
+
+</style>
+
+<div class="orders-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">My Orders</h2>
+            <p class="text-white-50">
+                Track your purchase requests and status
+            </p>
+        </div>
+
+        @foreach (var order in Model)
+        {
+            <div class="order-card mb-5">
+
+                <!-- HEADER -->
+                <div class="order-header">
+
+                    <div>
+                        <div><strong>PO No:</strong> @order.Pono</div>
+                        <div class="order-meta">
+                            Date: @order.Podate
+                            |
+                            Supplier: @order.SupplierName
+                        </div>
+                    </div>
+
+                    <div>
+                        @if (order.PoStatus == "Pending")
+                        {
+                            <span class="status-badge status-pending">
+                                Pending
+                            </span>
+                        }
+                        else if (order.PoStatus == "Approved")
+                        {
+                            <span class="status-badge status-approved">
+                                Approved
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-rejected">
+                                Rejected
+                            </span>
+                        }
+                    </div>
+
+                </div>
+
+                <!-- BODY -->
+                <div class="p-4">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in order.Items)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">
+                                            💊 @item.DrugName
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-approved">
+                                                @item.Qty
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
 
 </div>

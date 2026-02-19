@@ -1,28 +1,170 @@
 ﻿@model List<CAS.Models.Drug>
 
-<h2 class="mb-4">Inventory</h2>
+@{
+    ViewData["Title"] = "Inventory";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
+}
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Drug Name</th>
-            <th>Description</th>
-            <th>Dosage</th>
-            <th>Expiry</th>
-            
-        </tr>
-    </thead>
+<style>
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.DrugTitle</td>
-                <td>@item.Description</td>
-                <td>@item.Dosage</td>
-                <td>@item.Expiry</td>
-          
-            </tr>
+    /* ================= BACKGROUND ================= */
+    .inventory-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
-    </tbody>
-</table>
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD CONTAINER ================= */
+    .inventory-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .inventory-title {
+        font-weight: 700;
+        color: #212A31;
+    }
+
+    /* ================= TABLE STYLING ================= */
+    .table {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+        .table thead {
+            background: linear-gradient(45deg,#124E66,#748D92);
+            color: white;
+        }
+
+            .table thead th {
+                border: none;
+                padding: 15px;
+            }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: 0.3s;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(18,78,102,0.08);
+                transform: scale(1.01);
+            }
+
+    /* ================= BADGES ================= */
+    .badge-expiry {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .badge-warning {
+        background: #dc3545;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @@media(max-width:768px) {
+        .inventory-card {
+            padding: 20px;
+        }
+    }
+
+</style>
+
+<div class="inventory-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="inventory-card">
+
+                    <h2 class="inventory-title mb-4 text-center">
+                        Drug Inventory
+                    </h2>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Drug Name</th>
+                                    <th>Description</th>
+                                    <th>Dosage</th>
+                                    <th>Expiry</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@item.DrugTitle</td>
+
+                                        <td>@item.Description</td>
+
+                                        <td>
+                                            <span class="badge-expiry">
+                                                @item.Dosage
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            @{
+                                                var isExpired = item.Expiry.HasValue &&
+                                                item.Expiry.Value < DateOnly.FromDateTime(DateTime.Now);
+                                            }
+
+                                            <span class="badge-expiry @(isExpired ? "badge-warning" : "")">
+                                                @item.Expiry?.ToString("dd MMM yyyy")
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

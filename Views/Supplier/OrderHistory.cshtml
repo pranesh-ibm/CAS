@@ -1,65 +1,199 @@
 ﻿@model IEnumerable<CAS.Models.PurchaseOrderHeader>
 
-<div class="container mt-4">
-    <h2 class="mb-4">Order History</h2>
+@{
+    ViewData["Title"] = "Order History";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
+}
 
-    @foreach (var order in Model)
-    {
-        <div class="card mb-4 shadow border-0" style="border-radius:15px;">
+<style>
 
-            <div class="card-header d-flex justify-content-between align-items-center"
-                 style="background: linear-gradient(90deg,#1f2937,#374151); color:white; border-radius:15px 15px 0 0;">
-
-                <div>
-                    <strong>@order.Pono</strong>
-                    <span class="ms-3">📅 @order.Podate</span>
-                </div>
-
-                <div>
-                    @if (order.PoStatus == "Approved")
-                    {
-                        <span class="badge bg-success px-3 py-2 fs-6">
-                            Approved
-                        </span>
-                    }
-                    else if (order.PoStatus == "Rejected")
-                    {
-                        <span class="badge bg-danger px-3 py-2 fs-6">
-                            Rejected
-                        </span>
-                    }
-                </div>
-
-            </div>
-
-            <div class="card-body">
-
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Medicine</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in order.PurchaseProductLines)
-                        {
-                            <tr>
-                                <td>
-                                    💊 @item.Drug.DrugTitle
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary">
-                                        @item.Qty
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-            </div>
-
-        </div>
+    /* ================= BACKGROUND ================= */
+    .orders-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= ORDER CARD ================= */
+    .order-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .order-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
+
+        .order-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= INFO ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+    }
+
+    /* ================= STATUS BADGES ================= */
+    .status-badge {
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+    .status-approved {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+    }
+
+    .status-rejected {
+        background: #964734;
+        color: white;
+    }
+
+    /* ================= TABLE ================= */
+    .order-table th {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .order-table td {
+        vertical-align: middle;
+    }
+
+    /* ================= EMPTY STATE ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: #AFDDE5;
+    }
+
+</style>
+
+<div class="orders-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Order History</h2>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="custom-alert">
+                <h5>No order history found</h5>
+                <p>You have not processed any purchase orders yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var order in Model)
+                {
+                    <div class="col-lg-8 col-md-10 mx-auto">
+
+                        <div class="order-card">
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <div class="info-label">PO No:</div>
+                                    <div class="info-value">@order.Pono</div>
+                                </div>
+
+                                <div>
+                                    @if (order.PoStatus == "Approved")
+                                    {
+                                        <span class="status-badge status-approved">
+                                            Approved
+                                        </span>
+                                    }
+                                    else if (order.PoStatus == "Rejected")
+                                    {
+                                        <span class="status-badge status-rejected">
+                                            Rejected
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="info-label">Date:</span>
+                                <span class="info-value">
+                                    @order.Podate.ToString("dd MMM yyyy")
+                                </span>
+                            </div>
+
+                            <table class="table table-bordered order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in order.PurchaseProductLines)
+                                    {
+                                        <tr>
+                                            <td>💊 @item.Drug.DrugTitle</td>
+                                            <td>@item.Qty</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
 </div>

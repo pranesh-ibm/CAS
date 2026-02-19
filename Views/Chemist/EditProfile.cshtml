@@ -2,39 +2,167 @@
 
 @{
     ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
 }
 
-<div class="container mt-5">
-    <div class="card shadow-lg p-4" style="border-radius:15px;">
-        <h3 class="mb-4">✏ Edit Profile</h3>
+<style>
 
-        <form asp-action="EditProfile" method="post">
+    /* ================= BACKGROUND ================= */
+    .edit-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        padding: 80px 0;
+        min-height: 100vh;
+    }
 
-            <input type="hidden" asp-for="ChemistId" />
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
 
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input asp-for="Email" class="form-control" />
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD ================= */
+    .edit-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .edit-card h2 {
+        font-weight: 700;
+        color: #212A31;
+        margin-bottom: 30px;
+    }
+
+    /* ================= INPUTS ================= */
+    .form-label {
+        font-weight: 600;
+        color: #124E66;
+    }
+
+    .form-control,
+    textarea.form-control {
+        border-radius: 30px;
+        padding: 12px 20px;
+        border: 1px solid #e0e0e0;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 12px rgba(18,78,102,0.6);
+            border-color: #124E66;
+            transform: scale(1.02);
+        }
+
+    /* ================= BUTTONS ================= */
+    .btn-update {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+        border: none;
+    }
+
+        .btn-update:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
+
+    .btn-cancel {
+        background: #2E3944;
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: #D3D9D4;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-cancel:hover {
+            background: #124E66;
+            transform: translateY(-4px);
+        }
+
+</style>
+
+<div class="edit-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="edit-card">
+
+                    <h2 class="text-center">Edit Profile</h2>
+
+                    <form asp-action="EditProfile" method="post">
+
+                        <input type="hidden" asp-for="ChemistId" />
+
+                        <div class="row g-4">
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input asp-for="Phone" class="form-control" />
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-md-12">
+                                <label class="form-label">Address</label>
+                                <textarea asp-for="Address"
+                                          rows="3"
+                                          class="form-control"></textarea>
+                            </div>
+
+                            <div class="col-md-12 text-center mt-4">
+                                <button type="submit"
+                                        class="btn btn-update me-3">
+                                    Update Profile
+                                </button>
+
+                                <a asp-action="Index"
+                                   class="btn btn-cancel">
+                                    Cancel
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Phone</label>
-                <input asp-for="Phone" class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Address</label>
-                <input asp-for="Address" class="form-control" />
-            </div>
-
-            <button type="submit" class="btn btn-success">
-                Save Changes
-            </button>
-
-            <a asp-action="Index" class="btn btn-secondary">
-                Cancel
-            </a>
-
-        </form>
+        </div>
     </div>
 </div>

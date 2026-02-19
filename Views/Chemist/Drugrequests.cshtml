@@ -1,54 +1,235 @@
 ﻿@model List<CAS.Models.DrugRequest>
 
-<h2>Physician Drug Requests</h2>
+@{
+    ViewData["Title"] = "Physician Drug Requests";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
+}
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Physician</th>
-            <th>Details</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+<style>
 
-    <tbody>
-        @foreach (var req in Model)
-        {
-            <tr>
-                <td>@req.DrugRequestId</td>
-                <td>@req.PhysicianId</td>
-                <td>@req.DrugsInfoText</td>
-                <td>@req.RequestDate</td>
+    /* ================= BACKGROUND ================= */
+    .requests-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
 
-                <td>
-                    @if (req.RequestStatus == "Approved")
-                    {
-                        <span class="badge bg-success">Approved</span>
-                    }
-                    else if (req.RequestStatus == "Rejected")
-                    {
-                        <span class="badge bg-danger">Rejected</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning text-dark">Pending</span>
-                    }
-                </td>
-
-                <td>
-                    @if (req.RequestStatus == "Pending")
-                    {
-                        <a asp-action="Approve" asp-route-id="@req.DrugRequestId"
-                           class="btn btn-success btn-sm">Approve</a>
-
-                        <a asp-action="Reject" asp-route-id="@req.DrugRequestId"
-                           class="btn btn-danger btn-sm">Reject</a>
-                    }
-                </td>
-            </tr>
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
-    </tbody>
-</table>
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= REQUEST CARD ================= */
+    .request-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .request-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
+
+        .request-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= LABELS ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    /* ================= STATUS BADGE ================= */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-pending {
+        background: #ffc107;
+        color: #000;
+    }
+
+    .status-approved {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+    }
+
+    .status-rejected {
+        background: #964734;
+        color: white;
+    }
+
+    /* ================= ACTION BUTTONS ================= */
+    .action-btn {
+        border-radius: 30px;
+        padding: 8px 18px;
+        font-weight: 600;
+        transition: 0.3s;
+        border: none;
+        margin-right: 8px;
+    }
+
+    .btn-approve {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+    }
+
+        .btn-approve:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(15,164,175,0.6);
+        }
+
+    .btn-reject {
+        background: #964734;
+        color: white;
+    }
+
+        .btn-reject:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(150,71,52,0.6);
+        }
+
+    /* ================= EMPTY STATE ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: #AFDDE5;
+    }
+
+</style>
+
+<div class="requests-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Physician Drug Requests</h2>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="custom-alert">
+                <h5 class="mb-3">No requests available</h5>
+                <p>No physician drug requests found at this time.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var req in Model)
+                {
+                    string statusClass = req.RequestStatus == "Approved" ? "status-approved"
+                    : req.RequestStatus == "Rejected" ? "status-rejected"
+                    : "status-pending";
+
+                    <div class="col-lg-6 col-md-6">
+
+                        <div class="request-card h-100">
+
+                            <div class="mb-3">
+                                <span class="info-label">Request ID:</span>
+                                <div class="info-value">
+                                    @req.DrugRequestId
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Physician ID:</span>
+                                <div class="info-value">
+                                    @req.PhysicianId
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Request Date:</span>
+                                <div class="info-value">
+                                    @req.RequestDate.ToString("dd MMM yyyy hh:mm tt")
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Drug Details:</span>
+                                <div class="info-value">
+                                    @req.DrugsInfoText
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+
+                                <span class="status-badge @statusClass">
+                                    @req.RequestStatus
+                                </span>
+
+                                @if (req.RequestStatus == "Pending")
+                                {
+                                    <div class="mt-3">
+                                        <a asp-action="Approve"
+                                           asp-route-id="@req.DrugRequestId"
+                                           class="action-btn btn-approve">
+                                            Approve
+                                        </a>
+
+                                        <a asp-action="Reject"
+                                           asp-route-id="@req.DrugRequestId"
+                                           class="action-btn btn-reject">
+                                            Reject
+                                        </a>
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>
