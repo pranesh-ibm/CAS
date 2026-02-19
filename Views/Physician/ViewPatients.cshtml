@@ -4,40 +4,176 @@
     ViewData["Title"] = "View Patients";
 }
 
-<h2>Assigned Patients</h2>
+<style>
 
-@if (Model == null || Model.Patients == null || !Model.Patients.Any())
-{
-    <div class="text-center py-5 text-muted">
-        <h5 class="mb-2">No patients assigned</h5>
-        <p class="mb-3">There are currently no patients linked to your account. This could be because schedules haven't been created or patients haven't been assigned yet.</p>
-        <a asp-action="ViewPatients" class="btn btn-outline-secondary me-2">Refresh</a>
-        <a asp-action="Index" class="btn btn-link">Back to Dashboard</a>
-    </div>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Phone</th>
-                <th class="text-end">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var p in Model.Patients)
-        {
-            <tr>
-                <td>@p.PatientName</td>
-                <td>@(p.Gender ?? "-")</td>
-                <td>@p.Phone</td>
-                <td class="text-end">
-                    <a asp-action="PatientDetails" asp-route-id="@p.PatientId" class="btn btn-sm btn-outline-primary">View</a>
-                </td>
-            </tr>
+    /* ================= BACKGROUND ================= */
+    .patients-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
-        </tbody>
-    </table>
-}
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= PATIENT CARD ================= */
+    .patient-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .patient-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
+
+        .patient-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= LABELS ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    /* ================= BUTTON ================= */
+    .dashboard-btn-outline {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    /* ================= EMPTY STATE ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: #AFDDE5;
+    }
+
+</style>
+
+<div class="patients-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Assigned Patients</h2>
+        </div>
+
+        @if (Model == null || Model.Patients == null || !Model.Patients.Any())
+        {
+            <div class="custom-alert">
+                <h5 class="mb-3">No patients assigned</h5>
+                <p class="mb-4">
+                    There are currently no patients linked to your account.
+                    Patients will appear here once appointments are scheduled.
+                </p>
+
+                <a asp-action="ViewPatients"
+                   class="dashboard-btn-outline me-3">
+                    Refresh
+                </a>
+
+                <a asp-action="Index"
+                   class="dashboard-btn-outline">
+                    Back to Dashboard
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var p in Model.Patients)
+                {
+                    <div class="col-lg-6 col-md-6">
+
+                        <div class="patient-card h-100">
+
+                            <div class="mb-3">
+                                <span class="info-label">Name:</span>
+                                <div class="info-value">@p.PatientName</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Gender:</span>
+                                <div class="info-value">
+                                    @(p.Gender ?? "-")
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="info-label">Phone:</span>
+                                <div class="info-value">@p.Phone</div>
+                            </div>
+
+                            <div class="text-end">
+                                <a asp-action="PatientDetails"
+                                   asp-route-id="@p.PatientId"
+                                   class="dashboard-btn-outline">
+                                    View Details
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>

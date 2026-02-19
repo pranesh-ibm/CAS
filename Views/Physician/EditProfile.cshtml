@@ -2,181 +2,185 @@
 
 @{
     ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
 }
 
-<h2>Edit Profile</h2>
+<style>
 
-<form id="physEditForm" asp-controller="Physician" asp-action="EditProfile" method="post" novalidate>
-        @Html.AntiForgeryToken()
-    <div id="physFormSummary" class="text-danger"></div>
-    <input type="hidden" asp-for="PhysicianId" />
-
-    <div class="mb-3">
-        <label asp-for="PhysicianName" class="form-label"></label>
-        <input asp-for="PhysicianName" class="form-control" required />
-        <div class="invalid-feedback" asp-validation-for="PhysicianName"></div>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Specialization" class="form-label"></label>
-        <input asp-for="Specialization" class="form-control" required />
-        <div class="invalid-feedback" asp-validation-for="Specialization"></div>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Address" class="form-label"></label>
-        <input asp-for="Address" class="form-control" required />
-        <div class="invalid-feedback" asp-validation-for="Address"></div>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Phone" class="form-label"></label>
-        <input asp-for="Phone" class="form-control" required />
-        <div class="invalid-feedback" asp-validation-for="Phone"></div>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" required />
-        <div class="invalid-feedback" asp-validation-for="Email"></div>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Summary" class="form-label"></label>
-        <textarea asp-for="Summary" class="form-control" required></textarea>
-        <div class="invalid-feedback" asp-validation-for="Summary"></div>
-    </div>
-
-    <button type="button" id="physSaveBtn" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        (function(){
-            var form = document.getElementById('physEditForm');
-            var btn = document.getElementById('physSaveBtn');
-            var summary = document.getElementById('physFormSummary');
-            if(!form || !btn) return;
-
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                summary.innerText = '';
-
-                // Prefer native reportValidity if available
-                if (typeof form.reportValidity === 'function') {
-                    if (!form.reportValidity()) return;
-                } else {
-                    if (!validateForm(form)) return;
-                }
-
-                // submit via fetch
-                (async function(){
-                    try {
-                        var fd = new FormData(form);
-                        var res = await fetch(form.action, {
-                            method: 'POST',
-                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                            credentials: 'same-origin',
-                            body: fd
-                        });
-                        if (!res.ok) {
-                            var err = 'An error occurred while saving.';
-                            try { var body = await res.json(); if (body && body.message) err = body.message; } catch(e){}
-                            summary.innerText = err;
-                            return;
-                        }
-                        var json = await res.json();
-                        if (json && json.success) {
-                            showModalAndRedirect(json.message || 'Saved', '@Url.Action("Index", "Physician")');
-                            return;
-                        }
-                        summary.innerText = (json && json.message) ? json.message : 'An unexpected response was received.';
-                    } catch (ex) {
-                        summary.innerText = 'Network error while saving.';
-                    }
-                })();
-            }, false);
-
-            function showModalAndRedirect(message, url) {
-                var modalId = 'ajaxSuccessModal';
-                var existing = document.getElementById(modalId);
-                if (existing) existing.remove();
-
-                var html = '<div class="modal fade" id="' + modalId + '" tabindex="-1" aria-hidden="true">' +
-                    '<div class="modal-dialog modal-dialog-centered"><div class="modal-content">' +
-                    '<div class="modal-header"><h5 class="modal-title">Success</h5>' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>' +
-                    '<div class="modal-body">' + encodeHtml(message) + '</div>' +
-                    '<div class="modal-footer"><button id="ajaxOkBtn" type="button" class="btn btn-primary">OK</button></div>' +
-                    '</div></div></div>';
-
-                var div = document.createElement('div');
-                div.innerHTML = html;
-                document.body.appendChild(div);
-                var modalEl = document.getElementById(modalId);
-                var modal = new bootstrap.Modal(modalEl);
-                modal.show();
-                document.getElementById('ajaxOkBtn').addEventListener('click', function(){
-                    modal.hide();
-                    window.location = url;
-                });
-            }
-
-            function encodeHtml(s){ var div = document.createElement('div'); div.innerText = s; return div.innerHTML; }
-
-            function validateForm(formEl) {
-                var controls = formEl.querySelectorAll('input,select,textarea');
-                var ok = true;
-                controls.forEach(function(c){
-                    if (c.type === 'hidden') return;
-                    var valid = true;
-                    if (typeof c.checkValidity === 'function') valid = c.checkValidity();
-                    if (!valid) {
-                        c.classList.add('is-invalid');
-                        // set or create invalid-feedback
-                        var fb = c.parentNode.querySelector('.invalid-feedback') || c.parentNode.querySelector('.text-danger');
-                        if (!fb) {
-                            fb = document.createElement('div'); fb.className = 'invalid-feedback'; c.parentNode.appendChild(fb);
-                        }
-                        try { fb.innerText = c.validationMessage || 'This field is required'; } catch(e){}
-                        ok = false;
-                    } else {
-                        c.classList.remove('is-invalid');
-                        var fb = c.parentNode.querySelector('.invalid-feedback'); if (fb) fb.innerText = '';
-                    }
-                });
-                return ok;
-            }
-        })();
-    </script>
-
-    @{
-        var msg = TempData["SuccessMessage"] as string;
+    /* ================= BACKGROUND ================= */
+    .edit-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        padding: 80px 0;
+        min-height: 100vh;
     }
 
-    @if (!string.IsNullOrEmpty(msg))
-    {
-        <script>
-            (function(){
-                var modalHtml = '<div class="modal fade" id="tempSuccessModal" tabindex="-1" aria-hidden="true">' +
-                                '<div class="modal-dialog modal-dialog-centered">' +
-                                '<div class="modal-content">' +
-                                '<div class="modal-header"><h5 class="modal-title">Success</h5>' +
-                                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>' +
-                                '<div class="modal-body">' + @Html.Raw(System.Text.Encodings.Web.HtmlEncoder.Default.Encode(msg)) + '</div>' +
-                                '<div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button></div>' +
-                                '</div></div></div>';
-                var div = document.createElement('div');
-                div.innerHTML = modalHtml;
-                document.body.appendChild(div);
-                var modalEl = document.getElementById('tempSuccessModal');
-                if (modalEl){
-                    var modal = new bootstrap.Modal(modalEl);
-                    modal.show();
-                }
-            })();
-        </script>
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
-}
+
+    /* ================= CARD ================= */
+    .edit-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .edit-card h2 {
+        font-weight: 700;
+        color: #212A31;
+        margin-bottom: 30px;
+    }
+
+    /* ================= INPUTS ================= */
+    .form-label {
+        font-weight: 600;
+        color: #124E66;
+    }
+
+    .form-control,
+    textarea.form-control {
+        border-radius: 30px;
+        padding: 12px 20px;
+        border: 1px solid #e0e0e0;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 12px rgba(18,78,102,0.6);
+            border-color: #124E66;
+            transform: scale(1.02);
+        }
+
+    /* ================= BUTTONS ================= */
+    .btn-update {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+        border: none;
+    }
+
+        .btn-update:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
+
+    .btn-cancel {
+        background: #2E3944;
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: #D3D9D4;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-cancel:hover {
+            background: #124E66;
+            transform: translateY(-4px);
+        }
+
+</style>
+
+<div class="edit-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="edit-card">
+
+                    <h2 class="text-center">Edit Profile</h2>
+
+                    <form id="physEditForm"
+                          asp-controller="Physician"
+                          asp-action="EditProfile"
+                          method="post"
+                          novalidate>
+
+                        @Html.AntiForgeryToken()
+                        <div id="physFormSummary" class="text-danger text-center mb-3"></div>
+
+                        <input type="hidden" asp-for="PhysicianId" />
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Name</label>
+                                <input asp-for="PhysicianName" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Specialization</label>
+                                <input asp-for="Specialization" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input asp-for="Phone" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">Address</label>
+                                <textarea asp-for="Address" rows="3" class="form-control"></textarea>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">Summary</label>
+                                <textarea asp-for="Summary" rows="3" class="form-control"></textarea>
+                            </div>
+
+                            <div class="col-md-12 text-center mt-4">
+                                <button type="button"
+                                        id="physSaveBtn"
+                                        class="btn btn-update me-3">
+                                    Update Profile
+                                </button>
+
+                                <a asp-action="Index"
+                                   class="btn btn-cancel">
+                                    Cancel
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

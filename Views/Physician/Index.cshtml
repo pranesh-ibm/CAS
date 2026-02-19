@@ -1,111 +1,271 @@
 @model CAS.Models.ViewModel.PhysicianProfileViewModel
 @{
     ViewData["Title"] = "Physician Dashboard";
+    Layout = "~/Views/Shared/_LayoutRoles.cshtml";
     var username = Model.PhysicianName ?? "Physician";
 }
 
 <style>
-    .gradient-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
+
+    /* ================= PREMIUM BACKGROUND ================= */
+    .dashboard-wrapper {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .dashboard-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .dashboard-subtitle {
+        color: rgba(255,255,255,0.85);
+    }
+
+    /* ================= GLASS WELCOME CARD ================= */
+    .welcome-card {
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        color: #AFDDE5;
         padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        animation: fadeUp 0.8s ease;
     }
 
-    .action-card {
-        border-radius: 15px;
-        transition: 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .action-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    .welcome-card h4 {
+        color: #D3D9D4;
+        font-weight: 700;
     }
 
-    .btn-modern {
-        border-radius: 25px;
-        padding: 8px 20px;
-        font-weight: 500;
+    .welcome-card p {
+        color: rgba(255,255,255,0.85);
     }
+
+    /* ================= FUNCTIONAL CARDS ================= */
+    .dashboard-card {
+        background: white;
+        padding: 35px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        transition: all 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dashboard-card::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -150%;
+            left: -50%;
+            background: linear-gradient(45deg,#0FA4AF,#AFDDE5);
+            opacity: 0.08;
+            transition: 0.5s;
+            transform: rotate(25deg);
+        }
+
+        .dashboard-card:hover::before {
+            top: -50%;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        .dashboard-card h5 {
+            color: #024950;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+    /* ================= ICON STYLE ================= */
+    .dashboard-icon {
+        font-size: 40px;
+        color: #0FA4AF;
+        margin-bottom: 15px;
+    }
+
+    /* ================= BUTTON STYLE ================= */
+    .dashboard-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 30px;
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+        margin-bottom: 10px;
+    }
+
+        .dashboard-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(15,164,175,0.7);
+            color: white;
+        }
+
+    .dashboard-btn-outline {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 30px;
+        border: 2px solid #964734; /* Brown Accent */
+        color: #964734; /* Brown Text */
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734; /* Brown Fill on Hover */
+            color: white;
+            transform: scale(1.05);
+        }
+
+    /* ===== FIX CLICK ISSUE CAUSED BY ANIMATION LAYER ===== */
+
+    .dashboard-card {
+        position: relative;
+        z-index: 1;
+    }
+
+        .dashboard-card::before {
+            z-index: 0;
+            pointer-events: none; /* prevents blocking clicks */
+        }
+
+        .dashboard-card * {
+            position: relative;
+            z-index: 2;
+        }
+
 </style>
 
-<div class="container mt-4">
+<div class="dashboard-wrapper">
+    <div class="container">
 
-    <div class="gradient-header text-center mb-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h2 class="fw-bold mb-1 text-start">Welcome, @username👋</h2>
-                <p class="mb-0 text-start">Physician Dashboard</p>
+        <!-- HEADER -->
+        <div class="text-center mb-5">
+            <h2 class="dashboard-title">Physician Dashboard</h2>
+            <p class="dashboard-subtitle">
+                Manage appointments, patients, prescriptions & drug orders
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- LEFT WELCOME PANEL -->
+            <div class="col-lg-4">
+                <div class="welcome-card h-100 d-flex flex-column justify-content-center">
+                    <h4>Welcome Back, @username 👋</h4>
+                    <p class="mt-3">
+                        Access your appointments, manage patients,
+                        create prescriptions and handle drug orders efficiently.
+                    </p>
+
+                    <a asp-action="EditProfile"
+                       class="dashboard-btn mt-3">
+                        Edit Profile
+                    </a>
+                </div>
             </div>
 
+            <!-- RIGHT ACTION CARDS -->
+            <div class="col-lg-8">
+                <div class="row g-4">
 
-@await Html.PartialAsync("_SuccessModal")
-            <div class="text-end">
-                <a asp-action="EditProfile" class="btn btn-outline-light">Edit Profile</a>
+                    <!-- APPOINTMENTS -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">📅</div>
+                            <h5>Appointments</h5>
+                            <a asp-action="ViewAppointments" class="dashboard-btn">
+                                View Appointments
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PATIENTS -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">🧑‍⚕️</div>
+                            <h5>Patients</h5>
+                            <a asp-action="ViewPatients" class="dashboard-btn">
+                                View Patients
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PRESCRIPTIONS -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">✍️</div>
+                            <h5>Prescriptions</h5>
+                            <a asp-action="CreatePrescription" class="dashboard-btn mb-3">
+                                Create Prescription
+                            </a>
+                            <a asp-action="ViewPrescriptions" class="dashboard-btn-outline">
+                                View Prescriptions
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DRUG MANAGEMENT -->
+                    <div class="col-md-6">
+                        <div class="dashboard-card h-100">
+                            <div class="dashboard-icon">💊</div>
+                            <h5>Drug Management</h5>
+                            <a asp-action="OrderDrugs" class="dashboard-btn mb-3">
+                                Order Drugs
+                            </a>
+                            <a asp-action="ViewDrugs" class="dashboard-btn-outline">
+                                View Drugs
+                            </a>
+                            <a asp-action="ViewDrugRequests" class="dashboard-btn-outline mt-2">
+                                Drug Request History
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
+
         </div>
     </div>
-
-    <div class="row text-center">
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>📅 View Appointments</h5>
-                <p class="text-muted">Manage your appointment schedule</p>
-                <a asp-controller="Physician" asp-action="ViewAppointments" class="btn btn-info btn-modern">Open</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>🧑‍⚕️ View Patients</h5>
-                <p class="text-muted">Browse your patients</p>
-                <a asp-controller="Physician" asp-action="ViewPatients" class="btn btn-primary btn-modern">Open</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>✍️ Create Prescription</h5>
-                <p class="text-muted">Compose a new prescription</p>
-                <a asp-controller="Physician" asp-action="CreatePrescription" class="btn btn-success btn-modern">Create</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>📄 View Prescriptions</h5>
-                <p class="text-muted">See prescriptions you've issued</p>
-                <a asp-controller="Physician" asp-action="ViewPrescriptions" class="btn btn-dark btn-modern">View</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>🛒 Order Drugs</h5>
-                <p class="text-muted">Place drug requests</p>
-                <a asp-controller="Physician" asp-action="OrderDrugs" class="btn btn-danger btn-modern">Order</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>💊 View Drugs</h5>
-                <p class="text-muted">Browse available drugs</p>
-                <a asp-controller="Physician" asp-action="ViewDrugs" class="btn btn-warning btn-modern">Browse</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card action-card p-4 h-100">
-                <h5>📜 View Drug Requests</h5>
-                <p class="text-muted">See your past drug requests</p>
-                <a asp-controller="Physician" asp-action="ViewDrugRequests" class="btn btn-secondary btn-modern">History</a>
-            </div>
-        </div>
-
-    </div>
-
 </div>

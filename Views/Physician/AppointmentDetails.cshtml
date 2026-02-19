@@ -4,22 +4,197 @@
     ViewData["Title"] = "Appointment Details";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Appointment Details</h2>
-    <a asp-action="ViewAppointments" class="btn btn-secondary">Back to Appointments</a>
-</div>
+<style>
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h4 class="card-title">Appointment #@Model.AppointmentId</h4>
-        <hr />
-        <div class="row g-3">
-            <div class="col-md-6"><strong>Patient:</strong> @(Model.Patient?.PatientName ?? "-")</div>
-            <div class="col-md-6"><strong>Date:</strong> @Model.AppointmentDate.ToString("g")</div>
-            <div class="col-md-6"><strong>Criticality:</strong> @(Model.Criticality ?? "-")</div>
-            <div class="col-md-6"><strong>Status:</strong> @(Model.ScheduleStatus ?? "-")</div>
-            <div class="col-12"><strong>Reason:</strong> @(Model.Reason ?? "-")</div>
-            <div class="col-12"><strong>Note:</strong> @(Model.Note ?? "-")</div>
+    /* ================= BACKGROUND ================= */
+    .status-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= CARD ================= */
+    .status-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 35px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .status-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
+
+        .status-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= SECTION TITLE ================= */
+    .section-title {
+        font-weight: 700;
+        color: #124E66;
+        margin-bottom: 20px;
+    }
+
+    /* ================= LABEL STYLING ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    /* ================= BADGES ================= */
+    .badge-low {
+        background: #198754;
+    }
+
+    .badge-medium {
+        background: #ffc107;
+        color: #000;
+    }
+
+    .badge-high {
+        background: #dc3545;
+    }
+
+    .status-badge {
+        background: #0FA4AF;
+    }
+
+    /* ================= BUTTON ================= */
+    .dashboard-btn-outline {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
+</style>
+
+<div class="status-page">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="page-title mb-0">Appointment Details</h2>
+            <a asp-action="ViewAppointments" class="dashboard-btn-outline">
+                Back to Appointments
+            </a>
         </div>
+
+        @{
+            string criticalityClass = Model.Criticality == "High" ? "badge-high"
+            : Model.Criticality == "Medium" ? "badge-medium"
+            : "badge-low";
+        }
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="status-card">
+
+                    <div class="section-title">
+                        📅 Appointment #@Model.AppointmentId
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <span class="info-label">Patient:</span>
+                            <div class="info-value">
+                                @(Model.Patient?.PatientName ?? "-")
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <span class="info-label">Date:</span>
+                            <div class="info-value">
+                                @Model.AppointmentDate.ToString("dd MMM yyyy hh:mm tt")
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <span class="info-label">Criticality:</span><br />
+                            <span class="badge @criticalityClass">
+                                @(Model.Criticality ?? "-")
+                            </span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <span class="info-label">Status:</span><br />
+                            <span class="badge status-badge">
+                                @(Model.ScheduleStatus ?? "-")
+                            </span>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <span class="info-label">Reason:</span>
+                            <div class="info-value">
+                                @(Model.Reason ?? "-")
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <span class="info-label">Note:</span>
+                            <div class="info-value">
+                                @(Model.Note ?? "-")
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
     </div>
+
 </div>

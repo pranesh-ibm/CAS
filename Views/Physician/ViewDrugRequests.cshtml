@@ -4,34 +4,194 @@
     ViewData["Title"] = "Drug Request History";
 }
 
-<h2>Drug Request History</h2>
+<style>
 
-@if (Model?.Requests == null || !Model.Requests.Any())
-{
-    <div class="alert alert-info">
-        You have not placed any drug requests yet.
-        <a asp-controller="Physician" asp-action="OrderDrugs" class="btn btn-sm btn-primary ms-3">Place a Request</a>
-    </div>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Request Date</th>
-                <th>Drug</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var r in Model.Requests)
-        {
-            <tr>
-                <td>@r.RequestDate.ToString("g")</td>
-                <td>@r.DrugsInfoText</td>
-                <td>@r.RequestStatus</td>
-            </tr>
+    /* ================= BACKGROUND ================= */
+    .requests-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
-        </tbody>
-    </table>
-}
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= REQUEST CARD ================= */
+    .request-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .request-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
+
+        .request-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= LABELS ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    /* ================= STATUS BADGE ================= */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-pending {
+        background: #ffc107;
+        color: #000;
+    }
+
+    .status-approved {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+    }
+
+    .status-rejected {
+        background: #964734;
+        color: white;
+    }
+
+    /* ================= BUTTON ================= */
+    .dashboard-btn-outline {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    /* ================= EMPTY STATE ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: #AFDDE5;
+    }
+
+</style>
+
+<div class="requests-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Drug Request History</h2>
+        </div>
+
+        @if (Model?.Requests == null || !Model.Requests.Any())
+        {
+            <div class="custom-alert">
+                <h5 class="mb-3">No drug requests found</h5>
+                <p class="mb-4">
+                    You have not placed any drug requests yet.
+                </p>
+
+                <a asp-controller="Physician"
+                   asp-action="OrderDrugs"
+                   class="dashboard-btn-outline">
+                    Place a Request
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var r in Model.Requests)
+                {
+                    string statusClass = r.RequestStatus == "Approved" ? "status-approved"
+                    : r.RequestStatus == "Rejected" ? "status-rejected"
+                    : "status-pending";
+
+                    <div class="col-lg-6 col-md-6">
+
+                        <div class="request-card h-100">
+
+                            <div class="mb-3">
+                                <span class="info-label">Request Date:</span>
+                                <div class="info-value">
+                                    @r.RequestDate.ToString("dd MMM yyyy hh:mm tt")
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Drug Details:</span>
+                                <div class="info-value">
+                                    @r.DrugsInfoText
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <span class="status-badge @statusClass">
+                                    @r.RequestStatus
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -6,43 +6,204 @@
 
 @await Html.PartialAsync("_SuccessModal")
 
-<h2>Prescriptions</h2>
+<style>
 
-@if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
-{
-    <div class="text-center py-5 text-muted">
-        <h5 class="mb-2">No prescriptions found</h5>
-        <p class="mb-3">There are no prescriptions available for your account right now.</p>
-        <a asp-action="CreatePrescription" class="btn btn-primary me-2">Create Prescription</a>
-        <a asp-action="ViewPrescriptions" class="btn btn-outline-secondary">Refresh</a>
-    </div>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Patient</th>
-                <th>Drug</th>
-                <th>Prescription</th>
-                <th>Dosage</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var p in Model.Prescriptions)
-        {
-            <tr>
-                <td>@p.PhysicianAdvice.Schedule.Appointment.Patient.PatientName</td>
-                <td>@p.Drug.DrugTitle</td>
-                <td>@p.Prescription</td>
-                <td>@p.Dosage</td>
-                <td>@p.PhysicianAdvice.Schedule.ScheduleDate.ToString()</td>
-            </tr>
+    /* ================= BACKGROUND ================= */
+    .prescriptions-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
         }
-        </tbody>
-    </table>
-}
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= PRESCRIPTION CARD ================= */
+    .prescription-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .prescription-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
+
+        .prescription-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= LABELS ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    /* ================= BUTTONS ================= */
+    .btn-premium {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-weight: 600;
+        color: white;
+        transition: 0.3s ease;
+    }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(15,164,175,0.6);
+            color: white;
+        }
+
+    .dashboard-btn-outline {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    /* ================= EMPTY STATE ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: #AFDDE5;
+    }
+
+</style>
+
+<div class="prescriptions-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Prescriptions</h2>
+        </div>
+
+        @if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
+        {
+            <div class="custom-alert">
+                <h5 class="mb-3">No prescriptions found</h5>
+                <p class="mb-4">
+                    There are no prescriptions available for your account right now.
+                </p>
+
+                <a asp-action="CreatePrescription"
+                   class="btn-premium me-3">
+                    Create Prescription
+                </a>
+
+                <a asp-action="ViewPrescriptions"
+                   class="dashboard-btn-outline">
+                    Refresh
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var p in Model.Prescriptions)
+                {
+                    <div class="col-lg-6 col-md-6">
+
+                        <div class="prescription-card h-100">
+
+                            <div class="mb-3">
+                                <span class="info-label">Patient:</span>
+                                <div class="info-value">
+                                    @p.PhysicianAdvice.Schedule.Appointment.Patient.PatientName
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Drug:</span>
+                                <div class="info-value">
+                                    @p.Drug.DrugTitle
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Prescription:</span>
+                                <div class="info-value">
+                                    @p.Prescription
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="info-label">Dosage:</span>
+                                <div class="info-value">
+                                    @p.Dosage
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="info-label">Date:</span>
+                                <div class="info-value">
+                                    @p.PhysicianAdvice.Schedule.ScheduleDate.ToString("dd MMM yyyy")
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>
 
 @section Scripts {
     <script>
@@ -54,5 +215,4 @@ else
             }
         })();
     </script>
-}
 }
