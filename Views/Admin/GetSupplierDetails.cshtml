@@ -1,49 +1,194 @@
 ﻿@model CAS.Models.Supplier
 
 @{
-    ViewData["Title"] = "SupplierGetDetailsById";
+    ViewData["Title"] = "Supplier Details";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>SupplierGetDetailsById</h1>
+<style>
 
-<div>
-    <h4>Supplier</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SupplierName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SupplierName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SupplierStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SupplierStatus)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="EditSupplier" asp-route-id="@Model?.SupplierId">Edit</a> |
-    <a asp-action="GetSuppliersDetail">Back to List</a>
+    /* ================= BACKGROUND ================= */
+    .profile-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        padding: 80px 0;
+        min-height: 100vh;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD ================= */
+    .profile-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .profile-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .avatar-circle {
+        width: 110px;
+        height: 110px;
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        color: white;
+        margin: 0 auto 15px auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .profile-name {
+        font-weight: 700;
+        color: #212A31;
+    }
+
+    .profile-email {
+        color: #6c757d;
+    }
+
+    /* ================= INFO BLOCKS ================= */
+    .info-section {
+        margin-bottom: 35px;
+    }
+
+    .info-title {
+        font-weight: 600;
+        color: #124E66;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #124E66;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+
+    .info-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #eaeaea;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #2E3944;
+    }
+
+    .info-value {
+        color: #212A31;
+    }
+
+    /* ================= BUTTONS ================= */
+    .btn-edit {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
+
+    .btn-back {
+        margin-left: 15px;
+        color: #124E66;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+</style>
+
+<div class="profile-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="profile-card">
+
+                    <!-- HEADER -->
+                    <div class="profile-header">
+                        <div class="avatar-circle">
+                            @Model.SupplierName?.Substring(0, 1).ToUpper()
+                        </div>
+                        <h2 class="profile-name">@Model.SupplierName</h2>
+                        <p class="profile-email">@Model.Email</p>
+                    </div>
+
+                    <!-- CONTACT INFO -->
+                    <div class="info-section">
+                        <div class="info-title">Contact Information</div>
+
+                        <div class="info-item">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">@Model.Address</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">@Model.Phone</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">@Model.Email</div>
+                        </div>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="info-section">
+                        <div class="info-title">Status</div>
+                        <p class="mt-2 fw-bold">@Model.SupplierStatus</p>
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="text-center mt-4">
+                        <a asp-action="EditSupplier"
+                           asp-route-id="@Model.SupplierId"
+                           class="btn-edit">Edit Supplier</a>
+
+                        <a asp-action="GetSuppliersDetail"
+                           class="btn-back">Back to List</a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>

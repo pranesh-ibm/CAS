@@ -1,51 +1,227 @@
 ﻿@model CAS.Models.Supplier
 
 @{
-    ViewData["Title"] = "CreateSupplier";
+    ViewData["Title"] = "Create Supplier";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>CreateSupplier</h1>
+<style>
+    :root {
+        --dark-1: #212A31;
+        --dark-2: #2E3944;
+        --accent: #124E66;
+        --muted: #748D92;
+        --light: #D3D9D4;
+    }
 
-<h4>Supplier</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateSupplier">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SupplierName" class="control-label"></label>
-                <input asp-for="SupplierName" class="form-control" />
-                <span asp-validation-for="SupplierName" class="text-danger"></span>
+    /* ================= BACKGROUND ================= */
+    .create-page {
+        background: linear-gradient(135deg, var(--dark-1), var(--dark-2), var(--accent));
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 70px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD ================= */
+    .create-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 45px;
+        box-shadow: 0 25px 55px rgba(0,0,0,0.35);
+        backdrop-filter: blur(10px);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(35px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADINGS ================= */
+    .page-title {
+        font-weight: 800;
+        color: var(--light);
+    }
+
+    .page-subtitle {
+        color: #d7e2e3;
+        font-size: 14px;
+    }
+
+    .section-title {
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    /* ================= FORM FIELDS ================= */
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-2);
+    }
+
+    .form-control {
+        border-radius: 14px;
+        padding: 12px 15px;
+        border: 1px solid var(--light);
+        transition: 0.3s ease;
+        background: #fff;
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(18,78,102,0.25);
+        }
+
+    /* ================= BUTTONS ================= */
+    .btn-premium {
+        border-radius: 30px;
+        padding: 12px 35px;
+        font-weight: 700;
+        transition: 0.3s ease;
+        letter-spacing: 0.4px;
+    }
+
+    .btn-create {
+        background: linear-gradient(45deg, var(--accent), var(--dark-2));
+        color: white;
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-create:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(18,78,102,0.45);
+        }
+
+        /* Ripple Effect */
+        .btn-create::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            transition: 0.5s;
+        }
+
+        .btn-create:hover::after {
+            width: 300%;
+            height: 300%;
+        }
+
+    .btn-back {
+        border-radius: 30px;
+        padding: 10px 30px;
+        border: 2px solid var(--light);
+        color: var(--dark);
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background: var(--dark);
+            color: var(--light);
+            transform: scale(1.05);
+        }
+
+</style>
+
+<div class="create-page">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="page-title">Create New Supplier</h2>
+            <p class="page-subtitle">Fill out the details to register a new supplier</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+
+                <div class="create-card">
+
+                    <h4 class="section-title">Supplier Information</h4>
+
+                    <form asp-action="CreateSupplier">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row g-4">
+
+                            <div class="col-md-12">
+                                <label asp-for="SupplierName" class="form-label"></label>
+                                <input asp-for="SupplierName" class="form-control" />
+                                <span asp-validation-for="SupplierName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label asp-for="Address" class="form-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label"></label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label asp-for="SupplierStatus" class="form-label"></label>
+                                <input asp-for="SupplierStatus" class="form-control" />
+                                <span asp-validation-for="SupplierStatus" class="text-danger"></span>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn-premium btn-create me-3">
+                                    Create Supplier
+                                </button>
+
+                                <a asp-action="GetSuppliersDetail" class="btn-back">
+                                    Back to List
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SupplierStatus" class="control-label"></label>
-                <input asp-for="SupplierStatus" class="form-control" />
-                <span asp-validation-for="SupplierStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+
     </div>
 </div>
-
-<div>
-    <a asp-action="GetSuppliersDetail">Back to List</a>
-</div>
-

@@ -1,75 +1,218 @@
 ﻿@model CAS.Models.Chemist
 
 @{
-    ViewData["Title"] = "EditChemist";
+    ViewData["Title"] = "Edit Chemist";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>EditChemist</h1>
+<style>
 
-<h4>Chemist</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditChemist">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ChemistId" />
-            <div class="form-group">
-                <label asp-for="ChemistName" class="control-label"></label>
-                <input asp-for="ChemistName" class="form-control" />
-                <span asp-validation-for="ChemistName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Summary" class="control-label"></label>
-                <input asp-for="Summary" class="form-control" />
-                <span asp-validation-for="Summary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label d-block">Chemist Status</label>
+    /* ================= PAGE WRAPPER ================= */
+    .edit-page {
+        padding: 50px 0;
+        animation: fadeIn 0.6s ease;
+    }
 
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio"
-                           asp-for="ChemistStatus" value="Pending" />
-                    <label class="form-check-label">Pending</label>
-                </div>
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio"
-                           asp-for="ChemistStatus" value="Active" />
-                    <label class="form-check-label">Active</label>
-                </div>
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio"
-                           asp-for="ChemistStatus" value="Inactive" />
-                    <label class="form-check-label">Inactive</label>
-                </div>
+    /* ================= HEADER ================= */
+    .edit-title {
+        font-weight: 800;
+        font-size: 30px;
+        background: linear-gradient(90deg,#ffffff,#dbeafe);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 0.5px;
+    }
 
-                <span asp-validation-for="ChemistStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    .edit-subtitle {
+        color: rgba(255,255,255,0.75);
+        font-size: 15px;
+        font-weight: 400;
+    }
+
+    /* ================= CARD ================= */
+    .edit-card {
+        background: rgba(255,255,255,0.97);
+        border-radius: 20px;
+        padding: 45px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+        border: none;
+        transition: 0.3s ease;
+    }
+
+        .edit-card:hover {
+            box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+        }
+
+    /* ================= FORM LABEL ================= */
+    .form-label {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+    }
+
+    /* ================= INPUT ================= */
+    .form-control {
+        border-radius: 14px;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
+        transition: 0.3s;
+        font-weight: 500;
+    }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+            transform: scale(1.02);
+        }
+
+    /* ================= RADIO GROUP ================= */
+    .radio-group {
+        background: #f3f4f6;
+        padding: 12px 18px;
+        border-radius: 14px;
+    }
+
+    /* ================= BUTTON BASE ================= */
+    .btn-premium {
+        border-radius: 50px;
+        padding: 12px 34px;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.4px;
+        transition: all 0.3s ease;
+    }
+
+    /* ================= SAVE BUTTON ================= */
+    .btn-save {
+        background: linear-gradient(135deg,#2563eb,#1e40af);
+        border: none;
+        color: white;
+        box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+    }
+
+        .btn-save:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(37,99,235,0.4);
+        }
+
+    /* ================= BACK BUTTON ================= */
+    .btn-back {
+        background: white;
+        border: 2px solid #d1d5db;
+        color: #374151;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+        .btn-back:hover {
+            background: #1f2937;
+            color: white;
+            border-color: #1f2937;
+            transform: translateY(-3px) scale(1.03);
+        }
+
+</style>
+
+<div class="container edit-page">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h2 style="color:white" class="edit-title">Edit Chemist</h2>
+        <p class="edit-subtitle">Update chemist information and status</p>
     </div>
-</div>
 
-<div>
-    <a asp-action="GetChemistsDetail">Back to List</a>
-</div>
+    <!-- CARD -->
+    <div class="edit-card">
 
+        <form asp-action="EditChemist" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <input type="hidden" asp-for="ChemistId" />
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <label asp-for="ChemistName" class="form-label"></label>
+                    <input asp-for="ChemistName" class="form-control" />
+                    <span asp-validation-for="ChemistName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Address" class="form-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Summary" class="form-label"></label>
+                    <textarea asp-for="Summary" rows="3" class="form-control"></textarea>
+                    <span asp-validation-for="Summary" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label d-block">Chemist Status</label>
+                    <div class="radio-group">
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" asp-for="ChemistStatus" value="Pending" type="radio" />
+                            <label class="form-check-label">Pending</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" asp-for="ChemistStatus" value="Active" type="radio" />
+                            <label class="form-check-label">Active</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" asp-for="ChemistStatus" value="Inactive" type="radio" />
+                            <label class="form-check-label">Inactive</label>
+                        </div>
+
+                    </div>
+                    <span asp-validation-for="ChemistStatus" class="text-danger"></span>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 mt-4 text-center">
+                    <button type="submit" class="btn btn-premium btn-save me-3">
+                        Save Changes
+                    </button>
+
+                    <a asp-action="GetChemistsDetail"
+                       class="btn btn-premium btn-back">
+                        Back to List
+                    </a>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

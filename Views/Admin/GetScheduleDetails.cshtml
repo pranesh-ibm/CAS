@@ -5,48 +5,219 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container-fluid px-4 py-4">
+<style>
 
-    <!-- ================= PAGE HEADER ================= -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">Schedule Details</h2>
-            @* <p class="text-muted mb-0">View all scheduled appointments with assigned physicians</p> *@
-        </div>
-    </div>
+    :root {
+        --dark1: #212A31;
+        --dark2: #2E3944;
+        --accent: #124E66;
+        --muted: #748D92;
+    }
 
-    <!-- ================= TABLE CARD ================= -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
+    /* ================= BACKGROUND ================= */
+    .schedule-page {
+        background: linear-gradient(135deg, var(--dark1), var(--dark2), var(--accent));
+        background-size: 300% 300%;
+        animation: bgShift 14s ease infinite;
+        min-height: 100vh;
+        padding: 70px 0;
+    }
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+    @@keyframes bgShift {
+        0% {
+            background-position: 0% 50%;
+        }
 
-                    <thead class="table-light">
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Patient Name</th>
-                            <th>Physician</th>
-                        </tr>
-                    </thead>
+        50% {
+            background-position: 100% 50%;
+        }
 
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.ScheduleDate.ToString("dd MMM yyyy")</td>
-                                <td>@item.ScheduleTime.ToString(@"hh\:mm")</td>
-                                <td>@item.Appointment.Patient.PatientName</td>
-                                <td>@item.Physician.PhysicianName</td>
-                            </tr>
-                        }
-                    </tbody>
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 
-                </table>
+    /* ================= CARD ================= */
+    .premium-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 45px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+        backdrop-filter: blur(8px);
+        animation: fadeUp 0.8s ease;
+        transition: 0.35s ease;
+        border-left: 6px solid var(--accent);
+    }
+
+        .premium-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 35px 80px rgba(0,0,0,0.45);
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        text-align: center;
+        font-weight: 800;
+        font-size: 32px;
+        color: var(--accent);
+        margin-bottom: 25px;
+        position: relative;
+        display: inline-block;
+        animation: titleFade 0.8s ease;
+    }
+
+    @@keyframes titleFade {
+        0% {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-title::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent), var(--muted));
+        border-radius: 20px;
+        animation: lineGrow 1s ease forwards;
+    }
+
+    @@keyframes lineGrow {
+        from {
+            width: 0;
+            opacity: 0;
+        }
+
+        to {
+            width: 60%;
+            opacity: 1;
+        }
+    }
+
+    /* ================= TABLE ================= */
+    .premium-table {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+        .premium-table thead {
+            background: linear-gradient(45deg, var(--accent), var(--muted));
+            color: white;
+        }
+
+            .premium-table thead th {
+                padding: 18px;
+                font-weight: 700;
+                font-size: 15px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                border: none;
+            }
+
+        /* Table Body */
+        .premium-table tbody tr {
+            transition: 0.3s ease;
+            animation: rowFade 0.7s ease;
+        }
+
+    @@keyframes rowFade {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .premium-table tbody tr:hover {
+        background: rgba(18,78,102,0.08);
+        transform: scale(1.01);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .premium-table tbody td {
+        padding: 16px 14px;
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--dark1);
+    }
+
+    /* Column Hover Highlight */
+    .premium-table td:hover {
+        color: var(--accent);
+        transition: 0.25s ease;
+        font-weight: 600;
+    }
+
+</style>
+
+<div class="schedule-page">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="premium-card">
+
+                    <h2 class="page-title">Schedule Details</h2>
+
+                    <div class="table-responsive mt-4">
+                        <table class="table premium-table align-middle mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Patient Name</th>
+                                    <th>Physician</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.ScheduleDate.ToString("dd MMM yyyy")</td>
+                                        <td>@item.ScheduleTime.ToString(@"hh\:mm")</td>
+                                        <td>@item.Appointment.Patient.PatientName</td>
+                                        <td>@item.Physician.PhysicianName</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
-
         </div>
-    </div>
 
+    </div>
 </div>

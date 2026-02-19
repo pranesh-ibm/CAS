@@ -5,24 +5,139 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container-fluid px-4 py-4">
+<style>
 
-    <!-- ================= PAGE HEADER ================= -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">Pending Appointments</h2>
-            @* <p class="text-muted mb-0">View all appointments that require scheduling</p> *@
+    /* ================= PAGE BACKGROUND ================= */
+    .admin-page {
+        background: linear-gradient(135deg,#f4f7fb,#e8edf5);
+        padding: 40px 0 20px 0;
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    .page-subtitle {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    /* ================= CARD ================= */
+    .premium-card {
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+        overflow: hidden;
+        animation: fadeIn 0.7s ease;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= TABLE ================= */
+    .table thead {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        font-weight: 600;
+    }
+
+        .table thead th {
+            padding: 16px;
+            border: none;
+        }
+
+    .table tbody tr {
+        transition: 0.3s ease;
+    }
+
+        .table tbody tr:hover {
+            background: rgba(18,78,102,0.10);
+            transform: scale(1.01);
+        }
+
+    .table td {
+        padding: 14px;
+        vertical-align: middle;
+    }
+
+    /* ================= STATUS BADGES ================= */
+    .badge {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .badge-pending {
+        background: #ffdd57;
+        color: #000;
+    }
+
+    .badge-success {
+        background: #0FA4AF;
+        color: #fff;
+    }
+
+    .badge-danger {
+        background: #d9534f;
+        color: #fff;
+    }
+
+    .badge-other {
+        background: #6c757d;
+        color: #fff;
+    }
+
+    /* ================= ACTION BUTTON ================= */
+    .btn-schedule {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: 0.3s ease;
+        box-shadow: 0 6px 16px rgba(15,164,175,0.35);
+    }
+
+        .btn-schedule:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(15,164,175,0.45);
+            color: white;
+        }
+
+</style>
+
+<div class="admin-page">
+
+    <div class="container-fluid px-4">
+
+        <!-- ================= HEADER ================= -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="page-title mb-1">Pending Appointments</h2>
+                <p class="page-subtitle">Appointments awaiting scheduling</p>
+            </div>
         </div>
-    </div>
 
-    <!-- ================= TABLE CARD ================= -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
+        <!-- ================= TABLE WRAPPER ================= -->
+        <div class="premium-card p-3">
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table align-middle mb-0">
 
-                    <thead class="table-light">
+                    <thead>
                         <tr>
                             <th>Patient</th>
                             <th>Appointment Date</th>
@@ -38,38 +153,42 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.Patient.PatientName</td>
-                                <td>@item.AppointmentDate.ToString("dd MMM yyyy HH:mm")</td>
+                                <td class="fw-semibold">@item.Patient.PatientName</td>
+
+                                <td>@item.AppointmentDate.ToString("dd MMM yyyy hh:mm tt")</td>
+
                                 <td>@item.Criticality</td>
+
                                 <td>@item.Reason</td>
+
                                 <td>@item.Note</td>
 
-                                <!-- Status Badge -->
+                                <!-- STATUS BADGE -->
                                 <td>
                                     @if (item.ScheduleStatus == "Scheduled")
                                     {
-                                        <span class="badge bg-success">Scheduled</span>
+                                        <span class="badge badge-success">Scheduled</span>
                                     }
                                     else if (item.ScheduleStatus == "Pending")
                                     {
-                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        <span class="badge badge-pending">Pending</span>
                                     }
                                     else if (item.ScheduleStatus == "Cancelled")
                                     {
-                                        <span class="badge bg-danger">Cancelled</span>
+                                        <span class="badge badge-danger">Cancelled</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary">@item.ScheduleStatus</span>
+                                        <span class="badge badge-other">@item.ScheduleStatus</span>
                                     }
                                 </td>
 
-                                <!-- Action Button -->
+                                <!-- ACTION BUTTON -->
                                 <td class="text-end">
                                     <a asp-controller="Admin"
                                        asp-action="CreateSchedule"
                                        asp-route-id="@item.AppointmentId"
-                                       class="btn btn-sm btn-primary">
+                                       class="btn btn-schedule">
                                         <i class="fas fa-calendar-plus me-1"></i> Schedule
                                     </a>
                                 </td>
@@ -81,6 +200,7 @@
             </div>
 
         </div>
+
     </div>
 
 </div>

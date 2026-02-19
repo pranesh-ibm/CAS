@@ -5,24 +5,154 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container-fluid px-4 py-4">
+<style>
 
-    <!-- ================= PAGE HEADER ================= -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">Pending Patients</h2>
-            <p class="text-muted mb-0">Review and approve or deny pending patient registrations</p>
+    /* ================= PAGE BACKGROUND ================= */
+    .admin-page {
+        background: linear-gradient(135deg,#f4f7fb,#e8edf5);
+        padding: 40px 0 20px 0;
+        animation: fadeInPage 0.7s ease;
+    }
+
+    @@keyframes fadeInPage {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    .page-subtitle {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    /* ================= CARD ================= */
+    .premium-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        padding: 25px;
+        overflow: hidden;
+        animation: fadeUp 0.7s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= TABLE ================= */
+    .table thead {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        font-weight: 600;
+    }
+
+        .table thead th {
+            padding: 16px;
+            border: none;
+        }
+
+    .table tbody tr {
+        transition: 0.25s ease;
+    }
+
+        .table tbody tr:hover {
+            background: rgba(18,78,102,0.10);
+            transform: scale(1.01);
+        }
+
+    .table td {
+        padding: 14px;
+        vertical-align: middle;
+    }
+
+    /* ================= ACTION BUTTONS ================= */
+    .btn-approve {
+        background: linear-gradient(45deg,#0FA4AF,#046b75);
+        border: none;
+        padding: 7px 16px;
+        border-radius: 25px;
+        font-weight: 600;
+        color: white;
+        transition: 0.3s ease;
+        box-shadow: 0 6px 14px rgba(15,164,175,0.35);
+    }
+
+        .btn-approve:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 22px rgba(15,164,175,0.45);
+            color: white;
+        }
+
+    .btn-deny {
+        background: linear-gradient(45deg,#e63946,#b71c1c);
+        border: none;
+        padding: 7px 16px;
+        border-radius: 25px;
+        font-weight: 600;
+        color: white;
+        transition: 0.3s ease;
+        box-shadow: 0 6px 14px rgba(230,57,70,0.35);
+    }
+
+        .btn-deny:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 22px rgba(230,57,70,0.45);
+            color: white;
+        }
+
+    /* Patient name link */
+    .patient-link {
+        font-weight: 600;
+        color: #124E66;
+        text-decoration: none;
+    }
+
+        .patient-link:hover {
+            text-decoration: underline;
+            color: #0FA4AF;
+        }
+
+</style>
+
+<div class="admin-page">
+
+    <div class="container-fluid px-4">
+
+        <!-- ================= PAGE HEADER ================= -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="page-title mb-1">Pending Patients</h2>
+                <p class="page-subtitle">Review and approve or deny pending patient registrations</p>
+            </div>
         </div>
-    </div>
 
-    <!-- ================= TABLE CARD ================= -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
+        <!-- ================= TABLE CARD ================= -->
+        <div class="premium-card">
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table align-middle mb-0">
 
-                    <thead class="table-light">
+                    <thead>
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
@@ -35,28 +165,39 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+
+                                <!-- Patient Name Link -->
                                 <td>
                                     <a asp-action="GetPatientDetails"
                                        asp-route-id="@item.PatientId"
-                                       class="text-decoration-none fw-medium">
+                                       class="patient-link">
                                         @item.PatientName
                                     </a>
                                 </td>
+
                                 <td>@item.Email</td>
+
                                 <td>@item.Phone</td>
+
+                                <!-- ACTION BUTTONS -->
                                 <td class="text-end">
+
+                                    <!-- Approve -->
                                     <a asp-action="Approve"
                                        asp-route-id="@item.PatientId"
-                                       class="btn btn-success btn-sm me-1">
+                                       class="btn btn-approve me-1">
                                         <i class="fas fa-check me-1"></i> Approve
                                     </a>
 
+                                    <!-- Deny -->
                                     <a asp-action="Deny"
                                        asp-route-id="@item.PatientId"
-                                       class="btn btn-danger btn-sm">
+                                       class="btn btn-deny">
                                         <i class="fas fa-times me-1"></i> Deny
                                     </a>
+
                                 </td>
+
                             </tr>
                         }
                     </tbody>
@@ -65,6 +206,7 @@
             </div>
 
         </div>
+
     </div>
 
 </div>

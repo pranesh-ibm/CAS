@@ -1,64 +1,247 @@
 ﻿@model CAS.Models.Physician
 
 @{
-    ViewData["Title"] = "DeletePhysician";
+    ViewData["Title"] = "Delete Physician";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>DeletePhysician</h1>
+<style>
+    /* ================== COLOR PALETTE ================== */
+    :root {
+        --dark-1: #212A31;
+        --dark-2: #2E3944;
+        --accent: #124E66;
+        --muted: #748D92;
+        --light: #D3D9D4;
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Physician</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhysicianName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhysicianName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Specialization)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Specialization)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Summary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Summary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhysicianStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhysicianStatus)
-        </dd>
-    </dl>
-    
-    <form asp-action="DeletePhysician" onsubmit="return confirm('Are you sure you want to delete this Physician?')" ;>
-        <input type="hidden" asp-for="PhysicianId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="GetPhysiciansDetail">Back to List</a>
-    </form>
+    /* ================== BACKGROUND ================== */
+    .delete-page {
+        background: linear-gradient(135deg, var(--dark-1), var(--dark-2), var(--accent));
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================== CARD ================== */
+    .delete-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 45px;
+        box-shadow: 0 25px 55px rgba(0,0,0,0.35);
+        backdrop-filter: blur(8px);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(35px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================== TITLE ================== */
+    .delete-title {
+        font-weight: 800;
+        color: var(--accent);
+    }
+
+    .delete-subtitle {
+        color: var(--muted);
+        font-size: 15px;
+    }
+
+    /* ================== INFO ROWS ================== */
+    .info-row {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--light);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--dark-2);
+    }
+
+    .info-value {
+        color: var(--dark-1);
+        font-weight: 500;
+    }
+
+    /* ================== WARNING ICON ================== */
+    .warning-icon {
+        font-size: 64px;
+        color: var(--accent);
+        filter: drop-shadow(0 0 8px rgba(18,78,102,0.5));
+        animation: pulse 1.6s infinite;
+    }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+
+        50% {
+            transform: scale(1.12);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+    }
+
+    /* ================== BUTTONS ================== */
+    .btn-delete {
+        background: linear-gradient(45deg, var(--accent), var(--dark-2));
+        color: white;
+        border-radius: 30px;
+        padding: 12px 30px;
+        font-weight: 700;
+        border: none;
+        transition: 0.35s ease;
+        letter-spacing: 0.3px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(18,78,102,0.45);
+        }
+
+        /* Glow ripple effect */
+        .btn-delete::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: 50%;
+            background: rgba(255,255,255,0.25);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            transition: 0.5s;
+        }
+
+        .btn-delete:hover::after {
+            width: 260%;
+            height: 260%;
+        }
+
+    /* Cancel Button */
+    .btn-cancel {
+        border: 2px solid var(--accent);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: var(--accent);
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+        .btn-cancel:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+
+</style>
+
+<div class="delete-page">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+                <div class="delete-card">
+
+                    <div class="text-center mb-4">
+                        <div class="warning-icon">⚠️</div>
+                        <h2 class="delete-title">Delete Physician</h2>
+                        <p class="delete-subtitle">
+                            You are about to permanently remove this physician record.
+                            This action cannot be undone.
+                        </p>
+                    </div>
+
+                    <!-- PHYSICIAN INFO -->
+                    <div class="mb-4">
+
+                        <div class="info-row">
+                            <div class="info-label">Name</div>
+                            <div class="info-value">@Model.PhysicianName</div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Specialization</div>
+                            <div class="info-value">@Model.Specialization</div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">@Model.Address</div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">@Model.Phone</div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">@Model.Email</div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">@Model.PhysicianStatus</div>
+                        </div>
+
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+                    <form asp-action="DeletePhysician" method="post"
+                          onsubmit="return confirm('Are you sure you want to permanently delete this physician?');">
+
+                        <input type="hidden" asp-for="PhysicianId" />
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn-delete me-3">
+                                Delete Physician
+                            </button>
+
+                            <a asp-action="GetPhysiciansDetail" class="btn-cancel">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
