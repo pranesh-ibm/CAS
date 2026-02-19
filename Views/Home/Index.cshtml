@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<CAS.Models.Drug>
+@{
     ViewData["Title"] = "MedAxis";
 }
 
@@ -44,7 +45,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient( rgba(33,42,49,0.85), rgba(18,78,102,0.85) ), url('/images/hero-bg.jpg'); /* Optional */
+            background: linear-gradient( rgba(33,42,49,0.85), rgba(18,78,102,0.85) ), url('/images/clinic.jpg'); /* Optional */
             background-size: cover;
             background-position: center;
             z-index: 0;
@@ -72,63 +73,116 @@
     }
 
     /* ================= AUTH BUTTONS ================= */
+    /* ================= AUTH BUTTONS (Upgraded Modern Neon Style) ================= */
+
+    /* ================= SLEEK MODERN BUTTONS ================= */
+
     .auth-buttons {
         display: flex;
         justify-content: center;
         margin-top: 30px;
+        gap: 14px;
     }
 
-
-    .btn-login {
-        background: linear-gradient(45deg,#124E66,#748D92);
-        color: white;
-        border-radius: 30px;
-        padding: 8px 22px;
-        transition: 0.4s;
+    .btn-login,
+    .btn-register {
+        padding: 12px 30px;
+        border-radius: 12px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.28s ease;
         border: none;
+        letter-spacing: 0.3px;
+    }
+
+    /* Sleek solid button */
+    .btn-login {
+        background: #66FCF1;
+        color: #0B0C10;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.18);
     }
 
         .btn-login:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 20px rgba(116,141,146,0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.22);
         }
 
+    /* Clean outlined button */
     .btn-register {
-        background: linear-gradient(45deg,#2E3944,#212A31);
-        color: #D3D9D4;
-        border-radius: 30px;
-        padding: 8px 22px;
-        margin-left: 10px;
-        transition: 0.4s;
-        border: none;
+        background: transparent;
+        color: #ffffff;
+        border: 2px solid rgba(255,255,255,0.6);
     }
 
         .btn-register:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 20px rgba(18,78,102,0.8);
+            background: rgba(255,255,255,0.15);
+            border-color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
         }
 
+
     /* ================= ROLE CARDS ================= */
+    /* ============= MODERN ROLE CARDS (Upgraded) ============= */
     .role-card {
-        background: linear-gradient( 145deg, #2E3944, #124E66 );
-        color: #ffffff;
-        border-radius: 20px;
-        padding: 25px;
-        transition: 0.4s;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        background: linear-gradient(145deg, #1B2A35, #0F1C24);
+        border-radius: 25px;
+        padding: 35px 25px;
+        color: #EAF6F6;
+        text-align: center;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.35), 0 0 0 0 rgba(102,252,241,0.25); /* glow ring animation base */
+
+        transition: 0.45s ease;
+        opacity: 0;
+        transform: translateY(40px);
+        animation: cardFloatUp 1s ease forwards;
     }
 
+        .role-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .role-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .role-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
         .role-card h4 {
-            color: #D3D9D4;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #66FCF1;
         }
 
         .role-card p {
-            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #C5C6C7;
         }
 
+        /* Hover Effect: Glow + Lift + Slight Scale */
         .role-card:hover {
-            transform: translateY(-10px) scale(1.05);
+            transform: translateY(-15px) scale(1.04);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 22px 6px rgba(102,252,241,0.45);
         }
+
+    /* Smooth float-up animation */
+    @@keyframes cardFloatUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
     /* ================= FEATURES SECTION ================= */
     .features-section {
@@ -206,6 +260,106 @@
         }
     }
 
+    .inventory-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
+    }
+
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD CONTAINER ================= */
+    .inventory-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .inventory-title {
+        font-weight: 700;
+        color: #212A31;
+    }
+
+    /* ================= TABLE STYLING ================= */
+    .table {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+        .table thead {
+            background: linear-gradient(45deg,#124E66,#748D92);
+            color: white;
+        }
+
+            .table thead th {
+                border: none;
+                padding: 15px;
+            }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: 0.3s;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(18,78,102,0.08);
+                transform: scale(1.01);
+            }
+
+    /* ================= BADGES ================= */
+    .badge-expiry {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .badge-warning {
+        background: #dc3545;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @@media(max - width:768px) {
+        .inventory-card {
+            padding: 20px;
+        }
+    }
+
+  
+
 </style>
 
 <!-- AUTH BUTTONS -->
@@ -218,7 +372,7 @@
         <p>Next-Generation Clinical Automation Platform</p>
         <div class="auth-buttons">
             <a asp-controller="CrediMgr" asp-action="Login" class="btn btn-login">Login</a>
-            <a asp-controller="CrediMgr" asp-action="RegisterPatient" class="btn btn-register">Create Account</a>
+            <a asp-controller="CrediMgr" asp-action="RegisterPatient" class="btn btn-register">Register</a>
         </div>
         <div class="row mt-5 justify-content-center">
             <div class="col-md-3 m-3 role-card">
@@ -265,6 +419,69 @@
                     <h4>Procurement Automation</h4>
                     <p>End-to-end supplier approval & inventory updates.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="inventory-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="inventory-card">
+
+                    <h2 class="inventory-title mb-4 text-center">
+                        Drug Inventory
+                    </h2>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Drug Name</th>
+                                    <th>Description</th>
+                                    <th>Dosage</th>
+                                    <th>Expiry</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@item.DrugTitle</td>
+
+                                        <td>@item.Description</td>
+
+                                        <td>
+                                            <span class="badge-expiry">
+                                                @item.Dosage
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            @{
+                                                var isExpired = item.Expiry.HasValue &&
+                                                item.Expiry.Value < DateOnly.FromDateTime(DateTime.Now);
+
+                                            }
+
+                                            <span class="badge-expiry @(isExpired ? "badge-warning" : "")">
+                                                @item.Expiry?.ToString("dd MMM yyyy")
+
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>

@@ -1,16 +1,16 @@
-@model CAS.Models.ViewModel.DrugListViewModel
+@model List<CAS.Models.Drug>
 
 @{
-    ViewData["Title"] = "Available Drugs";
+    ViewData["Title"] = "Inventory";
 }
 
 <style>
 
     /* ================= BACKGROUND ================= */
-    .drugs-page {
-        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+    .inventory-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
         background-size: 300% 300%;
-        animation: bgMove 14s ease infinite;
+        animation: bgMove 12s ease infinite;
         min-height: 100vh;
         padding: 80px 0;
     }
@@ -29,167 +29,143 @@
         }
     }
 
-    /* ================= HEADER ================= */
-    .page-title {
-        color: #AFDDE5;
-        font-weight: 800;
-        letter-spacing: 1px;
-    }
-
-    /* ================= DRUG CARD ================= */
-    .drug-card {
+    /* ================= CARD CONTAINER ================= */
+    .inventory-card {
         background: rgba(255,255,255,0.95);
         border-radius: 25px;
-        padding: 30px;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-        transition: 0.35s ease;
-        position: relative;
+        padding: 40px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .inventory-title {
+        font-weight: 700;
+        color: #212A31;
+    }
+
+    /* ================= TABLE STYLING ================= */
+    .table {
+        border-radius: 15px;
         overflow: hidden;
     }
 
-        .drug-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
-        }
-
-        .drug-card::before {
-            content: "";
-            position: absolute;
-            height: 6px;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: linear-gradient(45deg,#0FA4AF,#964734);
-        }
-
-    /* ================= LABELS ================= */
-    .info-label {
-        font-weight: 600;
-        color: #003135;
-    }
-
-    .info-value {
-        color: #555;
-        margin-bottom: 10px;
-    }
-
-    /* ================= BUTTON ================= */
-    .dashboard-btn-outline {
-        display: inline-block;
-        padding: 8px 18px;
-        border-radius: 30px;
-        border: 2px solid #964734;
-        color: #964734;
-        text-decoration: none;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-        .dashboard-btn-outline:hover {
-            background: #964734;
+        .table thead {
+            background: linear-gradient(45deg,#124E66,#748D92);
             color: white;
-            transform: scale(1.05);
         }
 
-    /* ================= PRIMARY BUTTON ================= */
-    .btn-premium {
-        background: linear-gradient(45deg,#0FA4AF,#024950);
-        border: none;
-        border-radius: 30px;
-        padding: 10px 20px;
-        font-weight: 600;
+            .table thead th {
+                border: none;
+                padding: 15px;
+            }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: 0.3s;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(18,78,102,0.08);
+                transform: scale(1.01);
+            }
+
+    /* ================= BADGES ================= */
+    .badge-expiry {
+        background: linear-gradient(45deg,#124E66,#748D92);
         color: white;
-        transition: 0.3s ease;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
     }
 
-        .btn-premium:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(15,164,175,0.6);
-            color: white;
-        }
+    .badge-warning {
+        background: #dc3545;
+    }
 
-    /* ================= EMPTY STATE ================= */
-    .custom-alert {
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 40px;
-        text-align: center;
-        color: #AFDDE5;
+    /* ================= RESPONSIVE ================= */
+    @@media(max - width:768px) {
+        .inventory-card {
+            padding: 20px;
+        }
     }
 
 </style>
 
-<div class="drugs-page">
-
+<div class="inventory-page">
     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
 
-        <div class="text-center mb-5">
-            <h2 class="page-title">Available Drugs</h2>
-        </div>
+                <div class="inventory-card">
 
-        @if (Model == null || Model.Drugs == null || !Model.Drugs.Any())
-        {
-            <div class="custom-alert">
-                <h5 class="mb-3">No drugs available</h5>
-                <p class="mb-4">
-                    There are currently no active drugs in the system.
-                    Please check back later or contact the pharmacy team.
-                </p>
+                    <h2 class="inventory-title mb-4 text-center">
+                        Drug Inventory
+                    </h2>
 
-                <a asp-action="ViewDrugs"
-                   class="dashboard-btn-outline me-3">
-                    Refresh
-                </a>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
 
-                <a asp-action="OrderDrugs"
-                   class="btn-premium">
-                    Order Drugs
-                </a>
-            </div>
-        }
-        else
-        {
-            <div class="row g-4">
+                            <thead>
+                                <tr>
+                                    <th>Drug Name</th>
+                                    <th>Description</th>
+                                    <th>Dosage</th>
+                                    <th>Expiry</th>
+                                </tr>
+                            </thead>
 
-                @foreach (var d in Model.Drugs)
-                {
-                    <div class="col-lg-6 col-md-6">
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@item.DrugTitle</td>
 
-                        <div class="drug-card h-100">
+                                        <td>@item.Description</td>
 
-                            <div class="mb-3">
-                                <span class="info-label">Title:</span>
-                                <div class="info-value">@d.DrugTitle</div>
-                            </div>
+                                        <td>
+                                            <span class="badge-expiry">
+                                                @item.Dosage
+                                            </span>
+                                        </td>
 
-                            <div class="mb-3">
-                                <span class="info-label">Description:</span>
-                                <div class="info-value">
-                                    @d.Description
-                                </div>
-                            </div>
+                                        <td>
+                                            @{
+                                                var isExpired = item.Expiry.HasValue &&
+                                                item.Expiry.Value < DateOnly.FromDateTime(DateTime.Now);
 
-                            <div class="mb-3">
-                                <span class="info-label">Expiry:</span>
-                                <div class="info-value">
-                                    @(d.Expiry.HasValue? d.Expiry.Value.ToString("dd MMM yyyy") : "-")
-                                </div>
-                            </div>
+                                            }
 
-                            <div>
-                                <span class="info-label">Dosage:</span>
-                                <div class="info-value">@d.Dosage</div>
-                            </div>
+                                            <span class="badge-expiry @(isExpired ? "badge-warning" : "")">
+                                                @item.Expiry?.ToString("dd MMM yyyy")
 
-                        </div>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
 
+                        </table>
                     </div>
-                }
+
+                </div>
 
             </div>
-        }
-
+        </div>
     </div>
-
 </div>

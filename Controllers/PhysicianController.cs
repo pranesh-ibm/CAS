@@ -295,14 +295,10 @@ public class PhysicianController : Controller
         return View(appointment);
     }
 
-    public async Task<IActionResult> ViewDrugs()
+    public IActionResult ViewDrugs()
     {
-        var drugs = await _context.Drugs
-            .Where(d => d.DrugStatus == "Active")
-            .ToListAsync();
-
-        var vm = new DrugListViewModel { Drugs = drugs };
-        return View(vm);
+        var drugs = _context.Drugs.ToList();
+        return View(drugs);
     }
 
     // View drug requests made by this physician
