@@ -4,53 +4,180 @@
     ViewData["Title"] = "Make Appointment";
 }
 
-<div class="container mt-5">
+<style>
 
-    <h2 class="text-center mb-4">Make Appointment</h2>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success text-center">
-            @TempData["Success"]
-        </div>
+    /* ================= BACKGROUND ================= */
+    .appointment-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
 
-    <form asp-action="MakeAppointment" method="post">
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
 
-        <div class="mb-3">
-            <label class="form-label">Criticality</label>
-            <select asp-for="Criticality" class="form-control">
-                <option value="">-- Select --</option>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-            </select>
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD ================= */
+    .appointment-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= FORM CONTROLS ================= */
+    .form-label {
+        font-weight: 600;
+        color: #024950;
+    }
+
+    .form-control {
+        border-radius: 30px;
+        padding: 12px 20px;
+        border: 2px solid #eaeaea;
+        transition: 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #0FA4AF;
+            box-shadow: 0 0 15px rgba(15,164,175,0.4);
+        }
+
+    /* ================= CRITICALITY STYLING ================= */
+    select.form-control option[value="High"] {
+        color: red;
+    }
+
+    /* ================= BUTTON ================= */
+    .btn-premium {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        border: none;
+        border-radius: 30px;
+        padding: 14px;
+        font-weight: 600;
+        color: white;
+        transition: 0.3s ease;
+    }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(15,164,175,0.6);
+            color: white;
+        }
+
+    /* ================= ALERT ================= */
+    .success-alert {
+        border-radius: 15px;
+        text-align: center;
+    }
+
+</style>
+
+<div class="appointment-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Book Appointment</h2>
+            <p class="text-white-50">
+                Schedule your consultation with ease
+            </p>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Reason</label>
-            <input asp-for="Reason" class="form-control" />
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+
+                <div class="appointment-card">
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success success-alert mb-4">
+                            @TempData["Success"]
+                        </div>
+                    }
+
+                    <form asp-action="MakeAppointment" method="post">
+
+                        <!-- Criticality -->
+                        <div class="mb-4">
+                            <label class="form-label">Criticality</label>
+                            <select asp-for="Criticality" class="form-control">
+                                <option value="">-- Select --</option>
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                            </select>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="mb-4">
+                            <label class="form-label">Reason</label>
+                            <input asp-for="Reason" class="form-control" placeholder="Reason for appointment" />
+                        </div>
+
+                        <!-- Note -->
+                        <div class="mb-4">
+                            <label class="form-label">Note</label>
+                            <textarea asp-for="Note" class="form-control" rows="3"
+                                      placeholder="Additional notes (optional)"></textarea>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="mb-4">
+                            <label class="form-label">Preferred Date</label>
+                            <input type="date" name="preferredDate" class="form-control" required />
+                        </div>
+
+                        <!-- Time -->
+                        <div class="mb-4">
+                            <label class="form-label">Preferred Time</label>
+                            <input type="time" name="preferredTime" class="form-control" required />
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn btn-premium w-100">
+                            Submit Appointment
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Note</label>
-            <textarea asp-for="Note" class="form-control"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Preferred Date</label>
-            <input type="date" name="preferredDate" class="form-control" required />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Preferred Time</label>
-            <input type="time" name="preferredTime" class="form-control" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100">
-            Submit Appointment
-        </button>
-
-    </form>
+    </div>
 
 </div>

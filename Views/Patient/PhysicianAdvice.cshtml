@@ -3,81 +3,201 @@
     var adviceList = ViewBag.AdviceList as IEnumerable<dynamic>;
 }
 
-<div class="container mt-5">
+<style>
 
-    <h2 class="text-center mb-4">Physician Advice</h2>
-
-    <p>Total Records: @ViewBag.Count</p>
-
-    @if (ViewBag.Message != null)
-    {
-        <div class="alert alert-warning text-center">
-            @ViewBag.Message
-        </div>
+    /* ================= BACKGROUND ================= */
+    .advice-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
 
-    @if (adviceList != null && adviceList.Any())
-    {
-        <div class="row">
-            @foreach (var item in adviceList)
-            {
-                
-                    // Explicit casting to avoid runtime binder errors
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .record-count {
+        color: rgba(255,255,255,0.8);
+        font-weight: 500;
+    }
+
+    /* ================= GLASS CARD ================= */
+    .advice-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        transition: all 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .advice-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.3);
+        }
+
+        /* Accent Bar */
+        .advice-card::before {
+            content: "";
+            position: absolute;
+            height: 5px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= DATE BADGE ================= */
+    .datetime-badge {
+        display: inline-block;
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    /* ================= TEXT STYLES ================= */
+    .section-title {
+        color: #024950;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-content {
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    /* ================= BUTTON ================= */
+    .btn-premium {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        border: none;
+        border-radius: 30px;
+        padding: 8px 20px;
+        color: white;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(15,164,175,0.6);
+            color: white;
+        }
+
+    /* ================= ALERT ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        color: #AFDDE5;
+        padding: 20px;
+        text-align: center;
+    }
+
+</style>
+
+<div class="advice-page">
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="text-center mb-5">
+            <h2 class="page-title">Physician Advice</h2>
+            <p class="record-count">Total Records: @ViewBag.Count</p>
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="custom-alert mb-4">
+                @ViewBag.Message
+            </div>
+        }
+
+        @if (adviceList != null && adviceList.Any())
+        {
+            var count = adviceList.Count();
+
+            <div class="row g-4 @(count == 1 ? "justify-content-center" : "")">
+
+                @foreach (var item in adviceList)
+                {
                     DateOnly date = (DateOnly)item.ScheduleDate;
-                TimeOnly time = (TimeOnly)item.ScheduleTime;
+                    TimeOnly time = (TimeOnly)item.ScheduleTime;
+                    DateTime fullDateTime = date.ToDateTime(time);
 
-                DateTime fullDateTime = date.ToDateTime(time);
-                
+                    <div class="@(count == 1 ? "col-lg-6 col-md-8" : "col-lg-6")">
 
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow border-0 h-100">
+                        <div class="advice-card h-100">
 
-                        <div class="card-body">
+                            <div class="datetime-badge">
+                                @date.ToString("dd MMM yyyy") • @fullDateTime.ToString("hh:mm tt")
+                            </div>
 
-                            <h5 class="text-primary mb-3">
+                            <h5 class="section-title">
                                 Consultation Details
                             </h5>
 
-                            <p>
-                                <strong>Date:</strong>
-                                @date.ToString("dd-MMM-yyyy")
-                            </p>
-
-                            <p>
-                                <strong>Time:</strong>
-                                @fullDateTime.ToString("hh:mm tt")
-                            </p>
-
-                            <hr />
-
-                            <p>
-                                <strong>Advice:</strong><br />
+                            <div class="info-content">
+                                <span class="info-label">Advice:</span><br />
                                 @item.Advice
-                            </p>
+                            </div>
 
-                            <p>
-                                <strong>Note:</strong><br />
+                            <div class="info-content">
+                                <span class="info-label">Note:</span><br />
                                 @item.Note
-                            </p>
+                            </div>
+
+                            <div class="text-end mt-3">
+                                <a asp-action="ViewPrescription"
+                                   asp-route-scheduleId="@item.ScheduleId"
+                                   class="btn btn-premium">
+                                    View Prescription
+                                </a>
+                            </div>
 
                         </div>
-                        <a asp-action="ViewPrescription"
-                           asp-route-scheduleId="@item.ScheduleId"
-                           class="btn btn-sm btn-primary mt-3">
-                            View Prescription
-                        </a>
-                    </div>
-                </div>
-                
 
-            }
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-warning text-center">
-            No physician advice found.
-        </div>
-    }
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="custom-alert">
+                No physician advice found.
+            </div>
+        }
+
+    </div>
 
 </div>

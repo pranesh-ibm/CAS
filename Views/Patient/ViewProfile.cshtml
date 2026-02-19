@@ -4,48 +4,196 @@
     ViewData["Title"] = "Patient Profile";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">My Profile</h2>
+<style>
 
-    <div class="card shadow p-4">
+    /* ================= BACKGROUND ================= */
+    .profile-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        padding: 80px 0;
+        min-height: 100vh;
+    }
 
-        <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input class="form-control" value="@Model.PatientName" readonly />
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD ================= */
+    .profile-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= HEADER SECTION ================= */
+    .profile-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .avatar-circle {
+        width: 110px;
+        height: 110px;
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        color: white;
+        margin: 0 auto 15px auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .profile-name {
+        font-weight: 700;
+        color: #212A31;
+    }
+
+    .profile-email {
+        color: #6c757d;
+    }
+
+    /* ================= INFO BLOCKS ================= */
+    .info-section {
+        margin-bottom: 35px;
+    }
+
+    .info-title {
+        font-weight: 600;
+        color: #124E66;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #124E66;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+
+    .info-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #eaeaea;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #2E3944;
+    }
+
+    .info-value {
+        color: #212A31;
+    }
+
+    /* ================= BADGES ================= */
+    .stats-badge {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-weight: 600;
+        margin: 5px;
+        display: inline-block;
+    }
+
+    /* ================= BUTTON ================= */
+    .btn-edit {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
+
+</style>
+
+<div class="profile-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="profile-card">
+
+                    <!-- HEADER -->
+                    <div class="profile-header">
+                        <div class="avatar-circle">
+                            @Model.PatientName?.Substring(0, 1).ToUpper()
+                        </div>
+                        <h2 class="profile-name">@Model.PatientName</h2>
+                        <p class="profile-email">@Model.Email</p>
+                    </div>
+
+                    <!-- PERSONAL INFO -->
+                    <div class="info-section">
+                        <div class="info-title">Personal Information</div>
+
+                        <div class="info-item">
+                            <div class="info-label">Mobile</div>
+                            <div class="info-value">@Model.Phone</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">@Model.Dob?.ToShortDateString()</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value">@Model.Gender</div>
+                        </div>
+                    </div>
+
+                    <!-- ADDRESS -->
+                    <div class="info-section">
+                        <div class="info-title">Address</div>
+                        <p class="mt-2">@Model.Address</p>
+                    </div>
+
+                    <!-- SUMMARY -->
+                    <div class="info-section">
+                        <div class="info-title">Medical Summary</div>
+                        <p class="mt-2">@Model.Summary</p>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a asp-action="EditProfile" class="btn btn-edit">
+                            Edit Profile
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Mobile</label>
-            <input class="form-control" value="@Model.Phone" readonly />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input class="form-control" value="@Model.Email" readonly />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Date of Birth</label>
-            <input class="form-control" value="@Model.Dob?.ToShortDateString()" readonly />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Gender</label>
-            <input class="form-control" value="@Model.Gender" readonly />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Address</label>
-            <textarea class="form-control" rows="3" readonly>@Model.Address</textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Summary</label>
-            <textarea class="form-control" rows="3" readonly>@Model.Summary</textarea>
-        </div>
-
-        <a asp-action="EditProfile" class="btn btn-warning">
-            Edit Profile
-        </a>
     </div>
 </div>

@@ -115,7 +115,7 @@ namespace CAS.Controllers
                 join p in _context.Physicians on s.PhysicianId equals p.PhysicianId
                 where a.PatientId == patientId
                       && a.ScheduleStatus == "Scheduled"
-                      && s.ScheduleStatus == "Completed"
+                    //  && s.ScheduleStatus == "Completed"
                 select p
             ).AsNoTracking().ToList();
 
@@ -191,6 +191,7 @@ namespace CAS.Controllers
                 where pa.ScheduleId == scheduleId
                 select new
                 {
+                    pa.PhysicianAdviceId,
                     p.PhysicianName,
                     pa.Advice,
                     pa.Note,

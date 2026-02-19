@@ -147,13 +147,61 @@
 
         /* ================= FOOTER ================= */
         footer {
+            background: linear-gradient( 90deg, #212A31, #2E3944 );
+            color: #D3D9D4;
+            padding: 40px 0;
             margin-top: 60px;
-            padding: 20px 0;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #748D92;
+        }
+
+        .footer-link {
+            color: #D3D9D4;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+
+            .footer-link:hover {
+                color: #748D92;
+                padding-left: 6px;
+            }
+
+        .footer-bottom {
+            border-top: 1px solid #124E66;
+            margin-top: 30px;
+            padding-top: 15px;
             text-align: center;
             font-size: 14px;
-            color: #D3D9D4;
-            opacity: 0.85;
         }
+
+        footer {
+            background: linear-gradient(90deg, #212A31, #2E3944);
+            border-top: 1px solid #124E66;
+        }
+
+        /* ================= LOGOUT BUTTON ================= */
+        .btn-logout {
+            background: linear-gradient(45deg, #748D92, #124E66);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 25px;
+            color: #D3D9D4;
+            font-weight: 600;
+            transition: 0.4s ease;
+            box-shadow: 0 0 12px rgba(18,78,102,0.6);
+        }
+
+            .btn-logout:hover {
+                transform: translateY(-4px) scale(1.05);
+                box-shadow: 0 0 20px rgba(116,141,146,0.8);
+                color: white;
+            }
 
     </style>
 </head>
@@ -196,31 +244,6 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
-
-        @if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            <li class="nav-item me-3 d-flex align-items-center text-light">
-                Hello, @User.Identity.Name
-            </li>
-
-            <li class="nav-item">
-                <form asp-controller="CrediMgr"
-                      asp-action="Logout"
-                      method="post"
-                      class="d-inline">
-
-                    <button type="submit"
-                            class="btn btn-modern btn-sm">
-                        Logout
-                    </button>
-
-                </form>
-            </li>
-        }
-
-    </ul>
-                
 
             </div>
         </div>
@@ -230,13 +253,6 @@
     <div class="container content-wrapper">
         @RenderBody()
     </div>
-
-    <!-- ================= FOOTER ================= -->
-    <footer>
-        © 2026 MEDAXIS • Home Panel
-    </footer>
-
-    <!-- Scripts -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Html.PartialAsync("_SuccessModal")

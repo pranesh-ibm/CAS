@@ -9,174 +9,238 @@
     <title>CAS | Admin Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <style>
+
+        /* ================= BACKGROUND ================= */
         body {
-            background: #f4f7f9;
+            background: linear-gradient(-45deg,#212A31,#2E3944,#124E66,#748D92);
+            background-size: 400% 400%;
+            animation: gradientFlow 18s ease infinite;
+            min-height: 100vh;
             font-family: 'Segoe UI', sans-serif;
         }
 
-        /* Top Navbar */
-        .navbar {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Dashboard Cards */
-        .dashboard-card {
-            border-radius: 12px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-            .dashboard-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        @@keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
             }
 
-        .card-icon {
-            font-size: 2.5rem;
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
-        /* Responsive text */
+        /* ================= NAVBAR ================= */
+        .glass-nav {
+            background: linear-gradient(90deg,#212A31,#124E66);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #D3D9D4 !important;
+        }
+
+        /* ================= WRAPPER ================= */
+        .main-wrapper {
+            margin-top: 110px;
+            padding: 40px 20px;
+        }
+
+        .dashboard-panel {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* ================= DIVIDER ================= */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right,#124E66,#748D92);
+            margin: 50px 0 40px 0;
+            border-radius: 5px;
+            opacity: 0.6;
+        }
+
+        /* ================= GLASS CARDS ================= */
+        .dashboard-card {
+            border-radius: 22px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            transition: all 0.4s ease;
+            width: 100%;
+            height: 100%;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+            /* Subtle animated glow layer */
+            .dashboard-card::before {
+                content: "";
+                position: absolute;
+                width: 180%;
+                height: 180%;
+                top: -120%;
+                left: -40%;
+                transform: rotate(25deg);
+                background: linear-gradient(45deg,#124E66,#0FA4AF);
+                opacity: 0.06;
+                transition: 0.5s;
+            }
+
+            .dashboard-card:hover::before {
+                top: -40%;
+            }
+
+            .dashboard-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+                background: rgba(255, 255, 255, 0.22);
+            }
+
+        /* ================= ICON ================= */
+        .card-icon {
+            font-size: 2.6rem;
+            margin-bottom: 18px;
+            background: linear-gradient(45deg,#0FA4AF,#748D92);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ================= TITLE ================= */
         .card-title {
-            font-size: 1.1rem;
             font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        /* ================= LOGOUT BUTTON ================= */
+        .btn-logout {
+            background: linear-gradient(45deg,#964734,#C0392B);
+            border-radius: 30px;
+            padding: 6px 18px;
+            color: white;
+            border: none;
+            transition: 0.3s;
+        }
+
+            .btn-logout:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 0 15px rgba(192,57,43,0.7);
+            }
+
+        /* ================= FOOTER ================= */
+        footer {
+            margin-top: 60px;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #D3D9D4;
+            opacity: 0.85;
         }
 
     </style>
 </head>
 
 <body>
-    <!-- ================= TOP NAVBAR ================= -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white px-4 py-3 fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-primary" asp-controller="Admin" asp-action="Index">
-                <i class="fas fa-hospital-symbol me-2"></i> Clinic Automation System
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass-nav fixed-top">
+        <div class="container">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="Index">
+                MEDAXIS Admin
             </a>
 
-            <div class="ms-auto d-flex align-items-center">
-                <!-- Profile Dropdown -->
-                <div class="dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user-circle fs-5 me-2"></i> Admin
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="min-width: 180px;">
-                        <li class="dropdown-header fw-bold text-secondary py-2 px-3">Account</li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center text-danger py-2 px-3"
-                               asp-controller="CrediMgr" asp-action="Logout">
-                                <i class="fas fa-sign-out-alt me-2"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="ms-auto d-flex align-items-center text-light">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <span class="me-3">Hello, @User.Identity.Name</span>
+
+                    <form asp-controller="CrediMgr"
+                          asp-action="Logout"
+                          method="post"
+                          class="d-inline">
+
+                        <button type="submit" class="btn-logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </button>
+
+                    </form>
+                }
             </div>
         </div>
     </nav>
 
-    @* Main content *@
-    <div class="container-fluid mt-5 pt-4">
-        @RenderBody()  <!-- <- This is crucial -->
-    </div>
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="container main-wrapper">
+        <div class="dashboard-panel">
 
-    <!-- ================= DASHBOARD CONTENT ================= -->
-    <div class="container-fluid mt-5 pt-4">
-        <div class="text-center mb-4">
-            <h1 class="fw-bold text-primary">Admin Dashboard</h1>
-            @* <p class="text-muted">Manage all system modules from here</p> *@
-        </div>
+            <!-- Dynamic Stats Section -->
+            @RenderBody()
 
-        <div class="row g-4">
+            <!-- Divider -->
+            <div class="section-divider"></div>
 
-            <!-- Patients -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="GetPatientsDetail" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-user-injured text-primary card-icon"></i>
-                        <div class="card-title mt-2">Patients</div>
+            <!-- ================= ADMIN MODULES ================= -->
+            <div class="row g-4">
+
+                @{
+                    var modules = new[] {
+                                new { Icon="fa-user-injured", Title="Patients", Action="GetPatientsDetail"},
+                                new { Icon="fa-user-md", Title="Physicians", Action="GetPhysiciansDetail"},
+                                new { Icon="fa-capsules", Title="Chemists", Action="GetChemistsDetail"},
+                                new { Icon="fa-truck", Title="Suppliers", Action="GetSuppliersDetail"},
+                                new { Icon="fa-calendar-check", Title="Appointments", Action="GetAppointmentDetails"},
+                                new { Icon="fa-clock", Title="Schedules", Action="GetScheduleDetails"},
+                                new { Icon="fa-user-clock", Title="Pending Patients", Action="PendingPatients"},
+                                new { Icon="fa-exclamation-circle", Title="Pending Appointments", Action="PendingAppointments"}
+                                };
+                }
+
+                @foreach (var m in modules)
+                {
+                    <div class="col-md-3 col-sm-6 d-flex">
+                        <a asp-controller="Admin"
+                           asp-action="@m.Action"
+                           class="text-decoration-none w-100">
+
+                            <div class="dashboard-card text-center d-flex flex-column justify-content-center align-items-center">
+                                <i class="fas @m.Icon card-icon"></i>
+                                <div class="card-title">@m.Title</div>
+                            </div>
+
+                        </a>
                     </div>
-                </a>
-            </div>
+                }
 
-            <!-- Physicians -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="GetPhysiciansDetail" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-user-md text-success card-icon"></i>
-                        <div class="card-title mt-2">Physicians</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Chemists -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="GetChemistsDetail" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-capsules text-warning card-icon"></i>
-                        <div class="card-title mt-2">Chemists</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Suppliers -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="GetSuppliersDetail" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-truck text-danger card-icon"></i>
-                        <div class="card-title mt-2">Suppliers</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Appointments -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="GetAppointmentDetails" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-calendar-check text-info card-icon"></i>
-                        <div class="card-title mt-2">Appointments</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Schedules -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="GetScheduleDetails" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-clock text-secondary card-icon"></i>
-                        <div class="card-title mt-2">Schedules</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Pending Patients -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="PendingPatients" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-user-clock text-warning card-icon"></i>
-                        <div class="card-title mt-2">Pending Patients</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Pending Appointments -->
-            <div class="col-md-3 col-sm-6">
-                <a asp-controller="Admin" asp-action="PendingAppointments" class="text-decoration-none text-dark">
-                    <div class="card dashboard-card p-3 text-center bg-light">
-                        <i class="fas fa-exclamation-circle text-danger card-icon"></i>
-                        <div class="card-title mt-2">Pending Appointments</div>
-                    </div>
-                </a>
             </div>
 
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    <footer>
+        © 2026 MEDAXIS • Admin Control Panel
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

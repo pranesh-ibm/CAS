@@ -3,49 +3,202 @@
     var list = ViewBag.Data;
 }
 
-<div class="container mt-5">
+<style>
 
-    <h2 class="text-center mb-4">Prescription Details</h2>
-
-    @if (ViewBag.Message != null)
-    {
-        <div class="alert alert-warning text-center">
-            @ViewBag.Message
-        </div>
+    /* ================= BACKGROUND ================= */
+    .prescription-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
 
-    @if (list != null)
-    {
-        <div class="row">
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
 
-            @foreach (var item in list)
-            {
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm p-4">
+        50% {
+            background-position: 100% 50%;
+        }
 
-                        <h5 class="text-primary mb-3">
-                            Physician: @item.PhysicianName
-                        </h5>
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 
-                        <p><strong>Advice:</strong> @item.Advice</p>
-                        <p><strong>Note:</strong> @item.Note</p>
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
 
-                        <hr />
+    /* ================= CARD ================= */
+    .prescription-card {
+        background: rgba(255,255,255,0.96);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        transition: 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
-                        <h6 class="text-success mb-3">
-                            Drug Details
-                        </h6>
+        .prescription-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        }
 
-                        <p><strong>Drug:</strong> @item.DrugTitle</p>
-                        <p><strong>Description:</strong> @item.Description</p>
-                        <p><strong>Prescription:</strong> @item.Prescription</p>
-                        <p><strong>Dosage:</strong> @item.Dosage</p>
+        /* Accent strip */
+        .prescription-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= PHYSICIAN HEADER ================= */
+    .physician-header {
+        font-weight: 700;
+        color: #024950;
+        margin-bottom: 20px;
+    }
+
+    /* ================= SECTION TITLES ================= */
+    .section-title {
+        font-weight: 700;
+        color: #124E66;
+        margin-bottom: 15px;
+    }
+
+    /* ================= INFO TEXT ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+        margin-bottom: 12px;
+    }
+
+    /* ================= DRUG PANEL ================= */
+    .drug-panel {
+        background: rgba(15,164,175,0.08);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 15px;
+    }
+
+    /* ================= ALERT ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        color: #AFDDE5;
+        padding: 20px;
+        text-align: center;
+    }
+
+</style>
+
+<div class="prescription-page">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="page-title">Prescription Details</h2>
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="custom-alert mb-4">
+                @ViewBag.Message
+            </div>
+        }
+
+        @if (list != null)
+        {
+            var grouped = ((IEnumerable<dynamic>)list)
+            .GroupBy(x => x.PhysicianAdviceId);
+
+            var count = grouped.Count();
+
+            <div class="row g-4 @(count == 1 ? "justify-content-center" : "")">
+
+                @foreach (var group in grouped)
+                {
+                    var first = group.First();
+
+                    <div class="@(count == 1 ? "col-lg-6 col-md-8" : "col-lg-6")">
+
+                        <div class="prescription-card h-100">
+
+                            <!-- Physician Info -->
+                            <div class="physician-header">
+                                🩺 Physician: @first.PhysicianName
+                            </div>
+
+                            <div>
+                                <div class="info-label">Advice</div>
+                                <div class="info-value">@first.Advice</div>
+
+                                <div class="info-label">Note</div>
+                                <div class="info-value">@first.Note</div>
+                            </div>
+
+                            <hr />
+
+                            <!-- Drug Section -->
+                            <div class="section-title">
+                                💊 Prescribed Drugs
+                            </div>
+
+                            <div class="drug-panel">
+
+                                @foreach (var item in group)
+                                {
+                                    <div class="mb-3 pb-3 border-bottom">
+
+                                        <div>
+                                            <span class="info-label">Drug:</span>
+                                            <span class="info-value">@item.DrugTitle</span>
+                                        </div>
+
+                                        <div>
+                                            <span class="info-label">Description:</span>
+                                            <span class="info-value">@item.Description</span>
+                                        </div>
+
+                                        <div>
+                                            <span class="info-label">Prescription:</span>
+                                            <span class="info-value">@item.Prescription</span>
+                                        </div>
+
+                                        <div>
+                                            <span class="info-label">Dosage:</span>
+                                            <span class="info-value">@item.Dosage</span>
+                                        </div>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
 
                     </div>
-                </div>
-            }
+                }
 
-        </div>
-    }
+            </div>
+        }
+
+
+    </div>
 
 </div>

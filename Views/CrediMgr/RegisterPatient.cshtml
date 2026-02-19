@@ -3,60 +3,193 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
 
-<div class="container mt-5 pt-4">
-    <h2 class="text-primary mb-4">Register New Patient</h2>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">@TempData["Success"]</div>
+    /* ================= PAGE BACKGROUND ================= */
+    .register-page {
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+        padding: 80px 0;
+        min-height: 100vh;
     }
 
-    <form asp-action="RegisterPatient" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PatientName" class="control-label"></label>
-                <input asp-for="PatientName" class="form-control" />
-                <span asp-validation-for="PatientName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Dob" class="control-label"></label>
-                <input asp-for="Dob" class="form-control" />
-                <span asp-validation-for="Dob" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label">Gender</label>
-                <div>
-                    <input type="radio" asp-for="Gender" value="Male" /> Male
-                    <input type="radio" asp-for="Gender" value="Female" /> Female
-                    <input type="radio" asp-for="Gender" value="Other" /> Other
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= CARD ================= */
+    .register-card {
+        background: #D3D9D4;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .register-card h2 {
+        color: #212A31;
+        font-weight: 700;
+    }
+
+    /* ================= INPUTS ================= */
+    .form-control {
+        border-radius: 30px;
+        padding: 12px 20px;
+        border: none;
+        background: white;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 12px #124E66;
+            transform: scale(1.02);
+        }
+
+    /* ================= RADIO STYLING ================= */
+    .gender-group input[type="radio"] {
+        margin-right: 6px;
+    }
+
+    .gender-option {
+        margin-right: 20px;
+        font-weight: 500;
+        color: #2E3944;
+    }
+
+    /* ================= BUTTON ================= */
+    .btn-create {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border: none;
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+        color: white;
+        transition: 0.4s;
+    }
+
+        .btn-create:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
+
+    /* ================= ALERT ================= */
+    .alert-success {
+        border-radius: 30px;
+    }
+
+</style>
+
+<div class="register-page">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="register-card">
+
+                    <h2 class="text-center mb-4">Register New Patient</h2>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success text-center">
+                            @TempData["Success"]
+                        </div>
+                    }
+
+                    <form asp-action="RegisterPatient" method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <input asp-for="PatientName" class="form-control" placeholder="Full Name" />
+                                <span asp-validation-for="PatientName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input asp-for="Dob" type="date" class="form-control" />
+                                <span asp-validation-for="Dob" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12 gender-group">
+                                <label class="mb-2 fw-semibold">Gender</label>
+                                <div>
+                                    <label class="gender-option">
+                                        <input type="radio" asp-for="Gender" value="Male" /> Male
+                                    </label>
+
+                                    <label class="gender-option">
+                                        <input type="radio" asp-for="Gender" value="Female" /> Female
+                                    </label>
+
+                                    <label class="gender-option">
+                                        <input type="radio" asp-for="Gender" value="Other" /> Other
+                                    </label>
+                                </div>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <input asp-for="Address" class="form-control" placeholder="Address" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input asp-for="Phone" class="form-control" placeholder="Phone Number" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input asp-for="Email" class="form-control" placeholder="Email Address" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <textarea asp-for="Summary"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Medical Summary / Notes"></textarea>
+                                <span asp-validation-for="Summary" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <button type="submit" class="btn btn-create w-100">
+                                    Register
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
                 </div>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Summary" class="control-label"></label>
-                <input asp-for="Summary" class="form-control" />
-                <span asp-validation-for="Summary" class="text-danger"></span>
-            </div>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
 </div>

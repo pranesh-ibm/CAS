@@ -1,33 +1,212 @@
 ﻿@model CAS.Models.ViewModel.LoginViewModel
 @{
     ViewData["Title"] = "Login";
+    Layout = "_LayoutNoFooter";
 }
 
-<h1>Login</h1>
+<style>
+    /* ================= BACKGROUND ================= */
+    .login-page {
+        min-height: calc(100vh - 80px); /* adjust if navbar height differs */
+        background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
+        background-size: 300% 300%;
+        animation: bgMove 12s ease infinite;
+    }
 
-@* <h4>LoginViewModel</h4> *@
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login" asp-controller="CrediMgr">
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
 
-            <IBM-tag-helper id="demo" name="Ganesh"></IBM-tag-helper>
+        50% {
+            background-position: 100% 50%;
+        }
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= LOGIN CARD ================= */
+    .login-card {
+        max-width: 950px;
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    }
+
+    /* LEFT PANEL */
+    .left-panel {
+        background: linear-gradient(160deg,#124E66,#2E3944);
+        color: #D3D9D4;
+        padding: 50px;
+    }
+
+        .left-panel h2 {
+            font-weight: 700;
+        }
+
+        .left-panel p {
+            color: #748D92;
+        }
+
+    /* RIGHT PANEL */
+    .right-panel {
+        background: #D3D9D4;
+        padding: 50px;
+    }
+
+        .right-panel h3 {
+            color: #212A31;
+            font-weight: 700;
+        }
+
+    /* INPUTS */
+    .form-control {
+        border-radius: 30px;
+        padding: 12px 18px;
+        border: none;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 10px #124E66;
+        }
+
+    /* BUTTONS */
+    .btn-login {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px;
+        color: white;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s;
+    }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(18,78,102,0.8);
+        }
+
+    .btn-register {
+        background: #2E3944;
+        border-radius: 30px;
+        padding: 12px;
+        color: #D3D9D4;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s;
+    }
+
+        .btn-register:hover {
+            background: #124E66;
+            transform: translateY(-3px);
+        }
+
+    .small-link {
+        color: #124E66;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+        .small-link:hover {
+            text-decoration: underline;
+        }
+
+    .login-image {
+        max-width: 80%;
+        height: auto;
+        animation: floatImage 6s ease-in-out infinite;
+    }
+
+    @@keyframes floatImage {
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-15px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    .left-panel {
+        position: relative;
+        overflow: hidden;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    .left-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+    }
+
+</style>
+
+<div class="login-page d-flex align-items-center justify-content-center">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="login-card row g-0">
+
+                    <!-- LEFT PANEL -->
+                    <div class="col-md-6 p-0 left-panel">
+
+                        <img src="~/images/login.jpg"
+                             class="w-100 h-100 left-image"
+                             alt="MedAxis Illustration" />
+
+                    </div>
+
+
+
+                    <!-- RIGHT PANEL -->
+                    <div class="col-md-6 d-flex align-items-center right-panel">
+                        <div class="w-100">
+
+                            <h3 class="mb-4 text-center">Login Your Account</h3>
+
+                            <form asp-action="Login" asp-controller="CrediMgr">
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
+
+                                <div class="mb-3">
+                                    <input asp-for="UserName" class="form-control" placeholder="Username" />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+
+                                <button type="submit" class="btn btn-login w-100 mb-3">
+                                    Login
+                                </button>
+
+                                <a asp-controller="CrediMgr"
+                                   asp-action="RegisterPatient"
+                                   class="btn btn-register w-100 text-center">
+                                    Create Account
+                                </a>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
+</div>

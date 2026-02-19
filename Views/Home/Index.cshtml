@@ -3,188 +3,295 @@
 }
 
 <style>
+    /* ================= GLOBAL ================= */
     body {
         margin: 0;
         font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient( 135deg, #212A31, #2E3944, #124E66 );
+        background-size: 300% 300%;
+        animation: gradientMove 12s ease infinite;
+        min-height: 100vh;
+        color: #ffffff;
     }
 
+    @@keyframes gradientMove {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HERO ================= */
     .hero {
-        background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
         text-align: center;
+        padding: 80px 20px;
         position: relative;
     }
 
-    .btn-premium {
-        border-radius: 30px;
-        padding: 12px 30px;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-        .btn-premium:hover {
-            transform: translateY(-4px);
+        /* Optional background image space */
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient( rgba(33,42,49,0.85), rgba(18,78,102,0.85) ), url('/images/hero-bg.jpg'); /* Optional */
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
         }
 
-    .glass-card {
-        backdrop-filter: blur(12px);
-        background: rgba(255, 255, 255, 0.1);
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* ================= TEXT VISIBILITY FIX ================= */
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #D3D9D4;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.7);
+        animation: fadeDown 1s ease;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+        color: #ffffff;
+        text-shadow: 0 3px 15px rgba(0,0,0,0.6);
+        animation: fadeUp 1.2s ease;
+    }
+
+    /* ================= AUTH BUTTONS ================= */
+    .auth-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+
+    .btn-login {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        color: white;
+        border-radius: 30px;
+        padding: 8px 22px;
+        transition: 0.4s;
+        border: none;
+    }
+
+        .btn-login:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px rgba(116,141,146,0.8);
+        }
+
+    .btn-register {
+        background: linear-gradient(45deg,#2E3944,#212A31);
+        color: #D3D9D4;
+        border-radius: 30px;
+        padding: 8px 22px;
+        margin-left: 10px;
+        transition: 0.4s;
+        border: none;
+    }
+
+        .btn-register:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px rgba(18,78,102,0.8);
+        }
+
+    /* ================= ROLE CARDS ================= */
+    .role-card {
+        background: linear-gradient( 145deg, #2E3944, #124E66 );
+        color: #ffffff;
         border-radius: 20px;
         padding: 25px;
-        color: white;
-        transition: 0.3s;
+        transition: 0.4s;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
     }
 
-        .glass-card:hover {
-            transform: translateY(-6px);
-            background: rgba(255, 255, 255, 0.2);
+        .role-card h4 {
+            color: #D3D9D4;
         }
+
+        .role-card p {
+            color: #ffffff;
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+    /* ================= FEATURES SECTION ================= */
+    .features-section {
+        background: linear-gradient( 135deg, #748D92, #D3D9D4 );
+        padding: 80px 0;
+        color: #212A31;
+    }
 
     .feature-card {
+        background: white;
         border-radius: 20px;
-        transition: 0.3s;
+        padding: 30px;
+        transition: 0.4s;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-        .feature-card:hover {
-            transform: translateY(-8px);
+        .feature-card h4 {
+            color: #124E66;
         }
 
-    .section-light {
-        background-color: #f1f5f9;
+        .feature-card p {
+            color: #2E3944;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+    /* ================= WORKFLOW ================= */
+    .workflow {
+        background: linear-gradient( 90deg, #124E66, #212A31 );
+        color: #ffffff;
+        padding: 80px 0;
     }
 
+        .workflow h2,
+        .workflow h5,
+        .workflow p {
+            color: #ffffff;
+        }
+
+    /* ================= FOOTER ================= */
     .footer {
-        background: #0f172a;
-        color: white;
+        background-color: #212A31;
+        color: #D3D9D4;
+        padding: 40px 0;
     }
+
+        .footer h5 {
+            color: #ffffff;
+        }
+
+    /* ================= ANIMATIONS ================= */
+    @@keyframes fadeDown {
+        from {
+            opacity: 0;
+            transform: translateY(-40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 </style>
 
-<!-- HERO SECTION -->
+<!-- AUTH BUTTONS -->
+
+
+<!-- HERO -->
 <div class="hero">
-    <div>
-        <h1 class="display-2 fw-bold">MedAxis</h1>
-        <p class="lead mt-3">
-            Smart Healthcare Automation Platform
+    <div class="container hero-content text-center">
+        <h1>MedAxis</h1>
+        <p>Next-Generation Clinical Automation Platform</p>
+        <div class="auth-buttons">
+            <a asp-controller="CrediMgr" asp-action="Login" class="btn btn-login">Login</a>
+            <a asp-controller="CrediMgr" asp-action="RegisterPatient" class="btn btn-register">Create Account</a>
+        </div>
+        <div class="row mt-5 justify-content-center">
+            <div class="col-md-3 m-3 role-card">
+                <h4>Physician</h4>
+                <p>Digital prescriptions & patient scheduling.</p>
+            </div>
+            <div class="col-md-3 m-3 role-card">
+                <h4>Chemist</h4>
+                <p>Smart inventory & procurement workflow.</p>
+            </div>
+            <div class="col-md-3 m-3 role-card">
+                <h4>Supplier</h4>
+                <p>Automated order approval & logistics.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features-section text-center">
+    <div class="container">
+        <h2 class="mb-5">About MedAxis</h2>
+        <p class="mb-5 text-muted">
+            MedAxis is an integrated healthcare automation system designed to connect
+            physicians, chemists, and suppliers within a unified digital workflow.
+            It eliminates manual inefficiencies and enhances operational transparency.
         </p>
 
-        <!-- Buttons -->
-        <div class="mt-4">
-            <a asp-controller="CrediMgr"
-               asp-action="Login"
-               class="btn btn-light btn-lg btn-premium me-3 shadow">
-                Login
-            </a>
-
-            <a asp-controller="Users"
-               asp-action="Create"
-               class="btn btn-outline-light btn-lg btn-premium shadow">
-                Register
-            </a>
-        </div>
-
-        <!-- Role Cards -->
-        <div class="row mt-5 justify-content-center">
-            <div class="col-md-3 m-2 glass-card">
-                <h4>👨‍⚕ Physician</h4>
-                <p>Manage prescriptions & appointments</p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <h4>Appointment Management</h4>
+                    <p>Secure and streamlined patient scheduling system.</p>
+                </div>
             </div>
-
-            <div class="col-md-3 m-2 glass-card">
-                <h4>💊 Chemist</h4>
-                <p>Inventory & drug ordering system</p>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <h4>Digital Prescription Tracking</h4>
+                    <p>Real-time tracking between physician and chemist.</p>
+                </div>
             </div>
-
-            <div class="col-md-3 m-2 glass-card">
-                <h4>🏭 Supplier</h4>
-                <p>Approve & manage purchase orders</p>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <h4>Procurement Automation</h4>
+                    <p>End-to-end supplier approval & inventory updates.</p>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<!-- FEATURES SECTION -->
-<div class="container py-5 section-light">
-    <h2 class="text-center mb-5 fw-bold">Why MedAxis?</h2>
-
-    <div class="row text-center">
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow feature-card p-4 border-0">
-                <h4>📅 Appointment Management</h4>
-                <p>Streamlined scheduling between patients and physicians.</p>
+<!-- WORKFLOW -->
+<div class="workflow text-center">
+    <div class="container">
+        <h2 class="mb-5">System Workflow</h2>
+        <div class="row">
+            <div class="col-md-3 workflow-step">
+                <h5>1️⃣ Physician</h5>
+                <p>Create digital prescription</p>
+            </div>
+            <div class="col-md-3 workflow-step">
+                <h5>2️⃣ Chemist</h5>
+                <p>Manage inventory & place order</p>
+            </div>
+            <div class="col-md-3 workflow-step">
+                <h5>3️⃣ Supplier</h5>
+                <p>Approve / Reject purchase</p>
+            </div>
+            <div class="col-md-3 workflow-step">
+                <h5>4️⃣ MedAxis</h5>
+                <p>Auto-update system & reports</p>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow feature-card p-4 border-0">
-                <h4>💊 Digital Prescription</h4>
-                <p>Secure and real-time prescription tracking system.</p>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow feature-card p-4 border-0">
-                <h4>🔄 Automated Procurement</h4>
-                <p>Chemist orders → Supplier approval → Inventory update.</p>
-            </div>
-        </div>
-
     </div>
 </div>
 
-<!-- WORKFLOW SECTION -->
-<div class="container py-5 text-center">
-    <h2 class="fw-bold mb-4">System Workflow</h2>
-
-    <div class="row">
-
-        <div class="col-md-3">
-            <h5>1️⃣ Physician</h5>
-            <p>Creates digital prescription</p>
-        </div>
-
-        <div class="col-md-3">
-            <h5>2️⃣ Chemist</h5>
-            <p>Manages drugs & places order</p>
-        </div>
-
-        <div class="col-md-3">
-            <h5>3️⃣ Supplier</h5>
-            <p>Approves or rejects purchase order</p>
-        </div>
-
-        <div class="col-md-3">
-            <h5>4️⃣ MedAxis</h5>
-            <p>Updates system & tracks inventory</p>
-        </div>
-
-    </div>
-</div>
-
-<!-- FOOTER -->
-<div class="footer text-center py-4">
-    <h5 class="mb-2">MedAxis</h5>
-    <p class="mb-0">© 2026 MedAxis Healthcare Automation</p>
-    <small>Developed by Your Team</small>
-@if (TempData["ShowSuccess"] != null && (bool)TempData["ShowSuccess"])
-{
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '@TempData["SuccessMessage"]',
-            confirmButtonColor: '#3085D6'
-        });
-    </script>
-}
-
-<div class="text-center">
-    <h1 class="display-4" >Welcome</h1>
-    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
-</div>

@@ -4,66 +4,189 @@
     ViewData["Title"] = "Physician Details";
 }
 
-<div class="container mt-5">
+<style>
 
-    <h2 class="mb-4 text-center">Physician Details</h2>
-
-    @if (ViewBag.Message != null)
-    {
-        <div class="alert alert-warning text-center">
-            @ViewBag.Message
-        </div>
+    /* ================= PAGE BACKGROUND ================= */
+    .physician-page {
+        background: linear-gradient(135deg,#003135,#024950,#0FA4AF);
+        background-size: 300% 300%;
+        animation: bgMove 14s ease infinite;
+        min-height: 100vh;
+        padding: 80px 0;
     }
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="row">
-            @foreach (var physician in Model)
-            {
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm border-0 h-100">
+    @@keyframes bgMove {
+        0% {
+            background-position: 0% 50%;
+        }
 
-                        <div class="card-body">
+        50% {
+            background-position: 100% 50%;
+        }
 
-                            <h4 class="card-title text-primary mb-3">
-                                @physician.PhysicianName
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ================= HEADER ================= */
+    .page-title {
+        color: #AFDDE5;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* ================= PHYSICIAN CARD ================= */
+    .physician-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        transition: all 0.35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .physician-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.25);
+        }
+
+        /* Decorative Gradient Accent */
+        .physician-card::before {
+            content: "";
+            position: absolute;
+            height: 5px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg,#0FA4AF,#964734);
+        }
+
+    /* ================= NAME ================= */
+    .physician-name {
+        color: #024950;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    /* ================= INFO LABEL ================= */
+    .info-label {
+        font-weight: 600;
+        color: #003135;
+    }
+
+    .info-value {
+        color: #555;
+    }
+
+    /* ================= STATUS BADGE ================= */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+    }
+
+    .status-inactive {
+        background: #964734;
+        color: white;
+    }
+
+    /* ================= ALERT ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        color: #AFDDE5;
+        padding: 20px;
+        text-align: center;
+    }
+
+</style>
+
+<div class="physician-page">
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="text-center mb-5">
+            <h2 class="page-title">Physician Directory</h2>
+            <p class="text-white-50">
+                View physician profiles, specialization & contact details
+            </p>
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="custom-alert mb-4">
+                @ViewBag.Message
+            </div>
+        }
+
+        @if (Model != null && Model.Any())
+        {
+            var count = Model.Count;
+
+            <div class="row g-4 justify-content-center">
+
+                @foreach (var physician in Model)
+                {
+                    var isActive = physician.PhysicianStatus == "Active";
+
+                    <div class="@(count == 1 ? "col-lg-6 col-md-8" : "col-lg-6 col-md-6")">
+
+                        <div class="physician-card h-100">
+
+                            <h4 class="physician-name">
+                                🩺 @physician.PhysicianName
                             </h4>
 
                             <p>
-                                <strong>Specialization:</strong>
-                                @physician.Specialization
+                                <span class="info-label">Specialization:</span>
+                                <span class="info-value">@physician.Specialization</span>
                             </p>
 
                             <p>
-                                <strong>Email:</strong>
-                                @physician.Email
+                                <span class="info-label">Email:</span>
+                                <span class="info-value">@physician.Email</span>
                             </p>
 
                             <p>
-                                <strong>Phone:</strong>
-                                @physician.Phone
+                                <span class="info-label">Phone:</span>
+                                <span class="info-value">@physician.Phone</span>
                             </p>
 
                             <p>
-                                <strong>Address:</strong>
-                                @physician.Address
+                                <span class="info-label">Address:</span>
+                                <span class="info-value">@physician.Address</span>
                             </p>
 
                             <p>
-                                <strong>Summary:</strong>
-                                @physician.Summary
+                                <span class="info-label">Summary:</span>
+                                <span class="info-value">@physician.Summary</span>
                             </p>
 
-                            <span class="badge bg-success">
-                                @physician.PhysicianStatus
-                            </span>
+                            <div class="mt-3">
+                                <span class="status-badge @(isActive ? "status-active" : "status-inactive")">
+                                    @physician.PhysicianStatus
+                                </span>
+                            </div>
 
                         </div>
 
                     </div>
-                </div>
-            }
-        </div>
-    }
+                }
+
+            </div>
+        }
+
+
+    </div>
 
 </div>

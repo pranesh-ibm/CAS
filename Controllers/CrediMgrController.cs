@@ -111,13 +111,12 @@ namespace CAS.Controllers
         {
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Admin");
+            return RedirectToAction("Login","CrediMgr");
         }
 
 
         public async Task<IActionResult> AccessDenied()
         {
-
             return View();
         }
 
