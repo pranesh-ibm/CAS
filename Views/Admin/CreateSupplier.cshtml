@@ -170,7 +170,7 @@
                     <form asp-action="CreateSupplier">
 
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
+                        <input type="hidden" asp-for="SupplierStatus" value="Active" />
                         <div class="row g-4">
 
                             <div class="col-md-12">
@@ -197,11 +197,7 @@
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
 
-                            <div class="col-md-12">
-                                <label asp-for="SupplierStatus" class="form-label"></label>
-                                <input asp-for="SupplierStatus" class="form-control" />
-                                <span asp-validation-for="SupplierStatus" class="text-danger"></span>
-                            </div>
+                           
 
                             <!-- Buttons -->
                             <div class="col-12 text-center mt-4">

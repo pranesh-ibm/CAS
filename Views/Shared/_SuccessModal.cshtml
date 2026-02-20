@@ -1,25 +1,3 @@
-@{
-    var msg = TempData["SuccessMessage"] as string;
-}
-
-@if (!string.IsNullOrEmpty(msg))
-{
-    <div class="modal fade" id="globalSuccessModal" tabindex="-1" aria-labelledby="globalSuccessModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="globalSuccessModalLabel">Success</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @Html.Raw(System.Net.WebUtility.HtmlEncode(msg))
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         (function(){
