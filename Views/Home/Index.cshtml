@@ -2,7 +2,18 @@
 @{
     ViewData["Title"] = "MedAxis";
 }
-
+@if (TempData["ShowSuccess"] != null && (bool)TempData["ShowSuccess"])
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '@TempData["SuccessMessage"]',
+            confirmButtonColor: '#3085d6'
+        });
+    </script>
+}
 <style>
     /* ================= GLOBAL ================= */
     body {
@@ -260,11 +271,10 @@
         }
     }
 
-    .inventory-page {
+    .inventorye-page {
         background: linear-gradient(135deg,#212A31,#2E3944,#124E66);
         background-size: 300% 300%;
         animation: bgMove 12s ease infinite;
-        min-height: 100vh;
         padding: 80px 0;
     }
 

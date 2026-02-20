@@ -305,7 +305,7 @@ namespace Medi_Clinic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePhysician([Bind("PhysicianId,PhysicianName,Specialization,Address,Phone,Email,Summary")] Physician physician)
+        public async Task<IActionResult> CreatePhysician([Bind("PhysicianId,PhysicianName,Specialization,Address,Phone,Email,Summary,PhysicianStatus")] Physician physician)
         {
             if (ModelState.IsValid)
             {
@@ -342,6 +342,7 @@ namespace Medi_Clinic.Controllers
                 return RedirectToAction(nameof(GetPhysiciansDetail));
             }
             return View(physician);
+            //return RedirectToAction(nameof(GetPhysiciansDetail));
         }
 
         // GET: AdminPhysician/Edit/5
@@ -503,7 +504,7 @@ namespace Medi_Clinic.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateChemist(
-    [Bind("ChemistId,ChemistName,Address,Phone,Email,Summary")] Chemist chemist)
+    [Bind("ChemistId,ChemistName,Address,Phone,Email,Summary","ChemistStatus")] Chemist chemist)
         {
             if (ModelState.IsValid)
             {
@@ -705,7 +706,7 @@ namespace Medi_Clinic.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSupplier(
-    [Bind("SupplierId,SupplierName,Address,Phone,Email")] Supplier supplier)
+    [Bind("SupplierId,SupplierName,Address,Phone,Email,SupplierStatus")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
@@ -990,7 +991,7 @@ namespace Medi_Clinic.Controllers
             // 2️⃣ Update Appointment Status
             var appointment = await _context.Appointments.FindAsync(AppointmentID);
 
-            appointment.ScheduleStatus = "Assigned";
+            appointment.ScheduleStatus = "Scheduled";
 
             await _context.SaveChangesAsync();
 
