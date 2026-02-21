@@ -30,7 +30,7 @@ namespace CAS.Controllers
                 _context.Add(patient);
                 await _context.SaveChangesAsync();
                 TempData["ShowSuccess"] = true;
-                TempData["SuccessMessage"] = "Registered successfully, Your Username is your email id, Password will be your Name and @ followed by last Four digits of your mobile number";
+                TempData["SuccessMessage"] = "Registered successfully, Your Username is your name, Password will be your Name and @ followed by last Four digits of your mobile number";
                 return RedirectToAction("Index","Home");
             }
             return View(patient);

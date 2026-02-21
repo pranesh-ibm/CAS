@@ -114,7 +114,7 @@ namespace Medi_Clinic.Controllers
             {
                 var user = new User
                 {
-                    UserName = patient.Email!,
+                    UserName = patient.PatientName,
                     Password = generatedPassword,
                     Role = "Patient",
                     RoleReferenceId = patient.PatientId,

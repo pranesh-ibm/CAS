@@ -6,6 +6,26 @@
 }
 
 <style>
+    /* ================= BACK BUTTON ================= */
+    .btn-back {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        padding: 6px 18px;
+        border-radius: 25px;
+        border: 2px solid #124E66;
+        background: white;
+        color: #124E66;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background: #124E66;
+            color: white;
+            transform: translateX(-4px);
+        }
 
     /* ================= BACKGROUND ================= */
     .profile-page {
@@ -32,12 +52,14 @@
 
     /* ================= CARD ================= */
     .profile-card {
+        position: relative; /* ADD THIS */
         background: rgba(255,255,255,0.95);
         border-radius: 25px;
         padding: 50px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         animation: fadeUp 0.8s ease;
     }
+
 
     @@keyframes fadeUp {
         from {
@@ -144,6 +166,13 @@
             <div class="col-lg-8">
 
                 <div class="profile-card">
+                    <a asp-controller="Admin"
+                       asp-action="GetPhysiciansDetail"
+                       class="btn-back">
+                        ← Back
+                    </a>
+                    <h2>  </h2>
+
 
                     <!-- HEADER -->
                     <div class="profile-header">

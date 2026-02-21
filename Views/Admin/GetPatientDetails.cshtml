@@ -5,6 +5,27 @@
 }
 
 <style>
+    /* ================= BACK BUTTON ================= */
+    .btn-back {
+        border: 2px solid #124E66;
+        color: #124E66;
+        border-radius: 30px;
+        padding: 8px 22px;
+        font-weight: 600;
+        background: transparent;
+        transition: 0.3s ease;
+        display: inline-block;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            background: #124E66;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(18,78,102,0.4);
+        }
+
 
     /* ================= BACKGROUND ================= */
     .profile-page {
@@ -143,6 +164,13 @@
             <div class="col-lg-8">
 
                 <div class="profile-card">
+                   
+                    <div>
+                        <a asp-controller="Admin" asp-action="GetPatientsDetail" class="btn-back">
+                            ← Back
+                        </a>
+                    </div>
+
 
                     <!-- HEADER -->
                     <div class="profile-header">

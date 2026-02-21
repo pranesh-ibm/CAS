@@ -6,6 +6,25 @@
 }
 
 <style>
+    .btn-back {
+        border: 2px solid white;
+        color: white;
+        border-radius: 30px;
+        padding: 8px 20px;
+        font-weight: 600;
+        background: transparent;
+        transition: 0.3s ease;
+        margin-left:150px ;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            background: #124E66;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(18,78,102,0.3);
+        }
+
 
     /* ================= BACKGROUND ================= */
     .appointments-page {
@@ -118,7 +137,9 @@
         <h2 class="text-center text-light fw-bold mb-5">
             Appointments Overview
         </h2>
-
+        <a asp-controller="Admin" asp-action="Index" class="btn-back mb-3">
+            ← Back
+        </a>
         @foreach (var appt in Model)
         {
             <div class="appt-card">
