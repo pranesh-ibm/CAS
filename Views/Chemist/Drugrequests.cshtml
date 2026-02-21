@@ -93,10 +93,6 @@
         color: white;
     }
 
-    .status-rejected {
-        background: #964734;
-        color: white;
-    }
 
     /* ================= ACTION BUTTONS ================= */
     .action-btn {
@@ -118,10 +114,6 @@
             box-shadow: 0 0 20px rgba(15,164,175,0.6);
         }
 
-    .btn-reject {
-        background: #964734;
-        color: white;
-    }
 
         .btn-reject:hover {
             transform: scale(1.05);
@@ -169,8 +161,7 @@
 
                 @foreach (var req in Model)
                 {
-                    string statusClass = req.RequestStatus == "Approved" ? "status-approved"
-                    : req.RequestStatus == "Rejected" ? "status-rejected"
+                    string statusClass = req.RequestStatus == "Acknowledged" ? "status-approved"
                     : "status-pending";
 
                     <div class="col-lg-6 col-md-6">
@@ -217,13 +208,7 @@
                                         <a asp-action="Approve"
                                            asp-route-id="@req.DrugRequestId"
                                            class="action-btn btn-approve">
-                                            Approve
-                                        </a>
-
-                                        <a asp-action="Reject"
-                                           asp-route-id="@req.DrugRequestId"
-                                           class="action-btn btn-reject">
-                                            Reject
+                                            Acknowledge
                                         </a>
                                     </div>
                                 }
