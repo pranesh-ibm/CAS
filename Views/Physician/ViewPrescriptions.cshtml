@@ -38,31 +38,60 @@
         letter-spacing: 1px;
     }
 
-    /* ================= PRESCRIPTION CARD ================= */
-    .prescription-card {
+    /* ================= CARD / TABLE STYLING (polished) ================= */
+    .inventory-card {
         background: rgba(255,255,255,0.95);
         border-radius: 25px;
-        padding: 30px;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-        transition: 0.35s ease;
-        position: relative;
+        padding: 40px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .inventory-title {
+        font-weight: 700;
+        color: #124E66;
+    }
+
+    .table {
+        border-radius: 15px;
         overflow: hidden;
     }
 
-        .prescription-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        .table thead {
+            background: linear-gradient(45deg,#124E66,#748D92);
+            color: white;
         }
 
-        .prescription-card::before {
-            content: "";
-            position: absolute;
-            height: 6px;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: linear-gradient(45deg,#0FA4AF,#964734);
+            .table thead th {
+                border: none;
+                padding: 15px;
+            }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
         }
+
+        .table tbody tr {
+            transition: 0.3s;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(18,78,102,0.08);
+                transform: scale(1.01);
+            }
 
     /* ================= LABELS ================= */
     .info-label {
@@ -124,82 +153,57 @@
 <div class="prescriptions-page">
 
     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
 
-        <div class="text-center mb-5">
-            <h2 class="page-title">Prescriptions</h2>
-        </div>
+                <div class="inventory-card">
 
-        @if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
-        {
-            <div class="custom-alert">
-                <h5 class="mb-3">No prescriptions found</h5>
-                <p class="mb-4">
-                    There are no prescriptions available for your account right now.
-                </p>
+                    <h2 class="inventory-title mb-4 text-center">Prescriptions</h2>
 
-                <a asp-action="CreatePrescription"
-                   class="btn-premium me-3">
-                    Create Prescription
-                </a>
+                    @if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
+                    {
+                        <div class="custom-alert">
+                            <h5 class="mb-3">No prescriptions found</h5>
+                            <p class="mb-4">There are no prescriptions available for your account right now.</p>
 
-                <a asp-action="ViewPrescriptions"
-                   class="dashboard-btn-outline">
-                    Refresh
-                </a>
-            </div>
-        }
-        else
-        {
-            <div class="row g-4">
-
-                @foreach (var p in Model.Prescriptions)
-                {
-                    <div class="col-lg-6 col-md-6">
-
-                        <div class="prescription-card h-100">
-
-                            <div class="mb-3">
-                                <span class="info-label">Patient:</span>
-                                <div class="info-value">
-                                    @p.PhysicianAdvice.Schedule.Appointment.Patient.PatientName
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="info-label">Drug:</span>
-                                <div class="info-value">
-                                    @p.Drug.DrugTitle
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="info-label">Prescription:</span>
-                                <div class="info-value">
-                                    @p.Prescription
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="info-label">Dosage:</span>
-                                <div class="info-value">
-                                    @p.Dosage
-                                </div>
-                            </div>
-
-                            <div>
-                                <span class="info-label">Date:</span>
-                                <div class="info-value">
-                                    @p.PhysicianAdvice.Schedule.ScheduleDate.ToString("dd MMM yyyy")
-                                </div>
-                            </div>
-
+                            <a asp-action="CreatePrescription" class="btn-premium me-3">Create Prescription</a>
+                            <a asp-action="ViewPrescriptions" class="dashboard-btn-outline">Refresh</a>
                         </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Drug</th>
+                                        <th>Prescription</th>
+                                        <th>Dosage</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var p in Model.Prescriptions)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@p.PhysicianAdvice.Schedule.Appointment.Patient.PatientName</td>
+                                            <td>@p.Drug.DrugTitle</td>
+                                            <td>@p.Prescription</td>
+                                            <td>@p.Dosage</td>
+                                            <td>@p.PhysicianAdvice.Schedule.ScheduleDate.ToString("dd MMM yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
 
-                    </div>
-                }
+                </div>
 
             </div>
-        }
+        </div>
+    </div>
 
     </div>
 
