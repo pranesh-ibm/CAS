@@ -6,6 +6,45 @@
 }
 
 <style>
+    /* ================= ROW HOVER EFFECT ================= */
+    .table tbody tr {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .table tbody tr:hover {
+            background: rgba(44,83,100,0.08);
+            transform: scale(1.01);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+    /* ================= SMOOTH TABLE ================= */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+        .table tbody tr {
+            background: white;
+            border-radius: 12px;
+        }
+
+    /* ================= BADGE HOVER ================= */
+    .status-badge {
+        transition: all 0.3s ease;
+    }
+
+        .status-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+
+    /* ================= HEADER STICKY EFFECT ================= */
+    .table thead th {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
     .btn-back {
         border: 2px solid white;
         color: white;
