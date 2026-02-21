@@ -14,7 +14,6 @@
         font-weight: 600;
         background: transparent;
         transition: 0.3s ease;
-        margin-left:150px ;
         text-decoration: none;
     }
 
@@ -23,191 +22,129 @@
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(18,78,102,0.3);
+            text-decoration: none;
         }
 
-
-    /* ================= BACKGROUND ================= */
     .appointments-page {
         background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-        background-size: 300% 300%;
-        animation: bgMove 14s ease infinite;
         padding: 60px 0;
         min-height: 100vh;
     }
 
-    @@keyframes bgMove {
-        0% {
-            background-position: 0% 50%;
-        }
-
-        50% {
-            background-position: 100% 50%;
-        }
-
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-
-    /* ================= CARD ================= */
-    .appt-card {
-        max-width: 650px;
-        margin: 0 auto 35px auto;
-        padding: 30px;
+    .table-card {
+        background: white;
         border-radius: 20px;
-        background: #ffffffee;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-        animation: fadeUp 0.7s ease;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-left: 8px solid #2c5364;
+        padding: 25px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     }
 
-        .appt-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    .table thead {
+        background: linear-gradient(45deg,#2c5364,#203a43);
+        color: white;
+    }
+
+        .table thead th {
+            border: none;
+            padding: 14px;
         }
 
-    @@keyframes fadeUp {
-        from {
-            opacity: 0;
-            transform: translateY(25px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .table tbody td {
+        padding: 14px;
+        vertical-align: middle;
     }
 
-    /* ================= SECTION HEADER ================= */
-    .section-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #2c5364;
-        margin-bottom: 10px;
-        border-left: 4px solid #2c5364;
-        padding-left: 10px;
-    }
-
-    /* ================= ITEM ROW ================= */
-    .item-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #e5e5e5;
-        font-size: 14px;
-    }
-
-    .item-label {
-        font-weight: 600;
-        color: #374151;
-    }
-
-    /* ================= BADGES ================= */
     .status-badge {
         padding: 6px 14px;
         border-radius: 25px;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 13px;
         color: white;
-        display: inline-block;
     }
 
     .scheduled {
-        background: linear-gradient(45deg,#0f9b0f,#4caf50);
-        box-shadow: 0 4px 12px rgba(76,175,80,0.4);
+        background: #28a745;
     }
 
     .pending {
-        background: linear-gradient(45deg,#f4a261,#e76f51);
-        box-shadow: 0 4px 12px rgba(231,111,81,0.4);
+        background: #ffc107;
+        color: black;
     }
 
     .cancelled {
-        background: linear-gradient(45deg,#d62828,#ba181b);
-        box-shadow: 0 4px 12px rgba(214,40,40,0.4);
+        background: #dc3545;
     }
-
 </style>
-
 
 <div class="appointments-page">
     <div class="container">
 
-        <h2 class="text-center text-light fw-bold mb-5">
-            Appointments Overview
-        </h2>
-        <a asp-controller="Admin" asp-action="Index" class="btn-back mb-3">
-            ← Back
-        </a>
-        @foreach (var appt in Model)
-        {
-            <div class="appt-card">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-light fw-bold">
+                Appointments Overview
+            </h2>
 
-                <!-- SECTION: PATIENT -->
-                <div class="section-title">Patient Information</div>
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="btn-back">
+                ← Back
+            </a>
+        </div>
 
-                <div class="item-row">
-                    <div class="item-label">Name</div>
-                    <div>@appt.Patient.PatientName</div>
-                </div>
+        <!-- Table -->
+        <div class="table-card">
+            <div class="table-responsive">
 
-                <div class="item-row">
-                    <div class="item-label">Phone</div>
-                    <div>@appt.Patient.Phone</div>
-                </div>
+                <table class="table align-middle mb-0">
 
-                <div class="item-row">
-                    <div class="item-label">Email</div>
-                    <div>@appt.Patient.Email</div>
-                </div>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Date & Time</th>
+                            <th>Criticality</th>
+                            <th>Reason</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
 
-                <!-- SECTION: APPOINTMENT -->
-                <div class="section-title mt-3">Appointment Details</div>
-
-                <div class="item-row">
-                    <div class="item-label">Date & Time</div>
-                    <div>@appt.AppointmentDate.ToString("dd MMM yyyy • hh:mm tt")</div>
-                </div>
-
-                <div class="item-row">
-                    <div class="item-label">Criticality</div>
-                    <div>@appt.Criticality</div>
-                </div>
-
-                <div class="item-row">
-                    <div class="item-label">Reason</div>
-                    <div>@appt.Reason</div>
-                </div>
-
-                <div class="item-row">
-                    <div class="item-label">Notes</div>
-                    <div>@appt.Note</div>
-                </div>
-
-                <!-- SECTION: STATUS -->
-                <div class="section-title mt-3">Status</div>
-
-                <div class="item-row">
-                    <div class="item-label">Schedule Status</div>
-                    <div>
-                        @if (appt.ScheduleStatus == "Scheduled")
+                    <tbody>
+                        @foreach (var appt in Model)
                         {
-                            <span class="status-badge scheduled">Scheduled</span>
+                            <tr>
+                                <td>@appt.Patient?.PatientName</td>
+                                <td>@appt.AppointmentDate.ToString("dd MMM yyyy hh:mm tt")</td>
+                                <td>@appt.Criticality</td>
+                                <td>@appt.Reason</td>
+                                <td>@appt.Patient?.Phone</td>
+                                <td>@appt.Patient?.Email</td>
+                                <td>
+                                    @{
+                                        string badgeClass = "cancelled";
+
+                                        if (appt.ScheduleStatus == "Scheduled")
+                                        {
+                                            badgeClass = "scheduled";
+                                        }
+                                        else if (appt.ScheduleStatus == "Pending")
+                                        {
+                                            badgeClass = "pending";
+                                        }
+                                    }
+
+                                    <span class="status-badge @badgeClass">
+                                        @appt.ScheduleStatus
+                                    </span>
+                                </td>
+                            </tr>
                         }
-                        else if (appt.ScheduleStatus == "Pending")
-                        {
-                            <span class="status-badge pending">Pending</span>
-                        }
-                        else
-                        {
-                            <span class="status-badge cancelled">@appt.ScheduleStatus</span>
-                        }
-                    </div>
-                </div>
+                    </tbody>
+
+                </table>
 
             </div>
-        }
+        </div>
 
     </div>
 </div>
