@@ -92,23 +92,46 @@
             color: white;
         }
 
+    /* ================= ACTION BUTTON (matches ViewAppointments) ================= */
+    .dashboard-btn-outline {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
 </style>
 
 <div class="appointment-page">
 
     <div class="container">
 
-        <div class="text-center mb-5">
-            <h2 class="page-title">Request Drugs</h2>
-            <p class="text-white-50">
-                Submit your drug requirements easily
-            </p>
+        <div class="d-flex align-items-center mb-5">
+            <a asp-action="Index" class="dashboard-btn-outline me-3">Back</a>
+            <div>
+                <h2 class="page-title mb-0">Request Drugs</h2>
+                <p class="text-white-50 mb-0">Submit your drug requirements easily</p>
+            </div>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
 
                 <div class="appointment-card">
+
+                    <div class="d-flex align-items-center mb-4">
+                        <h2 class="page-title mb-0">Request Drugs</h2>
+                    </div>
 
                     <form id="orderDrugsForm"
                           asp-action="OrderDrugs"

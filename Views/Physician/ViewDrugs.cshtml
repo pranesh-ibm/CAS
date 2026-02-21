@@ -55,6 +55,24 @@
         color: #212A31;
     }
 
+    /* ================= ACTION BUTTON (matches ViewAppointments) ================= */
+    .dashboard-btn-outline {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        border: 2px solid #964734;
+        color: #964734;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .dashboard-btn-outline:hover {
+            background: #964734;
+            color: white;
+            transform: scale(1.05);
+        }
+
     /* ================= TABLE STYLING ================= */
     .table {
         border-radius: 15px;
@@ -114,9 +132,10 @@
 
                 <div class="inventory-card">
 
-                    <h2 class="inventory-title mb-4 text-center">
-                        Drug Inventory
-                    </h2>
+                    <div class="mb-3">
+                        <a asp-action="Index" class="dashboard-btn-outline mb-3">← Back</a>
+                        <h2 class="inventory-title mb-0">Drug Inventory</h2>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table align-middle">

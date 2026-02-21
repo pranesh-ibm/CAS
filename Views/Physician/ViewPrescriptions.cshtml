@@ -158,7 +158,10 @@
 
                 <div class="inventory-card">
 
-                    <h2 class="inventory-title mb-4 text-center">Prescriptions</h2>
+                    <div class="d-flex align-items-center mb-4">
+                        <a asp-action="Index" class="dashboard-btn-outline me-3">Back</a>
+                        <h2 class="inventory-title mb-0">Prescriptions</h2>
+                    </div>
 
                     @if (Model == null || Model.Prescriptions == null || !Model.Prescriptions.Any())
                     {
