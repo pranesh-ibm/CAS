@@ -56,7 +56,6 @@
             box-shadow: 0 30px 70px rgba(0,0,0,0.3);
         }
 
-        /* Accent Bar */
         .advice-card::before {
             content: "";
             position: absolute;
@@ -96,7 +95,6 @@
         margin-bottom: 15px;
     }
 
-    /* ================= BUTTON ================= */
     .btn-premium {
         background: linear-gradient(45deg,#0FA4AF,#024950);
         border: none;
@@ -113,6 +111,19 @@
             color: white;
         }
 
+    .btn-back {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-back:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
     /* ================= ALERT ================= */
     .custom-alert {
         background: rgba(255,255,255,0.15);
@@ -121,6 +132,10 @@
         color: #AFDDE5;
         padding: 20px;
         text-align: center;
+        font-size: 18px;
+        font-weight: 500;
+        max-width: 700px;
+        margin: 0 auto;
     }
 
 </style>
@@ -134,15 +149,15 @@
             <h2 class="page-title">Physician Advice</h2>
             <p class="record-count">Total Records: @ViewBag.Count</p>
         </div>
-
-        @if (ViewBag.Message != null)
+        
+        <!-- ONLY ONE ALERT NOW -->
+        @if (adviceList == null || !adviceList.Any())
         {
-            <div class="custom-alert mb-4">
-                @ViewBag.Message
+            <div class="custom-alert">
+                No physician advice found.
             </div>
         }
-
-        @if (adviceList != null && adviceList.Any())
+        else
         {
             var count = adviceList.Count();
 
@@ -162,9 +177,7 @@
                                 @date.ToString("dd MMM yyyy") • @fullDateTime.ToString("hh:mm tt")
                             </div>
 
-                            <h5 class="section-title">
-                                Consultation Details
-                            </h5>
+                            <h5 class="section-title">Consultation Details</h5>
 
                             <div class="info-content">
                                 <span class="info-label">Advice:</span><br />
@@ -191,12 +204,12 @@
 
             </div>
         }
-        else
-        {
-            <div class="custom-alert">
-                No physician advice found.
-            </div>
-        }
+        <div class="text-center mt-4 d-flex justify-content-center gap-3">
+
+            <a asp-action="Index" class="btn btn-edit btn-back">
+                Back
+            </a>
+        </div>
 
     </div>
 

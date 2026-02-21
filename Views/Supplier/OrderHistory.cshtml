@@ -118,8 +118,16 @@
 
     <div class="container">
 
-        <div class="text-center mb-5">
-            <h2 class="page-title">Order History</h2>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+
+            <h2 class="page-title mb-0">Order History</h2>
+
+            <a asp-controller="Supplier"
+               asp-action="Index"
+               class="btn btn-outline-light rounded-pill px-4 fw-semibold">
+                ← Back to Dashboard
+            </a>
+
         </div>
 
         @if (Model == null || !Model.Any())

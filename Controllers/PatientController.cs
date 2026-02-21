@@ -1,4 +1,5 @@
 ﻿using CAS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
@@ -6,6 +7,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CAS.Controllers
 {
+    [Authorize(Roles = "Patient")]
     public class PatientController : Controller
     {
         private readonly CasContext _context;
@@ -35,7 +37,7 @@ namespace CAS.Controllers
 
             if (patient == null)
             {
-                return Content("Chemist profile not found. Please contact admin.");
+                return Content("Pateint profile not found. Please contact admin.");
             }
 
             return View(patient);

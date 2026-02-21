@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Check Appointment";
-    var list = ViewBag.Data;
+    var list = ViewBag.Data as IEnumerable<dynamic>;
 }
 
 <style>
@@ -35,52 +35,43 @@
         letter-spacing: 1px;
     }
 
-    /* ================= CARD ================= */
-    .status-card {
-        background: rgba(255,255,255,0.95);
-        border-radius: 25px;
-        padding: 35px;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-        transition: 0.35s ease;
-        position: relative;
+    /* ================= TABLE WRAPPER ================= */
+    .status-table {
+        background: rgba(255,255,255,0.97);
+        border-radius: 20px;
         overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.3);
     }
 
-        .status-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+        .status-table thead {
+            background: linear-gradient(45deg,#0FA4AF,#024950);
+            color: white;
         }
 
-        /* Accent strip */
-        .status-card::before {
-            content: "";
-            position: absolute;
-            height: 6px;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: linear-gradient(45deg,#0FA4AF,#964734);
+        .status-table th {
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
         }
 
-    /* ================= SECTION TITLE ================= */
-    .section-title {
-        font-weight: 700;
-        color: #124E66;
-        margin-bottom: 15px;
-    }
+        .status-table td {
+            padding: 16px;
+            vertical-align: middle;
+            color: #003135;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
 
-    /* ================= LABEL STYLING ================= */
-    .info-label {
-        font-weight: 600;
-        color: #003135;
-    }
+        .status-table tbody tr {
+            transition: 0.25s ease;
+        }
 
-    .info-value {
-        color: #555;
-        margin-bottom: 10px;
-    }
+            .status-table tbody tr:hover {
+                background: rgba(15,164,175,0.08);
+            }
 
-    /* ================= CRITICALITY BADGES ================= */
+    /* ================= BADGES ================= */
     .badge-low {
         background: #198754;
     }
@@ -94,7 +85,6 @@
         background: #dc3545;
     }
 
-    /* ================= STATUS BADGES ================= */
     .status-pending {
         background: #ffc107;
         color: #000;
@@ -108,16 +98,14 @@
         background: #198754;
     }
 
-    /* ================= DATE BADGE ================= */
     .datetime-badge {
         display: inline-block;
         background: linear-gradient(45deg,#0FA4AF,#024950);
         color: white;
         padding: 6px 14px;
         border-radius: 30px;
-        font-size: 13px;
         font-weight: 600;
-        margin-top: 10px;
+        font-size: 13px;
     }
 
     /* ================= ALERT ================= */
@@ -128,7 +116,24 @@
         color: #AFDDE5;
         padding: 20px;
         text-align: center;
+        font-size: 18px;
+        max-width: 700px;
+        margin: 0 auto;
     }
+
+    .btn-back {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-back:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
 
 </style>
 
@@ -142,84 +147,91 @@
 
         @if (ViewBag.Message != null)
         {
-            <div class="custom-alert mb-4">
-                @ViewBag.Message
-            </div>
+            <div class="custom-alert mb-4">@ViewBag.Message</div>
         }
 
-        @if (list != null)
+        @if (list != null && list.Any())
         {
-            var data = ((IEnumerable<dynamic>)list).ToList();
-            var count = data.Count;
+            var data = list.ToList();
 
-            <div class="row g-4 @(count == 1 ? "justify-content-center" : "")">
+            <div class="table-responsive">
+                <table class="table status-table align-middle">
 
-                @foreach (var item in data)
-                {
-                    string criticalityClass = item.Criticality == "High" ? "badge-high"
-                    : item.Criticality == "Medium" ? "badge-medium"
-                    : "badge-low";
+                    <thead>
+                        <tr>
+                            <th>Criticality</th>
+                            <th>Reason</th>
+                            <th>Note</th>
+                            <th>Physician</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
 
-                    bool isPending = item.Status == "Yet to assign an appointment";
+                    <tbody>
+                        @foreach (var item in data)
+                        {
+                            string criticalityClass =
+                            item.Criticality == "High" ? "badge-high" :
+                            item.Criticality == "Medium" ? "badge-medium" :
+                                                    "badge-low";
 
-                    <div class="@(count == 1 ? "col-lg-6 col-md-8" : "col-lg-6")">
+                            bool isPending = item.Status == "Yet to assign an appointment";
 
-                        <div class="status-card h-100">
+                            <tr>
+                                <td>
+                                    <span class="badge @criticalityClass">
+                                        @item.Criticality
+                                    </span>
+                                </td>
 
-                            <div class="section-title">
-                                📅 Appointment Details
-                            </div>
+                                <td>@item.Reason</td>
+                                <td>@item.Note</td>
 
-                            <div class="mb-2">
-                                <span class="info-label">Criticality:</span>
-                                <span class="badge @criticalityClass">
-                                    @item.Criticality
-                                </span>
-                            </div>
+                                <td>
+                                    @if (isPending)
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                    else
+                                    {
+                                        @item.PhysicianName
+                                    }
+                                </td>
 
-                            <div class="info-value">
-                                <span class="info-label">Reason:</span> @item.Reason
-                            </div>
+                                <td>
+                                    @if (isPending)
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="datetime-badge">
+                                            @item.ScheduleDate?.ToString("dd MMM yyyy") • @item.ScheduleTime?.ToString("hh:mm tt")
+                                        </span>
+                                    }
+                                </td>
 
-                            <div class="info-value">
-                                <span class="info-label">Note:</span> @item.Note
-                            </div>
-
-                            <hr />
-
-                            @if (isPending)
-                            {
-                                <span class="badge status-pending">
-                                    @item.Status
-                                </span>
-                            }
-                            else
-                            {
-                                <div class="info-value">
-                                    <span class="info-label">Physician:</span>
-                                    @item.PhysicianName
-                                </div>
-
-                                <div class="datetime-badge">
-                                    @item.ScheduleDate?.ToString("dd MMM yyyy")
-                                    •
-                                    @item.ScheduleTime?.ToString("hh:mm tt")
-                                </div>
-
-                                <div class="mt-3">
-                                    <span class="badge status-assigned">
+                                <td>
+                                    <span class="badge @(isPending ? "status-pending" : "status-assigned")">
                                         @item.Status
                                     </span>
-                                </div>
-                            }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
 
-                        </div>
-
-                    </div>
-                }
-
+                </table>
             </div>
         }
+        else
+        {
+            <div class="custom-alert">No appointment data found.</div>
+        }
+
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-back">Back</a>
+        </div>
 
     </div>
 

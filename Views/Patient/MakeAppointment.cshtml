@@ -103,6 +103,19 @@
         text-align: center;
     }
 
+    .btn-back {
+        background: linear-gradient(45deg,#124E66,#748D92);
+        border-radius: 30px;
+        padding: 12px 30px;
+        color: white;
+        font-weight: 600;
+        transition: 0.4s;
+    }
+
+        .btn-back:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(18,78,102,0.8);
+        }
 </style>
 
 <div class="appointment-page">
@@ -167,15 +180,27 @@
                         </div>
 
                         <!-- Submit -->
-                        <button type="submit" class="btn btn-premium w-100">
-                            Submit Appointment
-                        </button>
+                        <!-- Button Row -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+
+                            <button type="submit" class="btn btn-premium" style="min-width: 200px;">
+                                Submit Appointment
+                            </button>
+                            <a asp-action="Index" class="btn btn-back" style="min-width: 140px;">
+                                Back
+                            </a>
+
+                            
+
+                        </div>
 
                     </form>
 
                 </div>
 
             </div>
+            
+
         </div>
 
     </div>

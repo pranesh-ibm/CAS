@@ -121,7 +121,19 @@
 
                 <div class="edit-card">
 
-                    <h2 class="text-center">Edit Profile</h2>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <a asp-controller="Supplier"
+                           asp-action="Index"
+                           class="btn btn-outline-dark rounded-pill px-3 fw-semibold">
+                            ← Back
+                        </a>
+
+                        <h2 class="mb-0">Edit Profile</h2>
+
+                        <div></div>
+
+                    </div>
 
                     <form asp-action="EditProfile" method="post">
 
