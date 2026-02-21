@@ -128,10 +128,7 @@
                                 <option value="">-- Select --</option>
                                 @foreach (var s in Model.Schedules)
                                 {
-                                    <option value="@s.ScheduleId">
-                                        @s.Appointment.Patient.PatientName -
-                                        @s.ScheduleDate.ToString("dd MMM yyyy")
-                                    </option>
+                                    <option value="@s.ScheduleId">@s.Appointment.Patient.PatientName - @s.ScheduleDate.ToString("dd MMM yyyy")</option>
                                 }
                             </select>
                             <div class="invalid-feedback">This field is required</div>
@@ -206,3 +203,15 @@
     </div>
 
 </div>
+
+@section Scripts {
+    <script>
+        (function(){
+            var selected = '@(Model.SelectedScheduleId?.ToString() ?? "")';
+            if (selected) {
+                var sel = document.querySelector('select[name="ScheduleId"]');
+                if (sel) sel.value = selected;
+            }
+        })();
+    </script>
+}

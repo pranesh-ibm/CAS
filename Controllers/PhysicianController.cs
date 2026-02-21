@@ -174,6 +174,36 @@ public class PhysicianController : Controller
         return View(vm);
     }
 
+    // Create Prescription starting from an appointment: pre-select the schedule for this appointment (synchronous lookup to avoid hot-reload limitations)
+    public IActionResult CreatePrescriptionFromAppointment(int appointmentId)
+    {
+        var physicianId = GetPhysicianId();
+        if (physicianId == null) return RedirectToAction("Login", "CrediMgr");
+
+        // Synchronous lookup (keeps method free of await) - acceptable for short operations
+        var schedules = _context.Schedules
+            .Where(s => s.PhysicianId == physicianId)
+            .Include(s => s.Appointment).ThenInclude(a => a.Patient)
+            .ToList();
+
+        var drugs = _context.Drugs.Where(d => d.DrugStatus == "Active").ToList();
+
+        var vm = new CreatePrescriptionViewModel
+        {
+            Schedules = schedules,
+            Drugs = drugs,
+            SelectedScheduleId = null
+        };
+
+        var sched = schedules.FirstOrDefault(s => s.AppointmentId == appointmentId && s.PhysicianId == physicianId);
+        if (sched != null)
+        {
+            vm.SelectedScheduleId = sched.ScheduleId;
+        }
+
+        return View("CreatePrescription", vm);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreatePrescription(CreatePrescriptionFormModel form)
@@ -190,13 +220,14 @@ public class PhysicianController : Controller
                 return BadRequest(new { success = false, message = first });
             }
 
-            // reload lists
+            // reload lists and keep the selected schedule from the submitted form
             var vm = new CreatePrescriptionViewModel
             {
                 Schedules = await _context.Schedules
                     .Where(s => s.PhysicianId == physicianId)
                     .Include(s => s.Appointment).ThenInclude(a => a.Patient).ToListAsync(),
-                Drugs = await _context.Drugs.Where(d => d.DrugStatus == "Active").ToListAsync()
+                Drugs = await _context.Drugs.Where(d => d.DrugStatus == "Active").ToListAsync(),
+                SelectedScheduleId = form.ScheduleId
             };
             return View(vm);
         }

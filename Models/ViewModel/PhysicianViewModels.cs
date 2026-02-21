@@ -13,6 +13,8 @@ namespace CAS.Models.ViewModel
     {
         public List<Schedule> Schedules { get; set; } = new List<Schedule>();
         public List<Drug> Drugs { get; set; } = new List<Drug>();
+        // Optional pre-selected schedule id (used to pre-select patient/schedule in the form)
+        public int? SelectedScheduleId { get; set; }
     }
 
     public class CreatePrescriptionFormModel
