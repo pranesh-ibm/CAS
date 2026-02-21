@@ -6,6 +6,23 @@
 }
 
 <style>
+    .btn-back {
+        border: 2px solid #124E66;
+        color: #124E66;
+        border-radius: 30px;
+        padding: 8px 20px;
+        font-weight: 600;
+        background: transparent;
+        transition: 0.3s ease;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            background: #124E66;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(18,78,102,0.3);
+        }
 
     :root {
         --dark1: #212A31;
@@ -163,6 +180,13 @@
             <div class="col-lg-6">
 
                 <div class="assign-card">
+                    <div class="mb-3">
+
+                        <a asp-controller="Admin" asp-action="PendingAppointments" class="btn-back">
+                            ← Back
+                        </a>
+                    </div>
+
 
                     <h2 class="assign-title">Assign Doctor</h2>
 

@@ -7,6 +7,25 @@
 
 <style>
 
+    /* ================= BACK BUTTON ================= */
+    .btn-back {
+        padding: 7px 18px;
+        border-radius: 25px;
+        border: 2px solid #124E66;
+        background: transparent;
+        color: #124E66;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background: #124E66;
+            color: white;
+            transform: translateX(-3px);
+        }
+
+
     /* ================= PAGE BACKGROUND ================= */
     .admin-page {
         background: linear-gradient(135deg,#f4f7fb,#e8edf5);
@@ -126,6 +145,10 @@
         <!-- ================= HEADER ================= -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
+                <a asp-controller="Admin" asp-action="Index" class="btn-back">
+                    ← Back
+                </a>
+                <h2>  </h2>
                 <h2 class="page-title mb-1">Pending Appointments</h2>
                 <p class="page-subtitle">Appointments awaiting scheduling</p>
             </div>

@@ -7,6 +7,26 @@
 
 <style>
 
+    /* ================= BACK BUTTON ================= */
+    .btn-back {
+        display: inline-block;
+        padding: 8px 22px;
+        border-radius: 30px;
+        border: 2px solid white;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s ease;
+        backdrop-filter: blur(6px);
+    }
+
+        .btn-back:hover {
+            background: white;
+            color: var(--accent);
+            transform: translateX(-3px);
+        }
+
+
     :root {
         --dark1: #212A31;
         --dark2: #2E3944;
@@ -176,12 +196,20 @@
 
 <div class="schedule-page">
     <div class="container">
-
+        
         <div class="row justify-content-center">
+            <div class="mb-4 ps-3">
+                <a asp-controller="Admin" asp-action="Index" class="btn-back">
+                    ← Back
+                </a>
+            </div>
+
             <div class="col-lg-10">
 
+              
                 <div class="premium-card">
 
+                  
                     <h2 class="page-title">Schedule Details</h2>
 
                     <div class="table-responsive mt-4">

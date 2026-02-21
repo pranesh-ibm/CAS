@@ -7,6 +7,24 @@
 
 <style>
 
+    .btn-back {
+        border: 2px solid #124E66;
+        color: #124E66;
+        border-radius: 30px;
+        padding: 8px 20px;
+        font-weight: 600;
+        background: transparent;
+        transition: 0.3s ease;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            background: #124E66;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(18,78,102,0.3);
+        }
+
     /* ================= PAGE BACKGROUND ================= */
     .admin-page {
         background: linear-gradient(135deg,#f4f7fb,#e8edf5);
@@ -146,6 +164,10 @@
         <!-- ================= HEADER ================= -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
+                <a asp-controller="Admin" asp-action="Index" class="btn-back mb-3">
+                    ← Back
+                </a>
+                <h2>  </h2>
                 <h2 class="page-title mb-1">Suppliers Management</h2>
                 <p class="page-subtitle mb-0">
                     Manage and monitor all registered suppliers
