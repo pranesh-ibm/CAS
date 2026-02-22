@@ -248,49 +248,48 @@ namespace Medi_Clinic.Controllers
         }
 
 
-        // GET: AdminPatient/Delete/5
-        public async Task<IActionResult> DeletePatient(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var patient = await _context.Patients
-                .FirstOrDefaultAsync(m => m.PatientId == id);
-            if (patient == null)
-            {
-                return NotFound();
-            }
-
-            return View(patient);
-        }
-
-        // POST: AdminPatient/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePatient(int id)
+        public async Task<IActionResult> DeactivatePatient(int id)
         {
             var patient = await _context.Patients.FindAsync(id);
 
-            if (patient != null)
-            {
-                patient.PatientStatus = "Inactive";   // or false if bool
-                _context.Patients.Update(patient);
-                await _context.SaveChangesAsync();
-                var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == patient.Email);
+            if (patient == null)
+                return NotFound();
 
-                if (user != null)
-                {
-                    user.Status = "Inactive";
-                }
-                await _context.SaveChangesAsync();
-            }
+            patient.PatientStatus = "Inactive";
+
+            // Also update user table
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.RoleReferenceId == id && u.Role == "Patient");
+
+            if (user != null)
+                user.Status = "Inactive";
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(GetPatientsDetail));
-
         }
+
+        public async Task<IActionResult> ActivatePatient(int id)
+        {
+            var patient = await _context.Patients.FindAsync(id);
+
+            if (patient == null)
+                return NotFound();
+
+            patient.PatientStatus = "Active";
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.RoleReferenceId == id && u.Role == "Patient");
+
+            if (user != null)
+                user.Status = "Active";
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(GetPatientsDetail));
+        }
+
+
 
         private bool PatientExists(int id)
         {
@@ -447,48 +446,30 @@ namespace Medi_Clinic.Controllers
         }
 
 
-        // GET: AdminPhysician/Delete/5
-        public async Task<IActionResult> DeletePhysician(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var physician = await _context.Physicians
-                .FirstOrDefaultAsync(m => m.PhysicianId == id);
-            if (physician == null)
-            {
-                return NotFound();
-            }
-
-            return View(physician);
-        }
-
-        // POST: AdminPhysician/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePhysician(int id)
+      
+        public async Task<IActionResult> TogglePhysicianStatus(int id)
         {
             var physician = await _context.Physicians.FindAsync(id);
-            if (physician != null)
-            {
-                physician.PhysicianStatus = "Inactive";
-                _context.Physicians.Update(physician);
-                await _context.SaveChangesAsync();
-                var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == physician.Email);
 
-                if (user != null)
-                {
-                    user.Status = "Inactive";
-                }
-                await _context.SaveChangesAsync();
-            }
+            if (physician == null)
+                return NotFound();
 
+            // Toggle status
+            physician.PhysicianStatus =
+                physician.PhysicianStatus == "Active" ? "Inactive" : "Active";
+
+            // Update Users table
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.RoleReferenceId == id && u.Role == "Physician");
+
+            if (user != null)
+                user.Status = physician.PhysicianStatus;
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(GetPhysiciansDetail));
         }
+
 
         private bool PhysicianExists(int id)
         {
@@ -649,45 +630,68 @@ namespace Medi_Clinic.Controllers
 
 
         // GET: AdminChemist/Delete/5
-        public async Task<IActionResult> DeleteChemist(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> DeleteChemist(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var chemist = await _context.Chemists
-                .FirstOrDefaultAsync(m => m.ChemistId == id);
-            if (chemist == null)
-            {
-                return NotFound();
-            }
+        //    var chemist = await _context.Chemists
+        //        .FirstOrDefaultAsync(m => m.ChemistId == id);
+        //    if (chemist == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(chemist);
-        }
+        //    return View(chemist);
+        //}
 
-        // POST: AdminChemist/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteChemist(int id)
+        //// POST: AdminChemist/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteChemist(int id)
+        //{
+        //    var chemist = await _context.Chemists.FindAsync(id);
+        //    if (chemist != null)
+        //    {
+        //        chemist.ChemistStatus = "Inactive";
+        //        _context.Chemists.Update(chemist);
+        //        await _context.SaveChangesAsync();
+        //        var user = await _context.Users
+        //    .FirstOrDefaultAsync(u => u.UserName == chemist.Email);
+
+        //        if (user != null)
+        //        {
+        //            user.Status = "Inactive";
+        //        }
+        //        await _context.SaveChangesAsync();
+        //    }
+
+
+
+        //    return RedirectToAction(nameof(GetChemistsDetail));
+        //}
+
+        public async Task<IActionResult> ToggleChemistStatus(int id)
         {
             var chemist = await _context.Chemists.FindAsync(id);
-            if (chemist != null)
-            {
-                chemist.ChemistStatus = "Inactive";
-                _context.Chemists.Update(chemist);
-                await _context.SaveChangesAsync();
-                var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == chemist.Email);
 
-                if (user != null)
-                {
-                    user.Status = "Inactive";
-                }
-                await _context.SaveChangesAsync();
-            }
+            if (chemist == null)
+                return NotFound();
 
+            // Toggle status
+            chemist.ChemistStatus =
+                chemist.ChemistStatus == "Active" ? "Inactive" : "Active";
 
+            // Update Users table
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.RoleReferenceId == id && u.Role == "Chemist");
+
+            if (user != null)
+                user.Status = chemist.ChemistStatus;
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(GetChemistsDetail));
         }
@@ -851,48 +855,29 @@ namespace Medi_Clinic.Controllers
 
 
         // GET: AdminSupplier/Delete/5
-        public async Task<IActionResult> DeleteSupplier(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var supplier = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.SupplierId == id);
-            if (supplier == null)
-            {
-                return NotFound();
-            }
-
-            return View(supplier);
-        }
-
-        // POST: AdminSupplier/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteSupplier(int id)
+        public async Task<IActionResult> ToggleSupplierStatus(int id)
         {
             var supplier = await _context.Suppliers.FindAsync(id);
-            if (supplier != null)
-            {
-                supplier.SupplierStatus = "Inactive";   // or false if bool
-                _context.Suppliers.Update(supplier);
-                await _context.SaveChangesAsync();
-                var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == supplier.Email);
 
-                if (user != null)
-                {
-                    user.Status = "Inactive";
-                }
-                await _context.SaveChangesAsync();
+            if (supplier == null)
+                return NotFound();
 
-            }
+            // Toggle status
+            supplier.SupplierStatus =
+                supplier.SupplierStatus == "Active" ? "Inactive" : "Active";
 
+            // Update user table
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.RoleReferenceId == id && u.Role == "Supplier");
+
+            if (user != null)
+                user.Status = supplier.SupplierStatus;
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(GetSuppliersDetail));
         }
+
 
         private bool SupplierExists(int id)
         {
@@ -997,11 +982,11 @@ namespace Medi_Clinic.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AssignDoctorPost(
-    int AppointmentID,
-    int PhysicianID,
-    DateTime ScheduleDate,
-    TimeSpan ScheduleTime)
-        {
+            int AppointmentID,
+            int PhysicianID,
+            DateTime ScheduleDate,
+            TimeSpan ScheduleTime)
+            {
             // 1️⃣ Insert into Schedule table
             var schedule = new Schedule
             {

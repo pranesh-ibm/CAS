@@ -240,11 +240,23 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    <a asp-action="DeleteSupplier"
-                                       asp-route-id="@item.SupplierId"
-                                       class="btn action-btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    @if (item.SupplierStatus == "Active")
+                                    {
+                                        <a asp-action="ToggleSupplierStatus"
+                                           asp-route-id="@item.SupplierId"
+                                           class="btn action-btn btn-delete">
+                                            <i class="fas fa-user-slash"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="ToggleSupplierStatus"
+                                           asp-route-id="@item.SupplierId"
+                                           class="btn action-btn btn-view">
+                                            <i class="fas fa-user-check"></i>
+                                        </a>
+                                    }
+
 
                                 </td>
 

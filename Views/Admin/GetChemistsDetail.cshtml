@@ -243,11 +243,22 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    <a asp-action="DeleteChemist"
-                                       asp-route-id="@item.ChemistId"
-                                       class="btn action-btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    @if (item.ChemistStatus == "Active")
+                                    {
+                                        <a asp-action="ToggleChemistStatus"
+                                           asp-route-id="@item.ChemistId"
+                                           class="btn action-btn btn-delete">
+                                            <i class="fas fa-user-slash"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="ToggleChemistStatus"
+                                           asp-route-id="@item.ChemistId"
+                                           class="btn action-btn btn-view">
+                                            <i class="fas fa-user-check"></i>
+                                        </a>
+                                    }
 
                                 </td>
 

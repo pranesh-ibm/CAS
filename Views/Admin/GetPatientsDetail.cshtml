@@ -238,11 +238,23 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    <a asp-action="DeletePatient"
-                                       asp-route-id="@item.PatientId"
-                                       class="btn action-btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    @if (item.PatientStatus == "Active")
+                                    {
+                                        <a asp-action="DeactivatePatient"
+                                           asp-route-id="@item.PatientId"
+                                           class="btn action-btn btn-delete">
+                                            <i class="fas fa-user-slash"></i>
+                                        </a>
+                                    }
+                                    else if (item.PatientStatus == "Inactive")
+                                    {
+                                        <a asp-action="ActivatePatient"
+                                           asp-route-id="@item.PatientId"
+                                           class="btn action-btn btn-view">
+                                            <i class="fas fa-user-check"></i>
+                                        </a>
+                                    }
+
 
                                 </td>
                             </tr>
