@@ -72,17 +72,44 @@ namespace Medi_Clinic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePatient([Bind("PatientId,PatientName,Dob,Gender,Address,Phone,Email,Summary")] Patient patient)
+        public async Task<IActionResult> CreatePatient(
+    [Bind("PatientId,PatientName,Dob,Gender,Address,Phone,Email,Summary")] Patient patient)
         {
             if (ModelState.IsValid)
             {
-                patient.PatientStatus = "Pending";
+                patient.PatientStatus = "Active";
                 _context.Add(patient);
                 await _context.SaveChangesAsync();
+
+                // Generate password
+                string lastFour = patient.Phone!.Substring(patient.Phone.Length - 4);
+                string generatedPassword = patient.PatientName + "@" + lastFour;
+
+                // Check if user already exists
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.UserName == patient.Email);
+
+                if (existingUser == null)
+                {
+                    var user = new User
+                    {
+                        UserName = patient.Email!,
+                        Password = generatedPassword,
+                        Role = "Patient",
+                        RoleReferenceId = patient.PatientId,
+                        Status = patient.PatientStatus
+                    };
+
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(GetPatientsDetail));
             }
+
             return View(patient);
         }
+
 
         public async Task<IActionResult> PendingPatients()
         {
@@ -114,7 +141,7 @@ namespace Medi_Clinic.Controllers
             {
                 var user = new User
                 {
-                    UserName = patient.PatientName,
+                    UserName = patient.Email!,
                     Password = generatedPassword,
                     Role = "Patient",
                     RoleReferenceId = patient.PatientId,
