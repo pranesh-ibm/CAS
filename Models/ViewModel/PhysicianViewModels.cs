@@ -22,14 +22,15 @@ namespace CAS.Models.ViewModel
         [Required]
         public int ScheduleId { get; set; }
 
+        // Support multiple drugs per advice
         [Required]
-        public int DrugId { get; set; }
+        public List<int> DrugIds { get; set; } = new List<int>();
 
         [Required]
-        public string Prescription { get; set; } = string.Empty;
+        public List<string> PrescriptionTexts { get; set; } = new List<string>();
 
         [Required(ErrorMessage = "This field is required")]
-        public string Dosage { get; set; } = string.Empty;
+        public List<string> Dosages { get; set; } = new List<string>();
 
         [Required(ErrorMessage = "This field is required")]
         public string Advice { get; set; } = string.Empty;

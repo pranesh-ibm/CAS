@@ -232,7 +232,7 @@ public class PhysicianController : Controller
             return View(vm);
         }
 
-        // create PhysicianAdvice then PhysicianPrescrip
+        // create PhysicianAdvice first
         var advice = new PhysicianAdvice
         {
             ScheduleId = form.ScheduleId,
@@ -243,16 +243,35 @@ public class PhysicianController : Controller
         _context.PhysicianAdvices.Add(advice);
         await _context.SaveChangesAsync();
 
-        var prescrip = new PhysicianPrescrip
-        {
-            PhysicianAdviceId = advice.PhysicianAdviceId,
-            DrugId = form.DrugId,
-            Prescription = form.Prescription,
-            Dosage = form.Dosage
-        };
+        // then create one PhysicianPrescrip per drug entry, all linked to the same PhysicianAdviceId
+        var prescrips = new List<PhysicianPrescrip>();
 
-        _context.PhysicianPrescrips.Add(prescrip);
-        await _context.SaveChangesAsync();
+        var drugCount = form.DrugIds?.Count ?? 0;
+        var prescCount = form.PrescriptionTexts?.Count ?? 0;
+        var dosageCount = form.Dosages?.Count ?? 0;
+
+        var items = Math.Min(drugCount, Math.Min(prescCount, dosageCount));
+        for (int i = 0; i < items; i++)
+        {
+            // skip invalid entries
+            if (form.DrugIds[i] <= 0) continue;
+
+            var p = new PhysicianPrescrip
+            {
+                PhysicianAdviceId = advice.PhysicianAdviceId,
+                DrugId = form.DrugIds[i],
+                Prescription = form.PrescriptionTexts[i],
+                Dosage = form.Dosages[i]
+            };
+
+            prescrips.Add(p);
+        }
+
+        if (prescrips.Any())
+        {
+            _context.PhysicianPrescrips.AddRange(prescrips);
+            await _context.SaveChangesAsync();
+        }
 
         var isAjaxResp = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
         if (isAjaxResp)
