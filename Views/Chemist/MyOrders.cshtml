@@ -133,7 +133,33 @@
                 background-color: rgba(18,78,102,0.06);
                 transform: scale(1.01);
             }
+    /* =============== Compact table design =============== */
+    .compact-table thead th {
+        padding: 8px 12px !important;
+        font-size: 14px;
+    }
 
+    .compact-row td {
+        padding: 6px 12px !important;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    /* Reduce hover scaling for small rows */
+    .compact-row:hover {
+        background-color: rgba(18,78,102,0.06);
+        transform: none !important;
+    }
+
+    /* Stylish quantity pill */
+    .qty-pill {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
 </style>
 
 <div class="orders-page">
@@ -201,29 +227,34 @@
                     <div class="table-responsive">
                         <table class="table align-middle">
 
-                            <thead>
-                                <tr>
-                                    <th>Drug</th>
-                                    <th>Quantity</th>
-                                </tr>
-                            </thead>
+                            <div class="table-responsive">
+                                <table class="table compact-table align-middle">
 
-                            <tbody>
-                                @foreach (var item in order.Items)
-                                {
-                                    <tr>
-                                        <td class="fw-semibold">
-                                            💊 @item.DrugName
-                                        </td>
-                                        <td>
-                                            <span class="status-badge status-approved">
-                                                @item.Qty
-                                            </span>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70%">Drug</th>
+                                            <th style="width: 30%">Qty</th>
+                                        </tr>
+                                    </thead>
 
+                                    <tbody>
+                                        @foreach (var item in order.Items)
+                                        {
+                                            <tr class="compact-row">
+                                                <td class="fw-semibold text-dark">
+                                                    💊 @item.DrugName
+                                                </td>
+                                                <td>
+                                                    <span class="qty-pill">
+                                                        @item.Qty
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </table>
                     </div>
                 </div>

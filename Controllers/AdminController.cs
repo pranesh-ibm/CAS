@@ -163,7 +163,7 @@ namespace Medi_Clinic.Controllers
             if (patient == null)
                 return NotFound();
 
-            patient.PatientStatus = "Inactive";
+            patient.PatientStatus = "InActive";
 
             await _context.SaveChangesAsync();
 
@@ -255,14 +255,14 @@ namespace Medi_Clinic.Controllers
             if (patient == null)
                 return NotFound();
 
-            patient.PatientStatus = "Inactive";
+            patient.PatientStatus = "InActive";
 
             // Also update user table
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.RoleReferenceId == id && u.Role == "Patient");
 
             if (user != null)
-                user.Status = "Inactive";
+                user.Status = "InActive";
 
             await _context.SaveChangesAsync();
 
@@ -456,7 +456,7 @@ namespace Medi_Clinic.Controllers
 
             // Toggle status
             physician.PhysicianStatus =
-                physician.PhysicianStatus == "Active" ? "Inactive" : "Active";
+                physician.PhysicianStatus == "Active" ? "InActive" : "Active";
 
             // Update Users table
             var user = await _context.Users
@@ -682,7 +682,7 @@ namespace Medi_Clinic.Controllers
 
             // Toggle status
             chemist.ChemistStatus =
-                chemist.ChemistStatus == "Active" ? "Inactive" : "Active";
+                chemist.ChemistStatus == "Active" ? "InActive" : "Active";
 
             // Update Users table
             var user = await _context.Users
@@ -864,7 +864,7 @@ namespace Medi_Clinic.Controllers
 
             // Toggle status
             supplier.SupplierStatus =
-                supplier.SupplierStatus == "Active" ? "Inactive" : "Active";
+                supplier.SupplierStatus == "Active" ? "InActive" : "Active";
 
             // Update user table
             var user = await _context.Users

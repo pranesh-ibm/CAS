@@ -36,50 +36,71 @@
         letter-spacing: 1px;
     }
 
-    /* ================= REQUEST CARD ================= */
-    .request-card {
+    /* ================= EMPTY STATE ================= */
+    .custom-alert {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: #AFDDE5;
+    }
+
+    /* ================= TABLE WRAPPER ================= */
+    .request-table-wrapper {
         background: rgba(255,255,255,0.95);
-        border-radius: 25px;
         padding: 30px;
+        border-radius: 25px;
         box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-        transition: 0.35s ease;
-        position: relative;
-        overflow: hidden;
+        animation: fadeIn 0.6s ease;
     }
 
-        .request-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.3);
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
         }
 
-        .request-card::before {
-            content: "";
-            position: absolute;
-            height: 6px;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: linear-gradient(45deg,#0FA4AF,#024950);
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= TABLE ================= */
+    .request-table thead tr {
+        background: linear-gradient(45deg,#0FA4AF,#024950);
+        color: white;
+    }
+
+    .request-table th {
+        padding: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .request-table td {
+        padding: 14px;
+        color: #333;
+        vertical-align: middle;
+        font-size: 15px;
+    }
+
+    .request-table tbody tr {
+        transition: 0.25s ease;
+    }
+
+        .request-table tbody tr:hover {
+            background: rgba(15,164,175,0.08);
+            transform: scale(1.01);
         }
 
-    /* ================= LABELS ================= */
-    .info-label {
-        font-weight: 600;
-        color: #003135;
-    }
-
-    .info-value {
-        color: #555;
-        margin-bottom: 10px;
-    }
-
-    /* ================= STATUS BADGE ================= */
+    /* ================= STATUS BADGES ================= */
     .status-badge {
         padding: 6px 14px;
         border-radius: 30px;
         font-size: 13px;
         font-weight: 600;
-        display: inline-block;
     }
 
     .status-pending {
@@ -93,30 +114,21 @@
     }
 
     /* ================= ACTION BUTTON ================= */
-    .action-btn {
-        border-radius: 30px;
-        padding: 8px 18px;
-        font-weight: 600;
-        transition: 0.3s;
-        border: none;
+    .action-btn-table {
+        padding: 6px 14px;
+        border-radius: 25px;
         background: linear-gradient(45deg,#0FA4AF,#024950);
-        color: white;
+        color: white !important;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s ease;
+        text-decoration: none;
     }
 
-        .action-btn:hover {
+        .action-btn-table:hover {
+            box-shadow: 0 0 15px rgba(15,164,175,0.6);
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(15,164,175,0.6);
         }
-
-    /* ================= EMPTY STATE ================= */
-    .custom-alert {
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 40px;
-        text-align: center;
-        color: #AFDDE5;
-    }
 </style>
 
 <div class="requests-page">
@@ -140,60 +152,57 @@
         }
         else
         {
-            <div class="row g-4">
+            <div class="table-responsive request-table-wrapper">
+                <table class="table table-borderless align-middle request-table">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Physician ID</th>
+                            <th>Request Date</th>
+                            <th>Drug Details</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
 
-                @foreach (var req in Model)
-                {
-                    var statusClass = req.RequestStatus == "Acknowledged"
-                    ? "status-acknowledged"
-                    : "status-pending";
+                    <tbody>
+                        @foreach (var req in Model)
+                        {
+                            var statusClass = req.RequestStatus == "Acknowledged"
+                            ? "status-acknowledged"
+                            : "status-pending";
 
-                    <div class="col-lg-6 col-md-6">
-                        <div class="request-card h-100">
+                            <tr>
+                                <td>@req.DrugRequestId</td>
+                                <td>@req.PhysicianId</td>
+                                <td>@req.RequestDate.ToString("dd MMM yyyy hh:mm tt")</td>
+                                <td>@req.DrugsInfoText</td>
 
-                            <div class="mb-3">
-                                <span class="info-label">Request ID:</span>
-                                <div class="info-value">@req.DrugRequestId</div>
-                            </div>
+                                <td>
+                                    <span class="status-badge @statusClass">
+                                        @req.RequestStatus
+                                    </span>
+                                </td>
 
-                            <div class="mb-3">
-                                <span class="info-label">Physician ID:</span>
-                                <div class="info-value">@req.PhysicianId</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="info-label">Request Date:</span>
-                                <div class="info-value">
-                                    @req.RequestDate.ToString("dd MMM yyyy hh:mm tt")
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="info-label">Drug Details:</span>
-                                <div class="info-value">@req.DrugsInfoText</div>
-                            </div>
-
-                            <div class="mt-3">
-                                <span class="status-badge @statusClass">
-                                    @req.RequestStatus
-                                </span>
-
-                                @if (req.RequestStatus == "Pending")
-                                {
-                                    <div class="mt-3">
+                                <td class="text-center">
+                                    @if (req.RequestStatus == "Pending")
+                                    {
                                         <a asp-action="Approve"
                                            asp-route-id="@req.DrugRequestId"
-                                           class="action-btn">
+                                           class="action-btn-table">
                                             Acknowledge
                                         </a>
-                                    </div>
-                                }
-                            </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success fw-semibold">✔ Done</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
 
-                        </div>
-                    </div>
-                }
-
+                </table>
             </div>
         }
 
